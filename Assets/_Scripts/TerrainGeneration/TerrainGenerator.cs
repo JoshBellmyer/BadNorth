@@ -12,9 +12,11 @@ public class TerrainGenerator : MonoBehaviour
 
     [SerializeField] float scaleHeight;
     [SerializeField] bool applyCornerFallOff;
-    [SerializeField] float cornerFallOffPower;
+    [SerializeField] float cornerFallOffDistance;
     [SerializeField] bool applyTerraces;
     [SerializeField] int terraceFrequency;
+    [SerializeField] bool flattenPeaks;
+    [SerializeField] [Range(0,8)] int flattenPeaksCutoff;
 
     public bool autoUpdate;
 
@@ -36,36 +38,64 @@ public class TerrainGenerator : MonoBehaviour
 
     public void AddEffectsToNoise(float[,] noise)
     {
+        // flatten after loop
+        List<int> toFlattenX = new List<int>();
+        List<int> toFlattenY = new List<int>();
+
+        // main loop
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
             {
-                float effect = 1;
-
                 // island fall off
                 float distFromCenterX = Mathf.Abs(x - size / 2);
                 float distFromCenterY = Mathf.Abs(y - size / 2);
                 float distFromCenter = Mathf.Sqrt(distFromCenterX * distFromCenterX + distFromCenterY * distFromCenterY);
-                effect *= Mathf.InverseLerp(size / 2, 0, distFromCenter);
+                noise[x, y] *= Mathf.InverseLerp(size / 2, 0, distFromCenter);
 
                 // corner fall off
                 if (applyCornerFallOff)
                 {
-                    effect *= Mathf.Pow(Mathf.InverseLerp(size, 0, x), cornerFallOffPower);
-                    effect *= Mathf.Pow(Mathf.InverseLerp(0, size, y), cornerFallOffPower);
+                    noise[x, y] *= Mathf.InverseLerp(cornerFallOffDistance, 0, x);
+                    noise[x, y] *= Mathf.InverseLerp(cornerFallOffDistance, 0, y);
                 }
 
                 // scale height
-                effect *= Mathf.Pow(scaleHeight, applyCornerFallOff ? cornerFallOffPower : 1);
+                noise[x, y] *= scaleHeight;
 
                 // terraces
                 if (applyTerraces)
                 {
-                    effect = Mathf.Floor(effect * terraceFrequency) / terraceFrequency;
+                    noise[x, y] = Mathf.Floor(noise[x, y] * terraceFrequency) / terraceFrequency;
                 }
 
-                noise[x, y] *= effect;
+                // flatten peaks
+                if (flattenPeaks && x != 0 && x != size - 1 && y != 0 && y != size - 1)
+                {
+                    int lowNeighborCount = 0;
+                    for (int i = -1; i < 1; i++)
+                    {
+                        for (int j = -1; j < 1; j++)
+                        {
+                            if (noise[x + i, y + j] <= noise[x, y])
+                            {
+                                lowNeighborCount++;
+                            }
+                        }
+                    }
+                    if (lowNeighborCount > flattenPeaksCutoff)
+                    {
+                        toFlattenX.Add(x); // flatten later
+                        toFlattenY.Add(y);
+                    }
+                }
             }
+        }
+
+        // flatten now
+        for(int i=0; i<toFlattenX.Count; i++)
+        {
+            noise[toFlattenX[i], toFlattenY[i]] -= 1 / (float)terraceFrequency;
         }
     }
 }
