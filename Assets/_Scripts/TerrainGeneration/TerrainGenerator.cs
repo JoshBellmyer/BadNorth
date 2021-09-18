@@ -24,6 +24,7 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] Material material;
     [SerializeField] MeshFilter meshFilter;
     [SerializeField] MeshRenderer meshRender;
+    [SerializeField] float meshScale;
 
     public void GenerateMap()
     {
@@ -33,7 +34,7 @@ public class TerrainGenerator : MonoBehaviour
         Texture texture = TextureGenerator.TextureFromNoiseMap(noise);
         material.mainTexture = texture;
 
-        meshFilter.sharedMesh = MeshGenerator.GenerateTerrainMesh(noise).CreateMesh();
+        meshFilter.sharedMesh = MeshGenerator.GenerateTerrainMesh(noise, meshScale).CreateMesh();
         meshRender.sharedMaterial.mainTexture = texture;
     }
 

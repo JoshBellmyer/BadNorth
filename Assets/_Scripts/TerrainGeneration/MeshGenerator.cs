@@ -4,9 +4,8 @@ using System.Collections;
 public static class MeshGenerator
 {
 
-    public static MeshData GenerateTerrainMesh(float[,] noiseMap)
+    public static MeshData GenerateTerrainMesh(float[,] noiseMap, float meshScale)
 	{
-        float scale = 10;
         int length = noiseMap.GetLength(0);
         float topLeftX = (length - 1) / -2f;
         float topLeftZ = (length - 1) / 2f;
@@ -21,7 +20,7 @@ public static class MeshGenerator
         {
             for (int y = 0; y < length; y++)
             {
-                Vector3 vertex = new Vector3(topLeftX + x, noiseMap[x, y] * scale, topLeftZ - y);
+                Vector3 vertex = new Vector3(topLeftX + x, noiseMap[x, y] * meshScale, topLeftZ - y);
                 meshData.AddVertex(vertex, new Vector2(x/(float)length, y/(float)length), vertexIndex);
 
                 if(x < length - 1 && y < length - 1)
@@ -35,7 +34,6 @@ public static class MeshGenerator
         }
 
 		return meshData;
-
 	}
 }
 
