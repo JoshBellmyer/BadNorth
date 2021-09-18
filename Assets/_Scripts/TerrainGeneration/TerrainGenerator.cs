@@ -19,12 +19,14 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] int flattenPeaksCutoff;
     [SerializeField] int flattenPeakLookRange;
 
-    public bool autoUpdate;
-
     [SerializeField] Material material;
     [SerializeField] MeshFilter meshFilter;
     [SerializeField] MeshRenderer meshRender;
     [SerializeField] float meshScale;
+
+    [SerializeField] bool flatTilesMesh;
+
+    [SerializeField] bool autoUpdate;
 
     public void GenerateMap()
     {
@@ -34,7 +36,7 @@ public class TerrainGenerator : MonoBehaviour
         Texture texture = TextureGenerator.TextureFromNoiseMap(noise);
         material.mainTexture = texture;
 
-        meshFilter.sharedMesh = MeshGenerator.GenerateTerrainMesh(noise, meshScale).CreateMesh();
+        meshFilter.sharedMesh = flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(noise, meshScale).CreateMesh() : MeshGenerator.GenerateTerrainMesh(noise, meshScale).CreateMesh();
         meshRender.sharedMaterial.mainTexture = texture;
     }
 
