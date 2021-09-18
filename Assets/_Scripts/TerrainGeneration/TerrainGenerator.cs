@@ -16,7 +16,8 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] bool applyTerraces;
     [SerializeField] int terraceFrequency;
     [SerializeField] bool flattenPeaks;
-    [SerializeField] [Range(0,8)] int flattenPeaksCutoff;
+    [SerializeField] int flattenPeaksCutoff;
+    [SerializeField] int flattenPeakLookRange;
 
     public bool autoUpdate;
 
@@ -70,20 +71,20 @@ public class TerrainGenerator : MonoBehaviour
                 }
 
                 // flatten peaks
-                if (flattenPeaks && x != 0 && x != size - 1 && y != 0 && y != size - 1)
+                if (flattenPeaks && x > flattenPeakLookRange - 1 && x < size - flattenPeakLookRange && y > flattenPeakLookRange - 1 && y < size - flattenPeakLookRange) // if not an edge
                 {
                     int lowNeighborCount = 0;
-                    for (int i = -1; i < 1; i++)
+                    for (int i = -flattenPeakLookRange; i < flattenPeakLookRange; i++)
                     {
-                        for (int j = -1; j < 1; j++)
+                        for (int j = -flattenPeakLookRange; j < flattenPeakLookRange; j++)
                         {
-                            if (noise[x + i, y + j] <= noise[x, y])
+                            if (noise[x + i, y + j] < noise[x, y])
                             {
                                 lowNeighborCount++;
                             }
                         }
                     }
-                    if (lowNeighborCount > flattenPeaksCutoff)
+                    if (lowNeighborCount >= flattenPeaksCutoff)
                     {
                         toFlattenX.Add(x); // flatten later
                         toFlattenY.Add(y);
