@@ -40,6 +40,13 @@ public class TerrainGenerator : MonoBehaviour
         meshRender.sharedMaterial.mainTexture = texture;
     }
 
+    public float[,] GenerateMapNoise () {
+        float[,] noise = Noise.GenerateNoiseMap(size, noiseSettings, Vector2.zero);
+        AddEffectsToNoise(noise);
+
+        return noise;
+    }
+
     public void AddEffectsToNoise(float[,] noise)
     {
         // flatten after loop
