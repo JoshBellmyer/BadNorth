@@ -95,19 +95,6 @@ public class TilePlacer : MonoBehaviour {
 		}
 
 		if (tileIndex >= 0) {
-			// GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
-			// tempTiles.Add(tileObject);
-
-			// tileObject.transform.position = new Vector3(x, y, z);
-			// tileObject.transform.eulerAngles = new Vector3(0, 90 * rotation, 0);
-
-			// GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
-
-			// cInstances[cIndex] = new CombineInstance();
-			// cInstances[cIndex].mesh = meshObject.GetComponent<MeshFilter>().mesh;
-			// cInstances[cIndex].transform = meshObject.transform.localToWorldMatrix;
-			// cIndex++;
-
 			PlaceTile(x, y, z, rotation, tileIndex);
 		}
 	}

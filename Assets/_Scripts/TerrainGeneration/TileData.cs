@@ -73,55 +73,58 @@ public class TileData {
 	// Places a slope at the given location if it is valid
 	private void PlaceSlope (int x, int z) {
 		int height = tileHeights[x, z] + 1;
-		int neighbors = GetNeighborDifference(x, height, z, 1);
+		int neighbors = GetNeighborDifference(x, height, z, 0);
+		int neighbors2 = GetNeighborDifference(x, height, z, -1);
 		TileType type = TileType.None;
 		int upChance = 0;
 		int downChance = 0;
 		int leftChance = 0;
 		int rightChance = 0;
 
+		// neighbors = (neighbors << 4) | neighbors2;
+
 		switch (neighbors) {
 			case 0b1000:
-				upChance = 5;
+				upChance = 15;
 			break;
 
 			case 0b0100:
-				downChance = 5;
+				downChance = 15;
 			break;
 
 			case 0b0010:
-				leftChance = 5;
+				leftChance = 15;
 			break;
 
 			case 0b0001:
-				rightChance = 5;
+				rightChance = 15;
 			break;
 
 			case 0b1010:
-				upChance = 10;
-				leftChance = 10;
+				upChance = 30;
+				leftChance = 30;
 			break;
 
 			case 0b1001:
-				upChance = 10;
-				rightChance = 10;
+				upChance = 30;
+				rightChance = 30;
 			break;
 
 			case 0b0110:
-				downChance = 10;
-				leftChance = 10;
+				downChance = 30;
+				leftChance = 30;
 			break;
 
 			case 0b0101:
-				downChance = 10;
-				rightChance = 10;
+				downChance = 30;
+				rightChance = 30;
 			break;
 		}
 
 		int rand = Random.Range(0, 100);
 		bool placed = false;
 
-		if (rand < upChance && upChance > 0) {
+		if (rand < upChance && upChance > 0 && (neighbors2 & 0b0100) > 0) {
 			tileTypes[x, height, z] = TileType.FullRampU;
 			tileLocations.Add( new TileLocation(TileType.FullRampU, new Vector3Int(x, height, z)) );
 
@@ -130,7 +133,7 @@ public class TileData {
 
 		rand -= upChance;
 
-		if (rand < downChance && downChance > 0) {
+		if (rand < downChance && downChance > 0 && (neighbors2 & 0b1000) > 0) {
 			tileTypes[x, height, z] = TileType.FullRampD;
 			tileLocations.Add( new TileLocation(TileType.FullRampD, new Vector3Int(x, height, z)) );
 
@@ -139,7 +142,7 @@ public class TileData {
 
 		rand -= downChance;
 
-		if (rand < leftChance && leftChance > 0) {
+		if (rand < leftChance && leftChance > 0 && (neighbors2 & 0b0001) > 0) {
 			tileTypes[x, height, z] = TileType.FullRampL;
 			tileLocations.Add( new TileLocation(TileType.FullRampL, new Vector3Int(x, height, z)) );
 
@@ -148,7 +151,7 @@ public class TileData {
 
 		rand -= leftChance;
 
-		if (rand < rightChance && rightChance > 0) {
+		if (rand < rightChance && rightChance > 0 && (neighbors2 & 0b0010) > 0) {
 			tileTypes[x, height, z] = TileType.FullRampR;
 			tileLocations.Add( new TileLocation(TileType.FullRampR, new Vector3Int(x, height, z)) );
 
