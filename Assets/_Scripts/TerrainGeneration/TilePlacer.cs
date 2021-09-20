@@ -32,6 +32,22 @@ public class TilePlacer : MonoBehaviour {
 				case TileType.Cube:
 					PlaceCube(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z);
 				break;
+
+				case TileType.FullRampU:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 0);
+				break;
+
+				case TileType.FullRampD:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 2);
+				break;
+
+				case TileType.FullRampL:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 3);
+				break;
+
+				case TileType.FullRampR:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 1);
+				break;
 			}
 		}
 
@@ -79,21 +95,65 @@ public class TilePlacer : MonoBehaviour {
 		}
 
 		if (tileIndex >= 0) {
-			GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
-			tempTiles.Add(tileObject);
+			// GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+			// tempTiles.Add(tileObject);
 
-			tileObject.transform.position = new Vector3(x, y, z);
-			tileObject.transform.eulerAngles = new Vector3(0, 90 * rotation, 0);
+			// tileObject.transform.position = new Vector3(x, y, z);
+			// tileObject.transform.eulerAngles = new Vector3(0, 90 * rotation, 0);
 
-			GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
+			// GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
 
-			cInstances[cIndex] = new CombineInstance();
-			cInstances[cIndex].mesh = meshObject.GetComponent<MeshFilter>().mesh;
-			cInstances[cIndex].transform = meshObject.transform.localToWorldMatrix;
-			cIndex++;
+			// cInstances[cIndex] = new CombineInstance();
+			// cInstances[cIndex].mesh = meshObject.GetComponent<MeshFilter>().mesh;
+			// cInstances[cIndex].transform = meshObject.transform.localToWorldMatrix;
+			// cIndex++;
+
+			PlaceTile(x, y, z, rotation, tileIndex);
 		}
 	}
 
+	// Places a full slope tile at the given
+	private static void PlaceSlope (int x, int y, int z, int rotation) {
+		Vector3Int pos = new Vector3Int(x, y, z);
+		int front = GetEdge(pos, 0, 0)[0] ? 0b1000 : 0b0000;
+		int back = GetEdge(pos, 1, 0)[0] ? 0b0100 : 0b0000;
+		int left = GetEdge(pos, 2, 0)[0] ? 0b0010 : 0b0000;
+		int right = GetEdge(pos, 3, 0)[0] ? 0b0001 : 0b0000;
+
+		int frontR = GetEdge(pos, 0, 0)[2] ? 0b1000 : 0b0000;
+		int backR = GetEdge(pos, 1, 0)[2] ? 0b0100 : 0b0000;
+		int leftR = GetEdge(pos, 2, 0)[2] ? 0b0010 : 0b0000;
+		int rightR = GetEdge(pos, 3, 0)[2] ? 0b0001 : 0b0000;
+
+		front = (front | frontR);
+		back = (back | backR);
+		left = (left | leftR);
+		right = (right | rightR);
+
+		int edgeBool = (front | back | left | right);
+		string index = $"{0b0000},{0b0000},{RotateEdges(edgeBool, rotation)}";
+
+		if (tileEdges.ContainsKey(index)) {
+			PlaceTile(x, y, z, rotation, tileEdges[index]);
+		}
+	}
+
+
+	// Places a tile and adds it to the mesh
+	private static void PlaceTile (int x, int y, int z, int rotation, int tileIndex) {
+		GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+		tempTiles.Add(tileObject);
+
+		tileObject.transform.position = new Vector3(x, y, z);
+		tileObject.transform.eulerAngles = new Vector3(0, 90 * rotation, 0);
+
+		GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
+
+		cInstances[cIndex] = new CombineInstance();
+		cInstances[cIndex].mesh = meshObject.GetComponent<MeshFilter>().mesh;
+		cInstances[cIndex].transform = meshObject.transform.localToWorldMatrix;
+		cIndex++;
+	}
 
 	// Returns the edge data from the given pos in the given direction
 	private static bool[] GetEdge (Vector3Int pos, int direction, int type) {
@@ -180,12 +240,19 @@ public class TilePlacer : MonoBehaviour {
 	private static void InitializeEdges () {
 		tileEdges = new Dictionary<string, int>();
 
+		// Cubes
 		tileEdges.Add($"{0b1111},{0b0000},{0b0000}", 0);
 		tileEdges.Add($"{0b1011},{0b0000},{0b0000}", 1);
 		tileEdges.Add($"{0b1001},{0b0000},{0b0000}", 2);
 		tileEdges.Add($"{0b1100},{0b0000},{0b0000}", 3);
 		tileEdges.Add($"{0b1000},{0b0000},{0b0000}", 4);
 		tileEdges.Add($"{0b0000},{0b0000},{0b0000}", 5);
+
+		// Ramps
+		tileEdges.Add($"{0b0000},{0b0000},{0b1011}", 6);
+		tileEdges.Add($"{0b0000},{0b0000},{0b1001}", 7);
+		tileEdges.Add($"{0b0000},{0b0000},{0b1010}", 8);
+		tileEdges.Add($"{0b0000},{0b0000},{0b1000}", 9);
 	}
 }
 
