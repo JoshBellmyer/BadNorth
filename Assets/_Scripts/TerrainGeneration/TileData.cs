@@ -35,8 +35,10 @@ public class TileData {
 				int height = (int)Mathf.Round(noise[x, z] * meshScale);
 				tileHeights[x, z] = height;
 
-				tileTypes[x, height, z] = TileType.Cube;
-				tileLocations.Add( new TileLocation(TileType.Cube, new Vector3Int(x, height, z)) );
+				if (height > 0) {
+					tileTypes[x, height, z] = TileType.Cube;
+					tileLocations.Add( new TileLocation(TileType.Cube, new Vector3Int(x, height, z)) );
+				}
 			}
 		}
 
@@ -73,13 +75,20 @@ public class TileData {
 	// Places a slope at the given location if it is valid
 	private void PlaceSlope (int x, int z) {
 		int height = tileHeights[x, z] + 1;
+
+		if (height < 2) {
+			return;
+		}
+
 		int neighbors = GetNeighborDifference(x, height, z, 0);
 		int neighbors2 = GetNeighborDifference(x, height, z, -1);
-		TileType type = TileType.None;
+		bool longSlope = false;
 		int upChance = 0;
 		int downChance = 0;
 		int leftChance = 0;
 		int rightChance = 0;
+
+		int randSlope = Random.Range(0, 10);
 
 		// neighbors = (neighbors << 4) | neighbors2;
 
@@ -101,23 +110,27 @@ public class TileData {
 			break;
 
 			case 0b1010:
-				upChance = 30;
-				leftChance = 30;
+				upChance = 40;
+				leftChance = 40;
+				longSlope = (randSlope < 50);
 			break;
 
 			case 0b1001:
-				upChance = 30;
-				rightChance = 30;
+				upChance = 40;
+				rightChance = 40;
+				longSlope = (randSlope < 50);
 			break;
 
 			case 0b0110:
-				downChance = 30;
-				leftChance = 30;
+				downChance = 40;
+				leftChance = 40;
+				longSlope = (randSlope < 50);
 			break;
 
 			case 0b0101:
-				downChance = 30;
-				rightChance = 30;
+				downChance = 40;
+				rightChance = 40;
+				longSlope = (randSlope < 50);
 			break;
 		}
 
@@ -125,8 +138,12 @@ public class TileData {
 		bool placed = false;
 
 		if (rand < upChance && upChance > 0 && (neighbors2 & 0b0100) > 0) {
-			tileTypes[x, height, z] = TileType.FullRampU;
-			tileLocations.Add( new TileLocation(TileType.FullRampU, new Vector3Int(x, height, z)) );
+			if (longSlope) {
+				PlaceLongSlope(x, height, z, new Vector3Int(0, 0, -1), 0b0100, TileType.FullRampU);
+			}
+			else {
+				PlaceFullSlope(x, height, z, TileType.FullRampU);
+			}
 
 			return;
 		}
@@ -134,8 +151,12 @@ public class TileData {
 		rand -= upChance;
 
 		if (rand < downChance && downChance > 0 && (neighbors2 & 0b1000) > 0) {
-			tileTypes[x, height, z] = TileType.FullRampD;
-			tileLocations.Add( new TileLocation(TileType.FullRampD, new Vector3Int(x, height, z)) );
+			if (longSlope) {
+				PlaceLongSlope(x, height, z, new Vector3Int(0, 0, 1), 0b1000, TileType.FullRampD);
+			}
+			else {
+				PlaceFullSlope(x, height, z, TileType.FullRampD);
+			}
 
 			return;
 		}
@@ -143,8 +164,12 @@ public class TileData {
 		rand -= downChance;
 
 		if (rand < leftChance && leftChance > 0 && (neighbors2 & 0b0001) > 0) {
-			tileTypes[x, height, z] = TileType.FullRampL;
-			tileLocations.Add( new TileLocation(TileType.FullRampL, new Vector3Int(x, height, z)) );
+			if (longSlope) {
+				PlaceLongSlope(x, height, z, new Vector3Int(1, 0, 0), 0b0001, TileType.FullRampL);
+			}
+			else {
+				PlaceFullSlope(x, height, z, TileType.FullRampL);
+			}
 
 			return;
 		}
@@ -152,11 +177,42 @@ public class TileData {
 		rand -= leftChance;
 
 		if (rand < rightChance && rightChance > 0 && (neighbors2 & 0b0010) > 0) {
-			tileTypes[x, height, z] = TileType.FullRampR;
-			tileLocations.Add( new TileLocation(TileType.FullRampR, new Vector3Int(x, height, z)) );
+			if (longSlope) {
+				PlaceLongSlope(x, height, z, new Vector3Int(-1, 0, 0), 0b0010, TileType.FullRampR);
+			}
+			else {
+				PlaceFullSlope(x, height, z, TileType.FullRampR);
+			}
 
 			return;
 		}
+	}
+
+	// Places a 45 degree slope
+	private void PlaceFullSlope (int x, int y, int z, TileType type) {
+		tileTypes[x, y, z] = type;
+		tileLocations.Add( new TileLocation(type, new Vector3Int(x, y, z)) );
+	}
+
+	// Places a long 22.5 degree slope if it fits, otherwise places a 45 degree slope
+	private void PlaceLongSlope (int x, int y, int z, Vector3Int backDir, int mask, TileType type) {
+		int neighbors = GetNeighborDifference(x + backDir.x, y, z + backDir.z, -1);
+
+		if ((neighbors & mask) == 0) {
+			PlaceFullSlope(x, y, z, type);
+
+			return;
+		}
+
+		int temp = (int)type - (int)TileType.FullRampU;
+		TileType raisedType = (TileType)((int)TileType.RaisedRampU + temp);
+		TileType halfType = (TileType)((int)TileType.HalfRampU + temp);
+
+		tileTypes[x, y, z] = raisedType;
+		tileLocations.Add( new TileLocation(raisedType, new Vector3Int(x, y, z)) );
+
+		tileTypes[x + backDir.x, y, z + backDir.z] = halfType;
+		tileLocations.Add( new TileLocation(halfType, new Vector3Int(x + backDir.x, y, z + backDir.z)) );
 	}
 
 	// Returns an int representing whether the neighboring heights in each direction are lower

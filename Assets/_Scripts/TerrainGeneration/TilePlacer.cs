@@ -34,19 +34,51 @@ public class TilePlacer : MonoBehaviour {
 				break;
 
 				case TileType.FullRampU:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 0);
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 0, 0b0000);
 				break;
 
 				case TileType.FullRampD:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 2);
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 2, 0b0000);
 				break;
 
 				case TileType.FullRampL:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 3);
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 3, 0b0000);
 				break;
 
 				case TileType.FullRampR:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 1);
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 1, 0b0000);
+				break;
+
+				case TileType.RaisedRampU:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 0, 0b0100);
+				break;
+
+				case TileType.RaisedRampD:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 2, 0b0100);
+				break;
+
+				case TileType.RaisedRampL:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 3, 0b0100);
+				break;
+
+				case TileType.RaisedRampR:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 1, 0b0100);
+				break;
+
+				case TileType.HalfRampU:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 0, 0b1000);
+				break;
+
+				case TileType.HalfRampD:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 2, 0b1000);
+				break;
+
+				case TileType.HalfRampL:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 3, 0b1000);
+				break;
+
+				case TileType.HalfRampR:
+					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 1, 0b1000);
 				break;
 			}
 		}
@@ -100,7 +132,7 @@ public class TilePlacer : MonoBehaviour {
 	}
 
 	// Places a full slope tile at the given
-	private static void PlaceSlope (int x, int y, int z, int rotation) {
+	private static void PlaceSlope (int x, int y, int z, int rotation, int slopeType) {
 		Vector3Int pos = new Vector3Int(x, y, z);
 		int front = GetEdge(pos, 0, 0)[0] ? 0b1000 : 0b0000;
 		int back = GetEdge(pos, 1, 0)[0] ? 0b0100 : 0b0000;
@@ -118,7 +150,7 @@ public class TilePlacer : MonoBehaviour {
 		right = (right | rightR);
 
 		int edgeBool = (front | back | left | right);
-		string index = $"{0b0000},{0b0000},{RotateEdges(edgeBool, rotation)}";
+		string index = $"{0b0000},{slopeType},{RotateEdges(edgeBool, rotation)}";
 
 		if (tileEdges.ContainsKey(index)) {
 			PlaceTile(x, y, z, rotation, tileEdges[index]);
@@ -240,6 +272,16 @@ public class TilePlacer : MonoBehaviour {
 		tileEdges.Add($"{0b0000},{0b0000},{0b1001}", 7);
 		tileEdges.Add($"{0b0000},{0b0000},{0b1010}", 8);
 		tileEdges.Add($"{0b0000},{0b0000},{0b1000}", 9);
+
+		tileEdges.Add($"{0b0000},{0b0100},{0b1011}", 10);
+		tileEdges.Add($"{0b0000},{0b0100},{0b1001}", 11);
+		tileEdges.Add($"{0b0000},{0b0100},{0b1010}", 12);
+		tileEdges.Add($"{0b0000},{0b0100},{0b1000}", 13);
+
+		tileEdges.Add($"{0b0000},{0b1000},{0b0011}", 14);
+		tileEdges.Add($"{0b0000},{0b1000},{0b0001}", 15);
+		tileEdges.Add($"{0b0000},{0b1000},{0b0010}", 16);
+		tileEdges.Add($"{0b0000},{0b1000},{0b0000}", 17);
 	}
 }
 

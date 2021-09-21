@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    [Range(2, 16)]
+    [Range(2, 24)]
     [SerializeField]
     int size;
     [SerializeField]
@@ -30,8 +30,8 @@ public class TerrainGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        float[,] noise = Noise.GenerateNoiseMap(size, noiseSettings, Vector2.zero);
-        AddEffectsToNoise(noise);
+        noiseSettings.seed = Random.Range(10, 5000);
+        float[,] noise = GenerateMapNoise();
 
         Texture texture = TextureGenerator.TextureFromNoiseMap(noise);
         material.mainTexture = texture;
