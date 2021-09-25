@@ -20,13 +20,15 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] int flattenPeakLookRange;
 
     [SerializeField] Material material;
-    [SerializeField] MeshFilter meshFilter;
+    [SerializeField] public MeshFilter meshFilter;
     [SerializeField] MeshRenderer meshRender;
-    [SerializeField] float meshScale;
+    [SerializeField] public float meshScale;
 
     [SerializeField] bool flatTilesMesh;
 
     [SerializeField] bool autoUpdate;
+
+
 
     public void GenerateMap()
     {
@@ -110,3 +112,17 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

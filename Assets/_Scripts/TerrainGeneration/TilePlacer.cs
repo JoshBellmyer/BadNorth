@@ -8,13 +8,18 @@ public class TilePlacer : MonoBehaviour {
 	private static TileData tileData;
 	private static TileSet tileSet;
 	private static CombineInstance[] cInstances;
+	private static CombineInstance[] mInstances;
 	private static List<GameObject> tempTiles;
 	private static Mesh mesh;
+	private static Mesh cMesh;
+	private static GameObject tempObj;
+
 	private static int cIndex;
+	private static int mIndex;
 
 
 	// Places tiles based on the given tileData and tileSet, and combines them into a single mesh
-	public static Mesh PlaceTiles (TileData _tileData, TileSet _tileSet) {
+	public static Mesh PlaceTiles (TileData _tileData, TileSet _tileSet, MeshFilter colMesh) {
 		tileData = _tileData;
 		tileSet = _tileSet;
 
@@ -23,9 +28,17 @@ public class TilePlacer : MonoBehaviour {
 		}
 
 		mesh = new Mesh();
+		cMesh = new Mesh();
 		tempTiles = new List<GameObject>();
 		cInstances = new CombineInstance[tileData.tileLocations.Count];
 		cIndex = 0;
+
+		tempObj = new GameObject();
+		mInstances = new CombineInstance[tileData.slopeCount + 1];
+		mInstances[0] = new CombineInstance();
+		mInstances[0].mesh = colMesh.mesh;
+		mInstances[0].transform = tempObj.transform.localToWorldMatrix;
+		mIndex = 1;
 
 		foreach (TileLocation tileLoc in tileData.tileLocations) {
 			switch (tileLoc.type) {
@@ -83,7 +96,11 @@ public class TilePlacer : MonoBehaviour {
 			}
 		}
 
+		// tempObj.transform.localScale = new Vector3(1, 1, -1);
+
 		mesh.CombineMeshes(cInstances);
+		cMesh.CombineMeshes(mInstances);
+		colMesh.mesh = cMesh;
 
 		foreach (GameObject obj in tempTiles) {
 			Destroy(obj);
@@ -131,7 +148,7 @@ public class TilePlacer : MonoBehaviour {
 		}
 	}
 
-	// Places a full slope tile at the given
+	// Places a full slope tile at the given location
 	private static void PlaceSlope (int x, int y, int z, int rotation, int slopeType) {
 		Vector3Int pos = new Vector3Int(x, y, z);
 		int front = GetEdge(pos, 0, 0)[0] ? 0b1000 : 0b0000;
@@ -154,6 +171,7 @@ public class TilePlacer : MonoBehaviour {
 
 		if (tileEdges.ContainsKey(index)) {
 			PlaceTile(x, y, z, rotation, tileEdges[index]);
+			PlaceMeshTile(x, y, z, rotation, tileEdges[index]);
 		}
 	}
 
@@ -172,6 +190,56 @@ public class TilePlacer : MonoBehaviour {
 		cInstances[cIndex].mesh = meshObject.GetComponent<MeshFilter>().mesh;
 		cInstances[cIndex].transform = meshObject.transform.localToWorldMatrix;
 		cIndex++;
+	}
+
+	// Places a mesh tile and adds it to the collision mesh
+	private static void PlaceMeshTile (int x, int y, int z, int rotation, int tileIndex) {
+		int meshIndex = -1;
+
+		switch (tileIndex) {
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+				meshIndex = 0;
+			break;
+
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+				meshIndex = 2;
+			break;
+
+			case 14:
+			case 15:
+			case 16:
+			case 17:
+				meshIndex = 1;
+			break;
+		}
+
+		if (meshIndex < 0) {
+			return;
+		}
+
+		GameObject tileObject = (GameObject)Instantiate(Game.instance.otherMeshes[meshIndex]);
+		tempTiles.Add(tileObject);
+
+		float offset = (tileData.sizeX / 2.0f) - 0.5f;
+		tileObject.transform.position = new Vector3(x - offset, y - 0.5f, z - offset);
+		tileObject.transform.eulerAngles = new Vector3(0, 90 * rotation, 0);
+
+		tempObj.transform.localScale = new Vector3(1, 1, 1);
+		tileObject.transform.SetParent(tempObj.transform);
+		tempObj.transform.localScale = new Vector3(1, 1, -1);
+
+		GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
+
+		mInstances[mIndex] = new CombineInstance();
+		mInstances[mIndex].mesh = meshObject.GetComponent<MeshFilter>().mesh;
+		mInstances[mIndex].transform = meshObject.transform.localToWorldMatrix;
+		mIndex++;
 	}
 
 	// Returns the edge data from the given pos in the given direction

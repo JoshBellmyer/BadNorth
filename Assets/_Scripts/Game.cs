@@ -8,6 +8,8 @@ public class Game : MonoBehaviour {
 
 	public TileSet testTileSet;
 
+	public GameObject[] otherMeshes;
+
 	private void Start () {
 		if (instance == null || instance == this) {
 			instance = this;

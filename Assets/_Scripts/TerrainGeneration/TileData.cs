@@ -9,6 +9,7 @@ public class TileData {
 	public int sizeX;
 	public int sizeY;
 	public int sizeZ;
+	public int slopeCount;
 
 	private float[,] noise;
 	private float meshScale;
@@ -192,12 +193,17 @@ public class TileData {
 	private void PlaceFullSlope (int x, int y, int z, TileType type) {
 		tileTypes[x, y, z] = type;
 		tileLocations.Add( new TileLocation(type, new Vector3Int(x, y, z)) );
+
+		slopeCount++;
 	}
 
 	// Places a long 22.5 degree slope if it fits, otherwise places a 45 degree slope
 	private void PlaceLongSlope (int x, int y, int z, Vector3Int backDir, int mask, TileType type) {
 		int neighbors = GetNeighborDifference(x + backDir.x, y, z + backDir.z, -1);
 
+		if (tileTypes[x + backDir.x, y, z + backDir.z] != TileType.None) {
+			return;
+		}
 		if ((neighbors & mask) == 0) {
 			PlaceFullSlope(x, y, z, type);
 
@@ -213,6 +219,8 @@ public class TileData {
 
 		tileTypes[x + backDir.x, y, z + backDir.z] = halfType;
 		tileLocations.Add( new TileLocation(halfType, new Vector3Int(x + backDir.x, y, z + backDir.z)) );
+
+		slopeCount += 2;
 	}
 
 	// Returns an int representing whether the neighboring heights in each direction are lower
