@@ -157,8 +157,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 7100564001335670523}
   rotationPoint: {x: 0, y: 0, z: 0}
-  rotateSpeed: 30
+  rotateSpeed: 50
+  rotateMin: 1
+  rotateMax: 89
   zoomSpeed: 0.01
+  zoomMin: 1
+  zoomMax: 15
 --- !u!20 &5098521557953940539
 Camera:
   m_ObjectHideFlags: 0

@@ -8,8 +8,14 @@ public class CameraController : MonoBehaviour
 {
     public PlayerInput playerInput;
     public Vector3 rotationPoint = Vector3.zero;
+
     public float rotateSpeed;
+    public float rotateMin;
+    public float rotateMax;
+
     public float zoomSpeed;
+    public float zoomMin;
+    public float zoomMax;
 
     private Vector2 rawInputRotation;
     private float rawInputZoom;
@@ -25,12 +31,18 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
+        // Rotation
         Vector2 rotation = -rawInputRotation * rotateSpeed;
         transform.RotateAround(rotationPoint, Vector3.up, rotation.x * Time.deltaTime);
-        transform.RotateAround(rotationPoint, -transform.right, rotation.y * Time.deltaTime);
+        if ((transform.rotation.eulerAngles.x < rotateMax && rotation.y < 0) || (transform.rotation.eulerAngles.x > rotateMin && rotation.y > 0))
+        {
+            transform.RotateAround(rotationPoint, -transform.right, rotation.y * Time.deltaTime);
+        }
 
-        float zoom = rawInputZoom * zoomSpeed;
+        // Zoom
+        float zoom = -rawInputZoom * zoomSpeed;
         camera.orthographicSize += zoom;
+        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, zoomMin, zoomMax);
     }
 
     public void OnRotate(InputAction.CallbackContext value)
