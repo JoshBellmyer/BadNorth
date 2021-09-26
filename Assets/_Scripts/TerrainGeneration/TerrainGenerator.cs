@@ -22,6 +22,7 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] Material material;
     [SerializeField] MeshFilter meshFilter;
     [SerializeField] MeshRenderer meshRender;
+    [SerializeField] MeshCollider meshCollider;
     [SerializeField] float meshScale;
 
     [SerializeField] bool flatTilesMesh;
@@ -36,7 +37,9 @@ public class TerrainGenerator : MonoBehaviour
         Texture texture = TextureGenerator.TextureFromNoiseMap(noise);
         material.mainTexture = texture;
 
-        meshFilter.sharedMesh = flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(noise, meshScale).CreateMesh() : MeshGenerator.GenerateTerrainMesh(noise, meshScale).CreateMesh();
+        Mesh mesh = flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(noise, meshScale).CreateMesh() : MeshGenerator.GenerateTerrainMesh(noise, meshScale).CreateMesh();
+        meshFilter.sharedMesh = mesh;
+        meshCollider.sharedMesh = mesh;
         meshRender.sharedMaterial.mainTexture = texture;
     }
 

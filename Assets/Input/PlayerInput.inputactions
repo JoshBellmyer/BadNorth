@@ -22,7 +22,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Fire",
+                    "name": "CursorSelect",
                     "type": "Button",
                     "id": "080fe4a4-f7d5-4d34-a4d5-f31121b0428b",
                     "expectedControlType": "Button",
@@ -207,11 +207,11 @@
                 {
                     "name": "",
                     "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Fire",
+                    "action": "CursorSelect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -222,7 +222,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Fire",
+                    "action": "CursorSelect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -233,7 +233,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Touch",
-                    "action": "Fire",
+                    "action": "CursorSelect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -244,7 +244,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "Fire",
+                    "action": "CursorSelect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -255,7 +255,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Fire",
+                    "action": "CursorSelect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

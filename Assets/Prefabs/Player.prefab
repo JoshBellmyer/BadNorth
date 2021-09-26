@@ -130,7 +130,19 @@ MonoBehaviour:
     m_ActionId: f1a0c6fd-1329-47f2-ae1a-f85ad3a60d14
     m_ActionName: Player/Look[/XInputControllerWindows/rightStick,/Mouse/delta]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2112761802484108638}
+        m_TargetAssemblyTypeName: CursorController, Assembly-CSharp
+        m_MethodName: OnCursorSelect
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 080fe4a4-f7d5-4d34-a4d5-f31121b0428b
     m_ActionName: Player/Fire[/XInputControllerWindows/rightTrigger,/Mouse/leftButton]
   - m_PersistentCalls:
@@ -242,6 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorTransform: {fileID: 7654383597929029811}
   canvasTransform: {fileID: 1554923549114292813}
+  playerInput: {fileID: 7100564001335670523}
 --- !u!1 &6696758229062741777
 GameObject:
   m_ObjectHideFlags: 0
