@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
-    public PlayerInput playerInput;
     public Vector3 rotationPoint = Vector3.zero;
 
     public float rotateSpeed;
@@ -20,12 +19,10 @@ public class CameraController : MonoBehaviour
     private Vector2 rawInputRotation;
     private float rawInputZoom;
 
-    private string currentControlScheme;
-    private Camera camera;
+    private new Camera camera;
 
     private void Start()
     {
-        currentControlScheme = playerInput.currentControlScheme;
         camera = GetComponent<Camera>();
     }
 
@@ -56,35 +53,5 @@ public class CameraController : MonoBehaviour
         float inputZoom = value.ReadValue<float>();
         rawInputZoom = inputZoom;
 
-    }
-
-    //This is automatically called from PlayerInput, when the input device has changed
-    //(IE: Keyboard -> Xbox Controller)
-    public void OnControlsChanged()
-    {
-
-        if (playerInput.currentControlScheme != currentControlScheme)
-        {
-            currentControlScheme = playerInput.currentControlScheme;
-
-            Debug.Log("OnControlsChanged");
-            RemoveAllBindingOverrides();
-        }
-    }
-
-    public void OnDeviceLost()
-    {
-        Debug.Log("OnDeviceLost");
-    }
-
-
-    public void OnDeviceRegained()
-    {
-        Debug.Log("OnDeviceRegained");
-    }
-
-    void RemoveAllBindingOverrides()
-    {
-        InputActionRebindingExtensions.RemoveAllBindingOverrides(playerInput.currentActionMap);
     }
 }
