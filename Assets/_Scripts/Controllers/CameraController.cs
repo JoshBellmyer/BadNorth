@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
+    public PlayerInput playerInput;
+
     public Vector3 rotationPoint = Vector3.zero;
 
     public float rotateSpeed;
@@ -19,21 +20,21 @@ public class CameraController : MonoBehaviour
     private Vector2 rawInputRotation;
     private float rawInputZoom;
 
-    private new Camera camera;
+    public new Camera camera;
 
     private void Start()
     {
-        camera = GetComponent<Camera>();
+        camera = playerInput.camera;
     }
 
     private void Update()
     {
         // Rotation
         Vector2 rotation = -rawInputRotation * rotateSpeed;
-        transform.RotateAround(rotationPoint, Vector3.up, rotation.x * Time.deltaTime);
-        if ((transform.rotation.eulerAngles.x < rotateMax && rotation.y < 0) || (transform.rotation.eulerAngles.x > rotateMin && rotation.y > 0))
+        camera.transform.RotateAround(rotationPoint, Vector3.up, rotation.x * Time.deltaTime);
+        if ((camera.transform.rotation.eulerAngles.x < rotateMax && rotation.y < 0) || (camera.transform.rotation.eulerAngles.x > rotateMin && rotation.y > 0))
         {
-            transform.RotateAround(rotationPoint, -transform.right, rotation.y * Time.deltaTime);
+            camera.transform.RotateAround(rotationPoint, -camera.transform.right, rotation.y * Time.deltaTime);
         }
 
         // Zoom
