@@ -101,6 +101,7 @@ public class TilePlacer : MonoBehaviour {
 		mesh.CombineMeshes(cInstances);
 		cMesh.CombineMeshes(mInstances);
 		colMesh.mesh = cMesh;
+		colMesh.GetComponent<MeshCollider>().sharedMesh = cMesh;
 
 		foreach (GameObject obj in tempTiles) {
 			Destroy(obj);

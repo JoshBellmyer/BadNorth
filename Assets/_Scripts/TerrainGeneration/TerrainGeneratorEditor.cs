@@ -10,7 +10,7 @@ public class TerrainGeneratorEditor : Editor
     {
         DrawDefaultInspector();
 
-        TerrainGenerator generator = (TerrainGenerator)target;
-        generator.GenerateMap();
+        // TerrainGenerator generator = (TerrainGenerator)target;
+        // generator.GenerateMap();
     }
 }
