@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 public class MapGenerator : MonoBehaviour {
 
 	[SerializeField] private TerrainGenerator terrainGenerator;
 	[SerializeField] private GameObject meshObject;
+	[SerializeField] private NavMeshSurface surface;
 
 
 	private void Start () {
@@ -28,5 +31,8 @@ public class MapGenerator : MonoBehaviour {
 
 		float offset = (noise.GetLength(0) / 2.0f) - 0.5f;
 		meshObject.transform.position += new Vector3(-offset, 0, -offset);
+		
+		surface.BuildNavMesh();
+		terrainGenerator.meshFilter.GetComponent<MeshRenderer>().enabled = false;
 	}
 }
