@@ -14,7 +14,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Look",
+                    "name": "CursorMove",
                     "type": "Value",
                     "id": "f1a0c6fd-1329-47f2-ae1a-f85ad3a60d14",
                     "expectedControlType": "Vector2",
@@ -178,7 +178,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Look",
+                    "action": "CursorMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -189,7 +189,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Look",
+                    "action": "CursorMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -200,7 +200,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "Look",
+                    "action": "CursorMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
