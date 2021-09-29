@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,37 +6,82 @@ public class Group<T> where T : Unit {
 
     private Vector3 _targetPosition;
     private List<T> _units;
+    private bool _canMove;
     private bool _canAttack;
-    public bool CanAttack
+
+    public Group()
+    {
+        _units = new List<T>();
+        _targetPosition = Vector3.zero;
+        _canMove = false;
+        _canAttack = false;
+        _units.Add((T) Activator.CreateInstance(typeof(T)));
+        // _units.Add((T) Activator.CreateInstance(typeof(T)));
+        // _units.Add((T) Activator.CreateInstance(typeof(T)));
+        // _units.Add((T) Activator.CreateInstance(typeof(T)));
+    }
+
+    public bool CanMove
     {
         get
         {
-            return _canAttack;
+            return _canMove;
         }
         set
         {
-            // TODO: Implement
-            _canAttack = value;
+            _canMove = value;
+            if (value == false)
+            {
+                foreach (var v in _units)
+                {
+                    v.CanMove = false;
+                }
+            }
+            if (value == true)
+            {
+                foreach (var v in _units)
+                {
+                    v.CanMove = true;
+                }
+            }
         }
     }
-    
+
+    public bool CanAttack
+    {
+        get => _canAttack;
+        set
+        {
+            _canAttack = value;
+            foreach (var v in _units)
+            {
+                v.CanAttack = value;
+            }
+        }
+    }
+
     public void TeleportTo(Vector3 position, float rotation)
     {
         // TODO: Implement
     }
     public void TeleportTo(Vector3 position)
     {
-        // TODO: Implement
         TeleportTo(position, 0f);
     }
     public void MoveTo(Vector3 position)
     {
-        // TODO: Implement
+        _targetPosition = position;
+        if (_canMove && !position.Equals(_targetPosition))
+        {
+            foreach (var v in _units)
+            {
+                v.IssueDestination(_targetPosition);
+            }
+        }
     }
     public int GetLiving()
     {
-        // TODO: Implement
-        return 0;
+        return _units.Count;
     }
     public void DestroyGroup()
     {
@@ -43,11 +89,11 @@ public class Group<T> where T : Unit {
     }
     public Vector3 GetDestination()
     {
-        // TODO: Implement
-        return Vector3.zero;
+        return _targetPosition;
     }
     public string GetDescription()
     {
+        // TODO: Implement
         return null;
     }
     
