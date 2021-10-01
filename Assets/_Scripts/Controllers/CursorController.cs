@@ -13,9 +13,12 @@ public class CursorController : MonoBehaviour
     private new Camera camera;
     private Ray cursorSelectRay;
 
+    private PlayerController playerController;
+
     private void Start()
     {
         camera = playerInput.camera;
+        playerController = GetComponent<PlayerController>();
     }
 
     private void Update()
@@ -33,7 +36,7 @@ public class CursorController : MonoBehaviour
 
     public void OnCursorSelect(InputAction.CallbackContext context)
     {
-        if (playerInput.playerIndex >= 0) // For some reason, this gets called an extra time for index -1 ???
+        if (Game.instance.IsPlayerRegistered(playerController)) // Accounts for Unity bug, see https://forum.unity.com/threads/player-input-manager-adds-an-extra-player-with-index-1.1039000/
         {
             if (context.performed)
             {

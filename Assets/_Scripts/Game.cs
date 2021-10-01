@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Game : MonoBehaviour {
 
@@ -8,7 +9,9 @@ public class Game : MonoBehaviour {
 
 	public TileSet testTileSet;
 	public GameObject[] otherMeshes;
-	public int numPlayers;
+
+	private bool isPaused;
+	private List<PlayerController> players;
 
 
 	private void Start () {
@@ -20,5 +23,32 @@ public class Game : MonoBehaviour {
 		}
 
 		DontDestroyOnLoad(gameObject);
+
+		players = new List<PlayerController>();
 	}
+
+	public bool IsPlayerRegistered(PlayerController player)
+    {
+		return players.Contains(player);
+    }
+
+	public void RegisterPlayer(PlayerController playerControl)
+    {
+		players.Add(playerControl);
+    }
+
+	public void Pause(PlayerController playerControl)
+    {
+		isPaused = true;
+		foreach(PlayerController player in players)
+        {
+			player.SetControlsEnabled(false);
+        }
+		playerControl.SetControlsEnabled(true);
+    }
+
+	public void Unpause()
+    {
+		isPaused = false;
+    }
 }
