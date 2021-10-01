@@ -17,9 +17,21 @@ public class PlayerController : MonoBehaviour
         Game.instance.RegisterPlayer(this);
     }
 
-    public void SetControlsEnabled(bool enabled)
+    public void SetControlsActivated(bool enabled)
     {
-        playerInput.enabled = enabled;
+        if (enabled)
+        {
+            playerInput.ActivateInput();
+        }
+        else
+        {
+            playerInput.DeactivateInput();
+        }
+    }
+
+    public void SetActionMap(string name)
+    {
+        playerInput.SwitchCurrentActionMap(name);
     }
 
     public void OnPause(InputAction.CallbackContext context)
@@ -28,7 +40,7 @@ public class PlayerController : MonoBehaviour
         {
             if (context.performed)
             {
-                Debug.Log("Pause");
+                Game.instance.Pause(this);
             }
         }            
     }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 75282544904575318}
   - component: {fileID: 6985450925375201689}
   - component: {fileID: 2112761802484108638}
+  - component: {fileID: 3427785615071788072}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -217,6 +218,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5c8611c4-c27c-4eb9-9ba0-6923b565c1ec
     m_ActionName: Player/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3427785615071788072}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: OnUnpause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2e2a7838-b3dd-40a4-afe1-c4a0fcd97d00
+    m_ActionName: UI/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -270,6 +287,18 @@ MonoBehaviour:
   cursorTransform: {fileID: 7654383597929029811}
   canvasTransform: {fileID: 1554923549114292813}
   playerInput: {fileID: 7100564001335670523}
+--- !u!114 &3427785615071788072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756096735779366189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a3294ac9a1c2ed42a472ab5cf2292f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6696758229062741777
 GameObject:
   m_ObjectHideFlags: 0

@@ -42,13 +42,23 @@ public class Game : MonoBehaviour {
 		isPaused = true;
 		foreach(PlayerController player in players)
         {
-			player.SetControlsEnabled(false);
+			player.SetControlsActivated(false);
         }
-		playerControl.SetControlsEnabled(true);
+		playerControl.SetControlsActivated(true);
+		playerControl.SetActionMap("UI");
+
+		UIManager.instance.Pause();
     }
 
 	public void Unpause()
     {
 		isPaused = false;
-    }
+		foreach (PlayerController player in players)
+		{
+			player.SetControlsActivated(true);
+			player.SetActionMap("Player");
+		}
+
+		UIManager.instance.Unpause();
+	}
 }
