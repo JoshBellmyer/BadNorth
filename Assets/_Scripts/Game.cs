@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,14 @@ public class Game : MonoBehaviour {
     {
 		return players.Contains(player);
     }
+
+    internal void ExitGame()
+    {
+		Application.Quit();
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+#endif
+	}
 
 	public void RegisterPlayer(PlayerController playerControl)
     {
