@@ -184,7 +184,7 @@ public class TilePlacer : MonoBehaviour {
 		// GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
 		GameObject tileObject;
 
-		if (tileData.tileTypes[x, y + 1, z] == 0) {
+		if (y > tileSet.threshold && tileSet.threshold > 0) {
 			tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariationTop(20));
 		}
 		else {
@@ -235,7 +235,7 @@ public class TilePlacer : MonoBehaviour {
 			return;
 		}
 
-		GameObject tileObject = (GameObject)Instantiate(Game.instance.otherMeshes[meshIndex]);
+		GameObject tileObject = (GameObject)Instantiate(Game.mapGenerator.otherMeshes[meshIndex]);
 		tempTiles.Add(tileObject);
 
 		float offset = (tileData.sizeX / 2.0f) - 0.5f;
@@ -370,6 +370,7 @@ public class TilePlacer : MonoBehaviour {
 public class TileSet {
 
 	public string setName;
+	public int threshold;
 	public TileGroup[] models;
 	public Material material;
 }

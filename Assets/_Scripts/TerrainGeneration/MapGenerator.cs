@@ -6,6 +6,11 @@ using Unity.AI.Navigation;
 
 public class MapGenerator : MonoBehaviour {
 
+	[Header("Tile Sets")]
+	[SerializeField] private TileSet tileSet1;
+	public GameObject[] otherMeshes;
+
+	[Header("Other References")]
 	[SerializeField] private TerrainGenerator terrainGenerator;
 	[SerializeField] private GameObject meshObject;
 	[SerializeField] private NavMeshSurface surface;
@@ -17,6 +22,8 @@ public class MapGenerator : MonoBehaviour {
 
 	// Generate a full map, including terrain shape, tiles, and slopes
 	public void GenerateMap () {
+		Game.mapGenerator = this;
+
 		MeshFilter filter = meshObject.GetComponent<MeshFilter>();
 		MeshRenderer renderer = meshObject.GetComponent<MeshRenderer>();
 		float meshScale = terrainGenerator.meshScale;
@@ -24,7 +31,7 @@ public class MapGenerator : MonoBehaviour {
 		terrainGenerator.GenerateMap();
 		float[,] noise = terrainGenerator.GenerateMapNoise();
 		TileData tileData = new TileData(noise, meshScale);
-		TileSet tileSet = Game.instance.tileSet1;
+		TileSet tileSet = tileSet1;
 
 		filter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, terrainGenerator.meshFilter);
 		renderer.material = tileSet.material;

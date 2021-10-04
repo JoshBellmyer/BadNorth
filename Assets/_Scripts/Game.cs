@@ -6,12 +6,7 @@ using UnityEngine.InputSystem;
 public class Game : MonoBehaviour {
 
 	public static Game instance;
-
-	[Header("Tile Sets")]
-	public TileSet testTileSet;
-	public TileSet tileSet1;
-
-	public GameObject[] otherMeshes;
+	public static MapGenerator mapGenerator;
 
 	private bool isPaused;
 	private List<PlayerController> players;
