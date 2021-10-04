@@ -98,6 +98,8 @@ public class TilePlacer : MonoBehaviour {
 
 		// tempObj.transform.localScale = new Vector3(1, 1, -1);
 
+		mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
 		mesh.CombineMeshes(cInstances);
 		cMesh.CombineMeshes(mInstances);
 		colMesh.mesh = cMesh;
@@ -179,7 +181,16 @@ public class TilePlacer : MonoBehaviour {
 
 	// Places a tile and adds it to the mesh
 	private static void PlaceTile (int x, int y, int z, int rotation, int tileIndex) {
-		GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+		// GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+		GameObject tileObject;
+
+		if (tileData.tileTypes[x, y + 1, z] == 0) {
+			tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariationTop(20));
+		}
+		else {
+			tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+		}
+
 		tempTiles.Add(tileObject);
 
 		tileObject.transform.position = new Vector3(x, y, z);
@@ -368,6 +379,7 @@ public class TileSet {
 public class TileGroup {
 
 	public GameObject[] variations;
+	public GameObject[] tVariations;
 
 	public GameObject RandomVariation (int varChance) {
 		int chance = Random.Range(0, 100);
@@ -379,6 +391,22 @@ public class TileGroup {
 		}
 
 		return variations[0];
+	}
+
+	public GameObject RandomVariationTop (int varChance) {
+		if (tVariations.Length < 1) {
+			return RandomVariation(varChance);
+		}
+
+		int chance = Random.Range(0, 100);
+
+		if (chance < varChance && tVariations.Length > 1) {
+			int rand = Random.Range(0, tVariations.Length - 1);
+
+			return tVariations[rand + 1];
+		}
+
+		return tVariations[0];
 	}
 }
 

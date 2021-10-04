@@ -24,9 +24,10 @@ public class MapGenerator : MonoBehaviour {
 		terrainGenerator.GenerateMap();
 		float[,] noise = terrainGenerator.GenerateMapNoise();
 		TileData tileData = new TileData(noise, meshScale);
+		TileSet tileSet = Game.instance.tileSet1;
 
-		filter.mesh = TilePlacer.PlaceTiles(tileData, Game.instance.testTileSet, terrainGenerator.meshFilter);
-		renderer.material = Game.instance.testTileSet.material;
+		filter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, terrainGenerator.meshFilter);
+		renderer.material = tileSet.material;
 		terrainGenerator.meshFilter.gameObject.transform.localScale = new Vector3(1, 1, -1);
 
 		float offset = (noise.GetLength(0) / 2.0f) - 0.5f;
