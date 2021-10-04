@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,17 +10,19 @@ public abstract class Unit : MonoBehaviour
     private bool _canMove;
     private bool _canAttack;
     private Vector3 _destination;
+    private string _team;
 
     public static float MAX_PROXIMITY
     {
         get => 5.0f;
     }
 
-    public bool CanMove
+    internal bool CanMove
     {
         get => _canMove;
         set
         {
+            _canMove = value;
             if (value == true)
             {
                 _navMeshAgent.SetDestination(_destination);
@@ -32,7 +36,8 @@ public abstract class Unit : MonoBehaviour
 
         }
     }
-    public bool CanAttack
+
+    internal bool CanAttack
     {
         get => _canAttack;
         set
@@ -71,7 +76,7 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    public void CeaseMovement()
+    internal void CeaseMovement()
     {
         if (_directive != Directive.NONE)
         {
@@ -79,7 +84,7 @@ public abstract class Unit : MonoBehaviour
             _directive = Directive.NONE;
         }
     }
-    public void IssueDestination(Vector3 destination)
+    internal void IssueDestination(Vector3 destination)
     {
         // TODO: Transform destination before setting.
         _destination = destination;
@@ -88,6 +93,10 @@ public abstract class Unit : MonoBehaviour
             _navMeshAgent.SetDestination(destination);
             _directive = Directive.MOVE;
         }
+    }
+    internal void SetTeam(string team)
+    {
+        _team = team;
     }
     protected void IssueAttackLocation(Vector3 target)
     {
@@ -101,4 +110,12 @@ public abstract class Unit : MonoBehaviour
         }
     }
     protected abstract bool FindAttack();
+    protected HashSet<Unit> GetEnemies()
+    {
+        return TeamManager.Primary.GetNotOnTeam(_team);
+    }
+    protected HashSet<Unit> GetAllies()
+    {
+        return TeamManager.Primary.GetOnTeam(_team);
+    }
 }

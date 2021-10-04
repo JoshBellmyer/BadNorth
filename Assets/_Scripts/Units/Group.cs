@@ -9,18 +9,20 @@ public class Group<T> where T : Unit {
     private bool _canMove;
     private bool _canAttack;
 
-    public Group()
-    {
+    public Group(string team) {
         _units = new List<T>();
         _targetPosition = Vector3.zero;
         _canMove = false;
         _canAttack = false;
-        _units.Add((T) Activator.CreateInstance(typeof(T)));
+        _units.Add((T)Activator.CreateInstance(typeof(T)));
         // _units.Add((T) Activator.CreateInstance(typeof(T)));
         // _units.Add((T) Activator.CreateInstance(typeof(T)));
         // _units.Add((T) Activator.CreateInstance(typeof(T)));
+        foreach (var u in _units) {
+            u.SetTeam(team);
+            TeamManager.Primary.Add(team, u);
+        }
     }
-
     public bool CanMove
     {
         get
@@ -96,5 +98,4 @@ public class Group<T> where T : Unit {
         // TODO: Implement
         return null;
     }
-    
 }
