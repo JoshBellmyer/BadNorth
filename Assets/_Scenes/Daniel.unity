@@ -1861,7 +1861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1710dddd4b79c747877c1d6243bfd08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseScreen: {fileID: 0}
+  pauseScreen: {fileID: 631598437}
 --- !u!4 &2128813573
 Transform:
   m_ObjectHideFlags: 0
