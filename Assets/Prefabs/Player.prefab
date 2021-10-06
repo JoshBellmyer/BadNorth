@@ -268,7 +268,7 @@ MonoBehaviour:
   playerInput: {fileID: 7100564001335670523}
   rotationPoint: {x: 0, y: 0, z: 0}
   rotateSpeed: 50
-  rotateMin: 30
+  rotateMin: 38
   rotateMax: 89
   zoomSpeed: 0.01
   zoomMin: 1

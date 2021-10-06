@@ -10,6 +10,7 @@ public class TileData {
 	public int sizeY;
 	public int sizeZ;
 	public int slopeCount;
+	public int maxHeight;
 
 	private float[,] noise;
 	private float meshScale;
@@ -25,6 +26,7 @@ public class TileData {
 		sizeX = noise.GetLength(0);
 		sizeZ = noise.GetLength(1);
 		sizeY = (int)meshScale + 2;
+		maxHeight = 0;
 
 		tileTypes = new TileType[sizeX, sizeY, sizeZ];
 		tileLocations = new List<TileLocation>();
@@ -35,6 +37,10 @@ public class TileData {
 			for (int z = 0; z < sizeZ; z++) {
 				int height = (int)Mathf.Round(noise[x, z] * meshScale);
 				tileHeights[x, z] = height;
+
+				if (height > maxHeight) {
+					maxHeight = height;
+				}
 
 				if (height > 0) {
 					tileTypes[x, height, z] = TileType.Cube;
@@ -136,7 +142,6 @@ public class TileData {
 		}
 
 		int rand = Random.Range(0, 100);
-		bool placed = false;
 
 		if (rand < upChance && upChance > 0 && (neighbors2 & 0b0100) > 0) {
 			if (longSlope) {

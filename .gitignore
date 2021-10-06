@@ -63,3 +63,6 @@ sysinfo.txt
 crashlytics-build.properties
 
 .vsconfig
+UserSettings/EditorUserSettings.asset
+.DS_Store
+
