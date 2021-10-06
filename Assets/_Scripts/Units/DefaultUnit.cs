@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class DefaultUnit : Unit
 {
+
+    public static int HEALTH
+    {
+        get => 100;
+    }
+
+    internal DefaultUnit() : base(HEALTH)
+    {
+        
+    }
     protected override bool FindAttack()
     {
         return false;
     }
+
 }

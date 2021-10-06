@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Group<T> where T : Unit {
+public class Group<T> : Group where T : Unit {
 
     private Vector3 _targetPosition;
     private List<T> _units;
@@ -14,13 +13,15 @@ public class Group<T> where T : Unit {
         _targetPosition = Vector3.zero;
         _canMove = false;
         _canAttack = false;
-        _units.Add((T)Activator.CreateInstance(typeof(T)));
-        // _units.Add((T) Activator.CreateInstance(typeof(T)));
-        // _units.Add((T) Activator.CreateInstance(typeof(T)));
-        // _units.Add((T) Activator.CreateInstance(typeof(T)));
+
+        // Gets the prefab, should one exist. Throws an exception if it's not in the list.
+        GameObject prefab = UnitManager.instance.GetPrefabOfType(typeof(T));
+        _units.Add(UnityEngine.Object.Instantiate(prefab).GetComponent<T>());
+
         foreach (var u in _units) {
             u.SetTeam(team);
-            TeamManager.Primary.Add(team, u);
+            u.SetGroup(this);
+            TeamManager.instance.Add(team, u);
         }
     }
     public bool CanMove
@@ -98,4 +99,21 @@ public class Group<T> where T : Unit {
         // TODO: Implement
         return null;
     }
+    public List<T> GetUnits()
+    {
+        return _units;
+    }
+    internal void RemoveUnit(T unit)
+    {
+        _units.Remove(unit);
+    }
+
+    internal override void RemoveUnit(Unit unit)
+    {
+        if (unit is T) RemoveUnit((T) unit);
+    }
+}
+public abstract class Group
+{
+    internal abstract void RemoveUnit(Unit unit);
 }
