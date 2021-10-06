@@ -8,6 +8,9 @@ public class Game : MonoBehaviour {
 	public static Game instance;
 	public static MapGenerator mapGenerator;
 
+	[Header("Prefabs")]
+	[SerializeField] private Boat boatPrefab;
+
 	private bool isPaused;
 	private List<PlayerController> players;
 
@@ -18,6 +21,8 @@ public class Game : MonoBehaviour {
 		}
 		else {
 			Destroy(gameObject);
+
+			return;
 		}
 
 		DontDestroyOnLoad(gameObject);
@@ -33,6 +38,9 @@ public class Game : MonoBehaviour {
 	public void RegisterPlayer(PlayerController playerControl)
     {
 		players.Add(playerControl);
+
+		Boat boat = Instantiate<Boat>(boatPrefab);
+		boat.SetPlayer(playerControl);
     }
 
 	public void Pause(PlayerController playerControl)

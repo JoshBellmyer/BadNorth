@@ -182,13 +182,30 @@ public class TilePlacer : MonoBehaviour {
 	// Places a tile and adds it to the mesh
 	private static void PlaceTile (int x, int y, int z, int rotation, int tileIndex) {
 		// GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
-		GameObject tileObject;
+		GameObject tileObject = null;
 
-		if (y > tileSet.threshold && tileSet.threshold > 0) {
-			tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariationTop(20));
-		}
-		else {
-			tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+		switch (tileSet.topType) {
+			case TileSet.TopType.None:
+				tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+			break;
+
+			case TileSet.TopType.Height:
+				if (y > tileData.maxHeight - tileSet.topLayers && tileSet.topLayers > 0 && y >= tileSet.topMinLayer) {
+					tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariationTop(20));
+				}
+				else {
+					tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+				}
+			break;
+
+			case TileSet.TopType.AllTops:
+				if (tileData.tileTypes[x, y + 1, z] == TileType.None) {
+					tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariationTop(20));
+				}
+				else {
+					tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
+				}
+			break;
 		}
 
 		tempTiles.Add(tileObject);
@@ -370,9 +387,18 @@ public class TilePlacer : MonoBehaviour {
 public class TileSet {
 
 	public string setName;
-	public int threshold;
+	public TopType topType;
+	public int topLayers;
+	public int topMinLayer;
 	public TileGroup[] models;
 	public Material material;
+
+
+	public enum TopType {
+		None = 0,
+		Height = 1,
+		AllTops = 2,
+	}
 }
 
 
