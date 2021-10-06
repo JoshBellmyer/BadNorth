@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
     private PlayerInput playerInput;
     private string currentControlScheme;
+    private MultiplayerEventSystem eventSystem;
 
     private void Start()
     {
@@ -15,6 +19,7 @@ public class PlayerController : MonoBehaviour
         currentControlScheme = playerInput.currentControlScheme;
 
         Game.instance.RegisterPlayer(this);
+        eventSystem = GetComponent<MultiplayerEventSystem>();
     }
 
     public void SetControlsActivated(bool enabled)
@@ -41,6 +46,7 @@ public class PlayerController : MonoBehaviour
             if (context.performed)
             {
                 Game.instance.Pause(this);
+                eventSystem.SetSelectedGameObject(FindObjectOfType<Selectable>().gameObject, new BaseEventData(eventSystem));
             }
         }            
     }
