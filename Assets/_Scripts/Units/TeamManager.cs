@@ -2,16 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamManager
+public class TeamManager : MonoBehaviour
 {
-    public static TeamManager Primary = new TeamManager();
+    public static TeamManager instance;
 
 
     private Dictionary<string, HashSet<Unit>> dictionary = new Dictionary<string, HashSet<Unit>>();
 
-    public TeamManager()
+    private void Awake()
     {
-
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
     }
 
     public void Add(string team, Unit unit)

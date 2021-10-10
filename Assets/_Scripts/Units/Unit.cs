@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,14 +8,18 @@ public abstract class Unit : MonoBehaviour
 {
     private NavMeshAgent _navMeshAgent;
     private Directive _directive;
+    private string _team;
+    private Group _group;
+    private Vector3 _destination;
+
+    [SerializeField] private int _health;
     private bool _canMove;
     private bool _canAttack;
-    private Vector3 _destination;
-    private string _team;
 
-    public static float MAX_PROXIMITY
+    public static readonly float MAX_PROXIMITY = 5.0f;
+    protected Unit(int health)
     {
-        get => 5.0f;
+        _health = health;
     }
 
     internal bool CanMove
@@ -70,9 +75,17 @@ public abstract class Unit : MonoBehaviour
         {
             _directive = Directive.NONE;
         }
-        if (_canAttack && _directive == Directive.NONE && FindAttack() && !_navMeshAgent.isStopped)
+        if (_canAttack && (_directive == Directive.NONE || _navMeshAgent.remainingDistance < MAX_PROXIMITY) && FindAttack() && !_navMeshAgent.isStopped)
         {
             _directive = Directive.ATTACK;
+        }
+    }
+    private void LateUpdate()
+    {
+        if (_health <= 0)
+        {
+            _group.RemoveUnit(this);
+            TeamManager.instance.Remove(_team, this);
         }
     }
 
@@ -98,6 +111,10 @@ public abstract class Unit : MonoBehaviour
     {
         _team = team;
     }
+    internal void SetGroup(Group group)
+    {
+        _group = group;
+    }
     protected void IssueAttackLocation(Vector3 target)
     {
         if (_canMove)
@@ -112,10 +129,19 @@ public abstract class Unit : MonoBehaviour
     protected abstract bool FindAttack();
     protected HashSet<Unit> GetEnemies()
     {
-        return TeamManager.Primary.GetNotOnTeam(_team);
+        return TeamManager.instance.GetNotOnTeam(_team);
     }
     protected HashSet<Unit> GetAllies()
     {
-        return TeamManager.Primary.GetOnTeam(_team);
+        return TeamManager.instance.GetOnTeam(_team);
+    }
+    protected IOrderedEnumerable<Unit> GetOrderedEnemiesWithin(float maximumDistance)
+    {
+        HashSet<Unit> enemies = GetEnemies();
+        IEnumerable<Unit> e = from enemy in enemies
+                              where Vector3.Distance(this.transform.position, enemy.transform.position) < maximumDistance
+                              select enemy;
+        IOrderedEnumerable<Unit> t = e.OrderBy(v => Vector3.Distance(this.transform.position, v.transform.position));
+        return t;
     }
 }
