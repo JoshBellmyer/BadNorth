@@ -55,6 +55,9 @@ public class UIController : MonoBehaviour
     void SetUpUnitOptionImages()
     {
         unitImages = new List<Image>();
+
+        return;
+
         int imageSize = 100;
         float offset = -unitOptions.Count * imageSize / 2f;
         for(int i=0; i<unitOptions.Count; i++)
@@ -77,6 +80,7 @@ public class UIController : MonoBehaviour
             if (context.performed)
             {
                 Debug.Log("Deploying: " + SelectedUnitType);
+                playerController.Boat.SetSail();
             }
         }
     }
