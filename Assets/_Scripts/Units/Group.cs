@@ -11,18 +11,17 @@ public class Group<T> : Group where T : Unit {
     public Group(string team) {
         _units = new List<T>();
         _targetPosition = Vector3.zero;
-        _canMove = false;
-        _canAttack = false;
 
         // Gets the prefab, should one exist. Throws an exception if it's not in the list.
         GameObject prefab = UnitManager.instance.GetPrefabOfType(typeof(T));
         _units.Add(UnityEngine.Object.Instantiate(prefab).GetComponent<T>());
-
         foreach (var u in _units) {
             u.SetTeam(team);
             u.SetGroup(this);
             TeamManager.instance.Add(team, u);
         }
+        _canMove = true;
+        _canAttack = false;
     }
     public bool CanMove
     {
@@ -65,7 +64,10 @@ public class Group<T> : Group where T : Unit {
 
     public void TeleportTo(Vector3 position, float rotation)
     {
-        // TODO: Implement
+        foreach (var u in _units)
+        {
+            u.transform.position = position;
+        }
     }
     public void TeleportTo(Vector3 position)
     {
@@ -73,9 +75,9 @@ public class Group<T> : Group where T : Unit {
     }
     public void MoveTo(Vector3 position)
     {
-        _targetPosition = position;
         if (_canMove && !position.Equals(_targetPosition))
         {
+            _targetPosition = position;
             foreach (var v in _units)
             {
                 v.IssueDestination(_targetPosition);

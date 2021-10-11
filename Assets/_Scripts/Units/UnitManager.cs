@@ -7,8 +7,9 @@ using UnityEngine;
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager instance;
-    [SerializeField] List<GameObject> prefabList;
-    Dictionary<Type, GameObject> prefabMap = new Dictionary<Type, GameObject>();
+    [SerializeField] private List<GameObject> prefabList;
+    private Dictionary<Type, GameObject> prefabMap = new Dictionary<Type, GameObject>();
+
     private void Awake()
     {
         if (instance != null)
@@ -33,10 +34,14 @@ public class UnitManager : MonoBehaviour
                 }
             }
             return null;
-        } else
+        }
+        else
         {
             return prefabMap[type];
         }
-        
+    }
+    public List<GameObject> GetRegisteredPrefabs()
+    {
+        return prefabList;
     }
 }

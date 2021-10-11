@@ -61,16 +61,22 @@ public abstract class Unit : MonoBehaviour
         MOVE, ATTACK, NONE
     }
 
-    void Start()
+    private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _canAttack = false;
+        _canMove = false;
         _destination = Vector3.zero;
         _directive = Directive.NONE;
+    }
+    void Start()
+    {
+
     }
     void Update()
     {
         // There has got to be a better way to implement this.
+        /*
         if (_navMeshAgent.isStopped)
         {
             _directive = Directive.NONE;
@@ -78,7 +84,7 @@ public abstract class Unit : MonoBehaviour
         if (_canAttack && (_directive == Directive.NONE || _navMeshAgent.remainingDistance < MAX_PROXIMITY) && FindAttack() && !_navMeshAgent.isStopped)
         {
             _directive = Directive.ATTACK;
-        }
+        }*/
     }
     private void LateUpdate()
     {
@@ -100,6 +106,7 @@ public abstract class Unit : MonoBehaviour
     internal void IssueDestination(Vector3 destination)
     {
         // TODO: Transform destination before setting.
+        Debug.Log(_navMeshAgent is null);
         _destination = destination;
         if (_canMove)
         {
