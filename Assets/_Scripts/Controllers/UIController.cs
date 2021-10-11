@@ -56,8 +56,6 @@ public class UIController : MonoBehaviour
     {
         unitImages = new List<Image>();
 
-        return;
-
         int imageSize = 100;
         float offset = -unitOptions.Count * imageSize / 2f;
         for(int i=0; i<unitOptions.Count; i++)
