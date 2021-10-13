@@ -207,8 +207,8 @@ MonoBehaviour:
     m_ActionName: Player/New action
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 75282544904575318}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 3427785615071788072}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
         m_MethodName: OnPause
         m_Mode: 0
         m_Arguments:

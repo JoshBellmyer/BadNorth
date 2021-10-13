@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -12,6 +14,7 @@ public class UIController : MonoBehaviour
     List<Image> unitImages;
 
     PlayerController playerController;
+    private MultiplayerEventSystem eventSystem;
 
     string SelectedUnitType
     {
@@ -50,6 +53,7 @@ public class UIController : MonoBehaviour
 
         playerController = GetComponent<PlayerController>();
         SelectedUnitIndex = 0;
+        eventSystem = GetComponent<MultiplayerEventSystem>();
     }
 
     void SetUpUnitOptionImages()
@@ -90,6 +94,18 @@ public class UIController : MonoBehaviour
             if (context.performed)
             {
                 SelectedUnitIndex += (int)context.ReadValue<float>();
+            }
+        }
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (Game.instance.IsPlayerRegistered(playerController)) // Accounts for Unity bug, see https://forum.unity.com/threads/player-input-manager-adds-an-extra-player-with-index-1.1039000/
+        {
+            if (context.performed)
+            {
+                Game.instance.Pause(playerController);
+                eventSystem.SetSelectedGameObject(FindObjectOfType<Selectable>().gameObject, new BaseEventData(eventSystem));
             }
         }
     }
