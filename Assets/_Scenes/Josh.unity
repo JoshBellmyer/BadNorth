@@ -1977,7 +1977,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2999157ed51a788439ffd2ebb93321b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabList: []
 --- !u!4 &1904463578
 Transform:
   m_ObjectHideFlags: 0

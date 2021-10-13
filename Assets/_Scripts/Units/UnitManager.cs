@@ -27,6 +27,7 @@ public class UnitManager : MonoBehaviour
         if (!prefabMap.ContainsKey(type)) {
             return null;
         }
+
         return prefabMap[type];
     }
 
