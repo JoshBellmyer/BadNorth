@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] GameObject settingsMenu;
+
     public void OnExitGameButton()
     {
         Game.instance.ExitGame();
@@ -17,6 +19,7 @@ public class PauseMenu : MonoBehaviour
 
     public void OnSettingsButton()
     {
-        Debug.Log("Open settings");
+        settingsMenu.SetActive(true);
+        gameObject.SetActive(false);
     }
 }

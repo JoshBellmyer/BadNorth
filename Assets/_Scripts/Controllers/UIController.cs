@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
     [SerializeField] GameObject pauseScreen;
+    [SerializeField] GameObject settingsMenu;
     [SerializeField] List<string> unitOptions; // TODO: determine type
 
     List<Image> unitImages;
@@ -56,6 +57,7 @@ public class UIController : MonoBehaviour
         SelectedUnitIndex = 0;
         eventSystem = GetComponent<MultiplayerEventSystem>();
         pauseScreen.SetActive(false);
+        settingsMenu.SetActive(false);
     }
 
     void SetUpUnitOptionImages()
@@ -124,8 +126,14 @@ public class UIController : MonoBehaviour
             if (context.performed)
             {
                 Game.instance.Unpause();
-                pauseScreen.SetActive(false);
+                ClearUI();
             }
         }
+    }
+
+    public void ClearUI()
+    {
+        pauseScreen.SetActive(false);
+        settingsMenu.SetActive(false);
     }
 }

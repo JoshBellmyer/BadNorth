@@ -7,8 +7,7 @@ using UnityEngine;
 [Serializable]
 public class Settings
 {
-    [NonSerialized] string path;
-    int playerId;
+    public int playerId;
     public float zoomSensitivity = 0.01f;
     public float rotateSensitivity = 50.0f;
     public float cursorSensitivity = 1;
@@ -16,7 +15,6 @@ public class Settings
     public Settings(int playerId)
     {
         this.playerId = playerId;
-        path = GetPath(playerId);
         Save();
     }
 
@@ -42,7 +40,7 @@ public class Settings
     public void Save()
     {
         string json = JsonUtility.ToJson(this);
-        using (StreamWriter writer = new StreamWriter(path))
+        using (StreamWriter writer = new StreamWriter(GetPath(playerId)))
         {
             writer.Write(json);
         }
