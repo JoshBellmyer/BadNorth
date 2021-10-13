@@ -59,10 +59,6 @@ public class Game : MonoBehaviour {
         {
 			player.SetControlsActivated(false);
         }
-		playerControl.SetControlsActivated(true);
-		playerControl.SetActionMap("UI");
-
-		UIManager.instance.Pause();
     }
 
 	public void Unpause()
@@ -73,7 +69,5 @@ public class Game : MonoBehaviour {
 			player.SetControlsActivated(true);
 			player.SetActionMap("Player");
 		}
-
-		UIManager.instance.Unpause();
 	}
 }

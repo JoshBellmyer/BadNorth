@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
+    [SerializeField] GameObject pauseScreen;
     [SerializeField] List<string> unitOptions; // TODO: determine type
 
     List<Image> unitImages;
@@ -54,6 +55,7 @@ public class UIController : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         SelectedUnitIndex = 0;
         eventSystem = GetComponent<MultiplayerEventSystem>();
+        pauseScreen.SetActive(false);
     }
 
     void SetUpUnitOptionImages()
@@ -105,6 +107,11 @@ public class UIController : MonoBehaviour
             if (context.performed)
             {
                 Game.instance.Pause(playerController);
+
+                playerController.SetControlsActivated(true);
+                playerController.SetActionMap("UI");
+                pauseScreen.SetActive(true);
+
                 eventSystem.SetSelectedGameObject(FindObjectOfType<Selectable>().gameObject, new BaseEventData(eventSystem));
             }
         }
@@ -117,6 +124,7 @@ public class UIController : MonoBehaviour
             if (context.performed)
             {
                 Game.instance.Unpause();
+                pauseScreen.SetActive(false);
             }
         }
     }
