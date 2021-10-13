@@ -12,6 +12,14 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private string currentControlScheme;
     private MultiplayerEventSystem eventSystem;
+    
+    private Boat _boat;
+
+    public Boat Boat {
+        get => _boat;
+        set { _boat = value; }
+    }
+
 
     private void Start()
     {

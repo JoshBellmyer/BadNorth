@@ -13,6 +13,7 @@ public class Boat : MonoBehaviour {
 
 	private GameObject cam;
 	private bool moving;
+	private bool following;
 	private Group<Unit> mountedGroup;
 	private Rigidbody rb;
 
@@ -27,7 +28,7 @@ public class Boat : MonoBehaviour {
 
 			return;
 		}
-		else if (cam != null) {
+		else if (cam != null && following) {
 			FollowCamera();
 		}
 	}
@@ -36,6 +37,8 @@ public class Boat : MonoBehaviour {
 	public void SetPlayer (PlayerController player) {
 		transform.SetParent(player.transform);
 		cam = player.GetComponent<CameraController>().camera.gameObject;
+		player.Boat = this;
+		following = true;
 	}
 
 	public void SetSail () {
@@ -52,13 +55,15 @@ public class Boat : MonoBehaviour {
 	}
 
 	public void DismountUnits () {
+		moving = false;
+		following = false;
+
 		if (mountedGroup == null) {
 			return;
 		}
 
 		// TODO: drop units off at the nearest walkable space
 
-		moving = false;
 		mountedGroup = null;
 	}
 
