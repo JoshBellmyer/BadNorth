@@ -52,7 +52,7 @@ public class Game : MonoBehaviour {
 		boat.SetPlayer(playerControl);
     }
 
-	public void Pause(PlayerController playerControl)
+	public void Pause()
     {
 		isPaused = true;
 		foreach(PlayerController player in players)

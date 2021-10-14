@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
-    [SerializeField] GameObject pauseScreen;
+    [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject settingsMenu;
     [SerializeField] List<string> unitOptions; // TODO: determine type
 
@@ -56,7 +56,7 @@ public class UIController : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         SelectedUnitIndex = 0;
         eventSystem = GetComponent<MultiplayerEventSystem>();
-        pauseScreen.SetActive(false);
+        pauseMenu.SetActive(false);
         settingsMenu.SetActive(false);
     }
 
@@ -108,11 +108,11 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
-                Game.instance.Pause(playerController);
+                Game.instance.Pause();
 
                 playerController.SetControlsActivated(true);
                 playerController.SetActionMap("UI");
-                pauseScreen.SetActive(true);
+                pauseMenu.SetActive(true);
 
                 eventSystem.SetSelectedGameObject(FindObjectOfType<Selectable>().gameObject, new BaseEventData(eventSystem));
             }
@@ -133,7 +133,7 @@ public class UIController : MonoBehaviour
 
     public void ClearUI()
     {
-        pauseScreen.SetActive(false);
+        pauseMenu.SetActive(false);
         settingsMenu.SetActive(false);
     }
 }
