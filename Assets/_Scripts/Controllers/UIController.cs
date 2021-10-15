@@ -11,72 +11,20 @@ public class UIController : MonoBehaviour
     [SerializeField] Canvas canvas;
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject settingsMenu;
-    [SerializeField] List<string> unitOptions; // TODO: determine type
-
-    List<Image> unitImages;
+    [SerializeField] OverlayMenu overlayMenu;
 
     PlayerController playerController;
     private MultiplayerEventSystem eventSystem;
 
-    string SelectedUnitType
-    {
-        get => unitOptions[_selectedUnitIndex];
-    }
-
-    int SelectedUnitIndex
-    {
-        get => _selectedUnitIndex;
-        set
-        {
-            _selectedUnitIndex = value;
-            if (_selectedUnitIndex >= unitOptions.Count)
-            {
-                _selectedUnitIndex = 0;
-            }
-            if (_selectedUnitIndex < 0)
-            {
-                _selectedUnitIndex = unitOptions.Count - 1;
-            }
-
-            foreach(Image image in unitImages)
-            {
-                image.color = Color.white;
-            }
-
-            unitImages[_selectedUnitIndex].color = Color.yellow;
-        }
-    }
-
-    int _selectedUnitIndex;
+    
 
     private void Start()
     {
-        SetUpUnitOptionImages();
-
         playerController = GetComponent<PlayerController>();
-        SelectedUnitIndex = 0;
+        overlayMenu.SelectedUnitIndex = 0;
         eventSystem = GetComponent<MultiplayerEventSystem>();
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(false);
-    }
-
-    void SetUpUnitOptionImages()
-    {
-        unitImages = new List<Image>();
-
-        int imageSize = 100;
-        float offset = -unitOptions.Count * imageSize / 2f;
-        for(int i=0; i<unitOptions.Count; i++)
-        {
-            Image image = new GameObject().AddComponent<Image>(); // TODO: Add real images
-            image.transform.SetParent(canvas.transform, false);
-            image.transform.localPosition = new Vector3(offset + imageSize * i, 150, 0);
-            image.rectTransform.sizeDelta = new Vector2(imageSize, imageSize);
-            image.rectTransform.pivot = Vector2.zero;
-            image.name = "Unit Selection";
-
-            unitImages.Add(image);
-        }
     }
 
     public void OnDeployUnit(InputAction.CallbackContext context)
@@ -85,7 +33,7 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
-                Debug.Log("Deploying: " + SelectedUnitType);
+                Debug.Log("Deploying: " + overlayMenu.SelectedUnitType);
                 playerController.Boat.SetSail();
             }
         }
@@ -97,7 +45,7 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
-                SelectedUnitIndex += (int)context.ReadValue<float>();
+                overlayMenu.SelectedUnitIndex += (int)context.ReadValue<float>();
             }
         }
     }
