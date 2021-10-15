@@ -5,6 +5,12 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject settingsMenu;
+    [SerializeField] UIController uiController;
+
+    private void OnEnable()
+    {
+        uiController.SelectSomething();
+    }
 
     public void OnExitGameButton()
     {

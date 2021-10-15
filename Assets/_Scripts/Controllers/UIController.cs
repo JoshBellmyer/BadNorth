@@ -114,7 +114,7 @@ public class UIController : MonoBehaviour
                 playerController.SetActionMap("UI");
                 pauseMenu.SetActive(true);
 
-                eventSystem.SetSelectedGameObject(FindObjectOfType<Selectable>().gameObject, new BaseEventData(eventSystem));
+                SelectSomething();
             }
         }
     }
@@ -135,5 +135,10 @@ public class UIController : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(false);
+    }
+
+    public void SelectSomething()
+    {
+        eventSystem.SetSelectedGameObject(FindObjectOfType<Selectable>().gameObject, new BaseEventData(eventSystem));
     }
 }

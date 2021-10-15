@@ -4,15 +4,17 @@ using UnityEngine.UI;
 public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
-    [SerializeField] InputField cursorSensitivity;
-    [SerializeField] InputField zoomSensitivity;
-    [SerializeField] InputField rotateSensitivity;
+    [SerializeField] Text cursorSensitivity;
+    [SerializeField] Text zoomSensitivity;
+    [SerializeField] Text rotateSensitivity;
 
+    [SerializeField] UIController uiController;
     [SerializeField] Player player;
 
     private void OnEnable()
     {
         LoadSettingsValues();
+        uiController.SelectSomething();
     }
 
     public void LoadSettingsValues()
