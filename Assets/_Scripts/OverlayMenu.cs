@@ -3,42 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OverlayMenu : MonoBehaviour
+public class OverlayMenu : PlayerMenu
 {
     Canvas canvas;
-    [SerializeField] List<string> unitOptions; // TODO: determine type
     List<Image> unitImages;
-
-    public string SelectedUnitType
-    {
-        get => unitOptions[_selectedUnitIndex];
-    }
-
-    public int SelectedUnitIndex
-    {
-        get => _selectedUnitIndex;
-        set
-        {
-            _selectedUnitIndex = value;
-            if (_selectedUnitIndex >= unitOptions.Count)
-            {
-                _selectedUnitIndex = 0;
-            }
-            if (_selectedUnitIndex < 0)
-            {
-                _selectedUnitIndex = unitOptions.Count - 1;
-            }
-
-            foreach (Image image in unitImages)
-            {
-                image.color = Color.white;
-            }
-
-            unitImages[_selectedUnitIndex].color = Color.yellow;
-        }
-    }
-
-    int _selectedUnitIndex;
 
     private void Awake()
     {
@@ -51,8 +19,8 @@ public class OverlayMenu : MonoBehaviour
         unitImages = new List<Image>();
 
         int imageSize = 100;
-        float offset = -unitOptions.Count * imageSize / 2f;
-        for (int i = 0; i < unitOptions.Count; i++)
+        float offset = -player.unitOptions.Count * imageSize / 2f;
+        for (int i = 0; i < player.unitOptions.Count; i++)
         {
             Image image = new GameObject().AddComponent<Image>(); // TODO: Add real images
             image.transform.SetParent(canvas.transform, false);
@@ -63,5 +31,16 @@ public class OverlayMenu : MonoBehaviour
 
             unitImages.Add(image);
         }
+        SetSelectedUnitIndex(0);
+    }
+
+    public void SetSelectedUnitIndex(int index)
+    {
+        foreach (Image image in unitImages)
+        {
+            image.color = Color.white;
+        }
+
+        unitImages[index].color = Color.yellow;
     }
 }

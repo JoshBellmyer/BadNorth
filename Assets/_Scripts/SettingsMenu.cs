@@ -1,20 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingsMenu : MonoBehaviour
+public class SettingsMenu : PlayerMenu
 {
-    [SerializeField] GameObject pauseMenu;
     [SerializeField] Text cursorSensitivity;
     [SerializeField] Text zoomSensitivity;
     [SerializeField] Text rotateSensitivity;
 
     [SerializeField] UIController uiController;
-    [SerializeField] Player player;
 
     private void OnEnable()
     {
         LoadSettingsValues();
-        uiController.SelectSomething();
     }
 
     public void LoadSettingsValues()
@@ -34,7 +31,6 @@ public class SettingsMenu : MonoBehaviour
 
     public void Back()
     {
-        gameObject.SetActive(false);
-        pauseMenu.SetActive(true);
+        playerUIManager.SwitchMenu(typeof(PauseMenu));
     }
 }

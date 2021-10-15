@@ -2,16 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : PlayerMenu
 {
-    [SerializeField] GameObject settingsMenu;
-    [SerializeField] UIController uiController;
-
-    private void OnEnable()
-    {
-        uiController.SelectSomething();
-    }
-
     public void OnExitGameButton()
     {
         Game.instance.ExitGame();
@@ -20,12 +12,11 @@ public class PauseMenu : MonoBehaviour
     public void OnPlayButton()
     {
         Game.instance.Unpause();
-        gameObject.SetActive(false);
+        playerUIManager.SwitchMenu(typeof(OverlayMenu));
     }
 
     public void OnSettingsButton()
     {
-        settingsMenu.SetActive(true);
-        gameObject.SetActive(false);
+        playerUIManager.SwitchMenu(typeof(SettingsMenu));
     }
 }

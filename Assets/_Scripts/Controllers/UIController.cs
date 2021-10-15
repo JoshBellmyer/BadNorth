@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -8,23 +6,18 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    [SerializeField] Canvas canvas;
-    [SerializeField] GameObject pauseMenu;
-    [SerializeField] GameObject settingsMenu;
-    [SerializeField] OverlayMenu overlayMenu;
+    [SerializeField] PlayerUIManager playerUIManager;
+    Player player;
 
     PlayerController playerController;
-    private MultiplayerEventSystem eventSystem;
-
-    
+    private MultiplayerEventSystem eventSystem;    
 
     private void Start()
     {
-        playerController = GetComponent<PlayerController>();
-        overlayMenu.SelectedUnitIndex = 0;
+        player = GetComponent<Player>();
         eventSystem = GetComponent<MultiplayerEventSystem>();
-        pauseMenu.SetActive(false);
-        settingsMenu.SetActive(false);
+        playerController = GetComponent<PlayerController>();
+        player.SelectedUnitIndex = 0;
     }
 
     public void OnDeployUnit(InputAction.CallbackContext context)
@@ -33,7 +26,7 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
-                Debug.Log("Deploying: " + overlayMenu.SelectedUnitType);
+                Debug.Log("Deploying: " + player.SelectedUnitType);
                 playerController.Boat.SetSail();
             }
         }
@@ -45,7 +38,8 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
-                overlayMenu.SelectedUnitIndex += (int)context.ReadValue<float>();
+                player.SelectedUnitIndex += (int)context.ReadValue<float>();
+                playerUIManager.GetMenu<OverlayMenu>().SetSelectedUnitIndex(player.SelectedUnitIndex);
             }
         }
     }
@@ -60,9 +54,7 @@ public class UIController : MonoBehaviour
 
                 playerController.SetControlsActivated(true);
                 playerController.SetActionMap("UI");
-                pauseMenu.SetActive(true);
-
-                SelectSomething();
+                playerUIManager.SwitchMenu(typeof(PauseMenu));
             }
         }
     }
@@ -74,19 +66,17 @@ public class UIController : MonoBehaviour
             if (context.performed)
             {
                 Game.instance.Unpause();
-                ClearUI();
+                playerUIManager.SwitchMenu(typeof(OverlayMenu));
             }
         }
     }
 
-    public void ClearUI()
-    {
-        pauseMenu.SetActive(false);
-        settingsMenu.SetActive(false);
-    }
-
     public void SelectSomething()
     {
-        eventSystem.SetSelectedGameObject(FindObjectOfType<Selectable>().gameObject, new BaseEventData(eventSystem));
+        Selectable something = FindObjectOfType<Selectable>();
+        if (something && eventSystem)
+        {
+            eventSystem.SetSelectedGameObject(something.gameObject, new BaseEventData(eventSystem));
+        }
     }
 }
