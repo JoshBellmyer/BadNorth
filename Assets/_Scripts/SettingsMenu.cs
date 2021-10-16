@@ -7,8 +7,6 @@ public class SettingsMenu : PlayerMenu
     [SerializeField] Text zoomSensitivity;
     [SerializeField] Text rotateSensitivity;
 
-    [SerializeField] UIController uiController;
-
     private void OnEnable()
     {
         LoadSettingsValues();
