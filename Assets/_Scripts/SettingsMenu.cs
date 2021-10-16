@@ -7,8 +7,9 @@ public class SettingsMenu : PlayerMenu
     [SerializeField] Text zoomSensitivity;
     [SerializeField] Text rotateSensitivity;
 
-    private void OnEnable()
+    protected new void Start()
     {
+        base.Start();
         LoadSettingsValues();
     }
 

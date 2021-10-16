@@ -8,8 +8,9 @@ public class OverlayMenu : PlayerMenu
     Canvas canvas;
     List<Image> unitImages;
 
-    private void Awake()
+    protected new void Start()
     {
+        base.Start();
         canvas = GetComponent<Canvas>();
         SetUpUnitOptionImages();
     }
