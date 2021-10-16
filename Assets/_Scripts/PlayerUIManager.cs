@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerUIManager : MonoBehaviour
 {
+    public event Action switchMenuEvent;
+
     [SerializeField] List<PlayerMenu> menus = new List<PlayerMenu>();
 
     PlayerMenu activeMenu;
@@ -27,6 +29,7 @@ public class PlayerUIManager : MonoBehaviour
                 menu.gameObject.SetActive(false);
             }
         }
+        switchMenuEvent();
     }
 
     public T GetMenu<T>() where T : PlayerMenu

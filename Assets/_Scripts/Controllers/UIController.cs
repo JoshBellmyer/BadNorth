@@ -18,6 +18,12 @@ public class UIController : MonoBehaviour
         eventSystem = GetComponent<MultiplayerEventSystem>();
         playerController = GetComponent<PlayerController>();
         player.SelectedUnitIndex = 0;
+        playerUIManager.switchMenuEvent += OnSwitchMenu;
+    }
+
+    public void OnSwitchMenu()
+    {
+        SelectNavigationStart();
     }
 
     public void OnDeployUnit(InputAction.CallbackContext context)
@@ -67,24 +73,6 @@ public class UIController : MonoBehaviour
             {
                 Game.instance.Unpause();
                 playerUIManager.SwitchMenu(typeof(OverlayMenu));
-            }
-        }
-    }
-
-    public void OnNavigate(InputAction.CallbackContext context)
-    {
-        if (Game.instance.IsPlayerRegistered(playerController))
-        {
-            if (context.performed)
-            {
-                if(eventSystem.currentSelectedGameObject == null || !eventSystem.currentSelectedGameObject.activeInHierarchy)
-                {
-                    SelectNavigationStart();
-                }
-                else
-                {
-                    Debug.Log(eventSystem.currentSelectedGameObject.name);
-                }
             }
         }
     }
