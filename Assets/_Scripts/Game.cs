@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.AI;
 
 public class Game : MonoBehaviour {
 
@@ -11,10 +12,12 @@ public class Game : MonoBehaviour {
 
 	[Header("Prefabs")]
 	[SerializeField] private Boat boatPrefab;
-	[SerializeField] private UnityEngine.AI.NavMeshAgent dummyAgentPrefab;
+	public GameObject selectionPrefab;
 
 	private bool isPaused;
 	private List<PlayerController> players;
+
+	public const int everythingMask = 0x7FFFFFFF; 
 
 
 	private void Start () {

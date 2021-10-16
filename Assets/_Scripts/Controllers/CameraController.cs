@@ -27,6 +27,8 @@ public class CameraController : MonoBehaviour
     {
         camera = playerInput.camera;
         player = GetComponent<Player>();
+
+        SetCullingMask(player.playerId);
     }
 
     private void Update()
@@ -57,4 +59,29 @@ public class CameraController : MonoBehaviour
         rawInputZoom = inputZoom;
 
     }
+
+    private void SetCullingMask (int number) {
+        int mask = 0;
+
+        for (int i = 1; i <= 4; i++) {
+            if (i != number) {
+                mask = mask | LayerMask.GetMask($"Player {i}");
+            }
+        }
+
+        camera.cullingMask = ~mask;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

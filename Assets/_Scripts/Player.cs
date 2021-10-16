@@ -6,9 +6,10 @@ public class Player : MonoBehaviour
 {
     public List<string> unitOptions; // TODO: determine type
     public Settings settings;
+    public GameObject gridSelection;
 
     static int numPlayers = 0;
-    int playerId;
+    public int playerId;
 
     public string SelectedUnitType
     {
@@ -42,5 +43,8 @@ public class Player : MonoBehaviour
     private void Start()
     {
         settings = Settings.Load(playerId);
+        gridSelection = Instantiate(Game.instance.selectionPrefab);
+        gridSelection.layer = LayerMask.NameToLayer($"Player {playerId}");
+        gridSelection.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");;
     }
 }
