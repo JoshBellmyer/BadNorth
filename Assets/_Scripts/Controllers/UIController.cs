@@ -79,7 +79,7 @@ public class UIController : MonoBehaviour
             {
                 if(eventSystem.currentSelectedGameObject == null || !eventSystem.currentSelectedGameObject.activeInHierarchy)
                 {
-                    SelectSomething();
+                    SelectNavigationStart();
                 }
                 else
                 {
@@ -89,12 +89,8 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void SelectSomething()
+    public void SelectNavigationStart()
     {
-        Selectable something = FindObjectOfType<Selectable>();
-        if (something && eventSystem)
-        {
-            eventSystem.SetSelectedGameObject(something.gameObject, new BaseEventData(eventSystem));
-        }
+        eventSystem.SetSelectedGameObject(playerUIManager.SelectNavigationStart(), new BaseEventData(eventSystem));
     }
 }

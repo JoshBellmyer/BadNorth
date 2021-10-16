@@ -6,14 +6,11 @@ public class PlayerUIManager : MonoBehaviour
 {
     [SerializeField] List<PlayerMenu> menus = new List<PlayerMenu>();
 
+    PlayerMenu activeMenu;
+
     private void Start()
     {
-        foreach(PlayerMenu menu in menus)
-        {
-            menu.gameObject.SetActive(false);
-        }
-
-        menus[0].gameObject.SetActive(true);
+        SwitchMenu(typeof(OverlayMenu));
     }
 
     public void SwitchMenu(Type type)
@@ -22,6 +19,7 @@ public class PlayerUIManager : MonoBehaviour
         {
             if(menu.GetType() == type)
             {
+                activeMenu = menu;
                 menu.gameObject.SetActive(true);
             }
             else
@@ -42,5 +40,10 @@ public class PlayerUIManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public GameObject SelectNavigationStart()
+    {
+        return activeMenu.navigationStart;
     }
 }

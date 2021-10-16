@@ -922,6 +922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f24c7c7d9e47848b8cf814fa8052c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navigationStart: {fileID: 5220790063210001119}
   player: {fileID: 630848437815155769}
   playerUIManager: {fileID: 4823997099460646592}
 --- !u!1 &2451888425355089017
@@ -1385,6 +1386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9bf473383612764fb5793a044e0a698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navigationStart: {fileID: 5270916570222419018}
   player: {fileID: 630848437815155769}
   playerUIManager: {fileID: 4823997099460646592}
   cursorSensitivity: {fileID: 7856477198511130565}
@@ -2213,6 +2215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0660d14e18be74cbdb193aef9ad45b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navigationStart: {fileID: 0}
   player: {fileID: 630848437815155769}
   playerUIManager: {fileID: 4823997099460646592}
 --- !u!1 &8141367258437828919
