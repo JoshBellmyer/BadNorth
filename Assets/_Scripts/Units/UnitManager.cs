@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager instance;
     private static Dictionary<UnitType, GameObject> prefabMap = new Dictionary<UnitType, GameObject>();
+    private static List<NavMeshAgent> dummyActive = new List<NavMeshAgent>();
+    private static List<NavMeshAgent> dummyInactive = new List<NavMeshAgent>();
 
     private void Awake()
     {
@@ -21,6 +24,7 @@ public class UnitManager : MonoBehaviour
         }
 
         InitializePrefabs();
+        InitializeDummies(20);
     }
 
     public GameObject GetPrefabOfType (UnitType type) {
@@ -47,6 +51,45 @@ public class UnitManager : MonoBehaviour
                 prefabMap.Add(ut, unit);
             }
         }
+    }
+
+    public static void DeactivateDummy (NavMeshAgent agent) {
+        if (!dummyActive.Contains(agent)) {
+            return;
+        }
+
+        agent.gameObject.SetActive(false);
+
+        dummyActive.Remove(agent);
+        dummyInactive.Add(agent);
+    }
+
+    public static NavMeshAgent GetDummyAgent () {
+        if (dummyInactive.Count < 1) {
+            return null;
+        }
+
+        NavMeshAgent agent = dummyInactive[0];
+        agent.gameObject.SetActive(true);
+
+        dummyInactive.Remove(agent);
+        dummyActive.Add(agent);
+
+        return agent;
+    }
+
+    private void InitializeDummies (int amount) {
+        GameObject dummyContainer = new GameObject("Dummy Agents");
+        NavMeshAgent dummy = Resources.Load<NavMeshAgent>("DummyAgent");
+
+        for (int i = 0; i < amount; i++) {
+            NavMeshAgent newAgent = Instantiate<NavMeshAgent>(dummy);
+            newAgent.transform.SetParent(dummyContainer.transform);
+            newAgent.gameObject.SetActive(false);
+            dummyInactive.Add(newAgent);
+        }
+
+        dummyActive.Clear();
     }
 }
 

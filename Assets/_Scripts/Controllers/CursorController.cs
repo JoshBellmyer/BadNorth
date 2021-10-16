@@ -51,7 +51,8 @@ public class CursorController : MonoBehaviour
                 if(Physics.Raycast(cursorSelectRay, out hit))
                 {
                     Vector3 location = hit.point;
-                    Debug.Log(location);
+
+                    Debug.Log(location + " -> " + Game.GetGridPos(location));
                 }
 
                 Debug.Log("Select");

@@ -856,6 +856,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatPrefab: {fileID: 7351449562876905076, guid: 5cdb48319c4554fb6a8b5678d3fce425, type: 3}
+  dummyAgentPrefab: {fileID: 0}
 --- !u!4 &1685019288
 Transform:
   m_ObjectHideFlags: 0
@@ -1185,7 +1186,7 @@ GameObject:
   - component: {fileID: 2127228807}
   - component: {fileID: 2127228805}
   - component: {fileID: 2127228808}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mesh
   m_TagString: Terrain
   m_Icon: {fileID: 0}

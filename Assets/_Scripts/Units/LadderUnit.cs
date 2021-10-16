@@ -15,4 +15,8 @@ public class LadderUnit : Unit
     {
         return false;
     }
+
+    public Vector3 GetEdgePos () {
+    	return Vector3.zero;
+    }
 }
