@@ -71,6 +71,24 @@ public class UIController : MonoBehaviour
         }
     }
 
+    public void OnNavigate(InputAction.CallbackContext context)
+    {
+        if (Game.instance.IsPlayerRegistered(playerController))
+        {
+            if (context.performed)
+            {
+                if(eventSystem.currentSelectedGameObject == null || !eventSystem.currentSelectedGameObject.activeInHierarchy)
+                {
+                    SelectSomething();
+                }
+                else
+                {
+                    Debug.Log(eventSystem.currentSelectedGameObject.name);
+                }
+            }
+        }
+    }
+
     public void SelectSomething()
     {
         Selectable something = FindObjectOfType<Selectable>();

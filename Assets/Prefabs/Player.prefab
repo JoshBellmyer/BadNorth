@@ -308,7 +308,19 @@ MonoBehaviour:
     m_ActionId: 080fe4a4-f7d5-4d34-a4d5-f31121b0428b
     m_ActionName: Player/Fire[/XInputControllerWindows/rightTrigger,/Mouse/leftButton]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3427785615071788072}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: OnNavigate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 5fe5ffc6-e3fd-4163-9f56-ed1cccffd2be
     m_ActionName: UI/Navigate[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
@@ -513,7 +525,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3294ac9a1c2ed42a472ab5cf2292f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 1412812136556421925}
   playerUIManager: {fileID: 4823997099460646592}
 --- !u!114 &84483306784721333
 MonoBehaviour:
@@ -913,7 +924,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 630848437815155769}
   playerUIManager: {fileID: 4823997099460646592}
-  settingsMenu: {fileID: 4122351470179830886}
 --- !u!1 &2451888425355089017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1251,7 +1261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61a4fe59560e5574c8c2b3870802dfac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiController: {fileID: 3427785615071788072}
   menus:
   - {fileID: 8981137377831816436}
   - {fileID: 2470003029319251782}
@@ -1378,12 +1387,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 630848437815155769}
   playerUIManager: {fileID: 4823997099460646592}
-  pauseMenu: {fileID: 2320021148808835868}
   cursorSensitivity: {fileID: 7856477198511130565}
   zoomSensitivity: {fileID: 4035514680786426936}
   rotateSensitivity: {fileID: 7769779573954951066}
-  uiController: {fileID: 3427785615071788072}
-  player: {fileID: 630848437815155769}
 --- !u!1 &4270852600270785788
 GameObject:
   m_ObjectHideFlags: 0

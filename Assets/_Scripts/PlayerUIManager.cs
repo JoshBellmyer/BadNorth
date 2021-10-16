@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerUIManager : MonoBehaviour
 {
-    [SerializeField] UIController uiController;
     [SerializeField] List<PlayerMenu> menus = new List<PlayerMenu>();
 
     private void Start()
@@ -30,7 +29,6 @@ public class PlayerUIManager : MonoBehaviour
                 menu.gameObject.SetActive(false);
             }
         }
-        uiController.SelectSomething();
     }
 
     public T GetMenu<T>() where T : PlayerMenu
