@@ -14,16 +14,18 @@ public class CursorController : MonoBehaviour
     private Ray cursorSelectRay;
 
     private PlayerController playerController;
+    private Player player;
 
     private void Start()
     {
         camera = playerInput.camera;
         playerController = GetComponent<PlayerController>();
+        player = GetComponent<Player>();
     }
 
     private void Update()
     {
-        cursorTransform.localPosition += new Vector3(rawInputDelta.x, rawInputDelta.y);
+        cursorTransform.localPosition += new Vector3(rawInputDelta.x, rawInputDelta.y) * player.settings.cursorSensitivity;
         float clampX = Mathf.Clamp(cursorTransform.localPosition.x, -canvasTransform.rect.width / 2, canvasTransform.rect.width / 2);
         float clampY = Mathf.Clamp(cursorTransform.localPosition.y, -canvasTransform.rect.height / 2, canvasTransform.rect.height / 2);
         cursorTransform.localPosition = new Vector3(clampX, clampY);

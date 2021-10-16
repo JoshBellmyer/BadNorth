@@ -1,76 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    [SerializeField] Canvas canvas;
-    [SerializeField] List<string> unitOptions; // TODO: determine type
-
-    List<Image> unitImages;
+    [SerializeField] PlayerUIManager playerUIManager;
+    Player player;
 
     PlayerController playerController;
-
-    string SelectedUnitType
-    {
-        get => unitOptions[_selectedUnitIndex];
-    }
-
-    int SelectedUnitIndex
-    {
-        get => _selectedUnitIndex;
-        set
-        {
-            _selectedUnitIndex = value;
-            if (_selectedUnitIndex >= unitOptions.Count)
-            {
-                _selectedUnitIndex = 0;
-            }
-            if (_selectedUnitIndex < 0)
-            {
-                _selectedUnitIndex = unitOptions.Count - 1;
-            }
-
-            foreach(Image image in unitImages)
-            {
-                image.color = Color.white;
-            }
-
-            unitImages[_selectedUnitIndex].color = Color.yellow;
-        }
-    }
-
-    int _selectedUnitIndex;
+    private MultiplayerEventSystem eventSystem;    
 
     private void Start()
     {
-        SetUpUnitOptionImages();
-
+        player = GetComponent<Player>();
+        eventSystem = GetComponent<MultiplayerEventSystem>();
         playerController = GetComponent<PlayerController>();
-        SelectedUnitIndex = 0;
+        player.SelectedUnitIndex = 0;
+        playerUIManager.switchMenuEvent += OnSwitchMenu;
     }
 
-    void SetUpUnitOptionImages()
+    public void OnSwitchMenu()
     {
-        unitImages = new List<Image>();
-
-        return;
-
-        int imageSize = 100;
-        float offset = -unitOptions.Count * imageSize / 2f;
-        for(int i=0; i<unitOptions.Count; i++)
-        {
-            Image image = new GameObject().AddComponent<Image>(); // TODO: Add real images
-            image.transform.SetParent(canvas.transform, false);
-            image.transform.localPosition = new Vector3(offset + imageSize * i, 150, 0);
-            image.rectTransform.sizeDelta = new Vector2(imageSize, imageSize);
-            image.rectTransform.pivot = Vector2.zero;
-            image.name = "Unit Selection";
-
-            unitImages.Add(image);
-        }
+        SelectNavigationStart();
     }
 
     public void OnDeployUnit(InputAction.CallbackContext context)
@@ -79,7 +32,7 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
-                Debug.Log("Deploying: " + SelectedUnitType);
+                Debug.Log("Deploying: " + player.SelectedUnitType);
                 playerController.Boat.SetSail();
             }
         }
@@ -91,7 +44,23 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
-                SelectedUnitIndex += (int)context.ReadValue<float>();
+                player.SelectedUnitIndex += (int)context.ReadValue<float>();
+                playerUIManager.GetMenu<OverlayMenu>().SetSelectedUnitIndex(player.SelectedUnitIndex);
+            }
+        }
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (Game.instance.IsPlayerRegistered(playerController)) // Accounts for Unity bug, see https://forum.unity.com/threads/player-input-manager-adds-an-extra-player-with-index-1.1039000/
+        {
+            if (context.performed)
+            {
+                Game.instance.Pause();
+
+                playerController.SetControlsActivated(true);
+                playerController.SetActionMap("UI");
+                playerUIManager.SwitchMenu(typeof(PauseMenu));
             }
         }
     }
@@ -103,7 +72,13 @@ public class UIController : MonoBehaviour
             if (context.performed)
             {
                 Game.instance.Unpause();
+                playerUIManager.SwitchMenu(typeof(OverlayMenu));
             }
         }
+    }
+
+    public void SelectNavigationStart()
+    {
+        eventSystem.SetSelectedGameObject(playerUIManager.SelectNavigationStart(), new BaseEventData(eventSystem));
     }
 }
