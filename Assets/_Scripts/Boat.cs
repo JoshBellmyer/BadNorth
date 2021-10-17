@@ -26,6 +26,7 @@ public class Boat : MonoBehaviour {
 	private List<Unit> mountedUnits = new List<Unit>();
 
 	private bool canSail;
+	private bool sailed;
 	private Vector3 dismountPos;
 
 
@@ -81,6 +82,7 @@ public class Boat : MonoBehaviour {
 		cam = player.GetComponent<CameraController>().camera.gameObject;
 		player.Boat = this;
 		following = true;
+		sailed = false;
 		Player tempPlayer = player.GetComponent<Player>();
 
 		int playerId = tempPlayer.playerId;
@@ -93,13 +95,14 @@ public class Boat : MonoBehaviour {
 	}
 
 	public void SetSail () {
-		if (!canSail) {
+		if (!canSail || sailed) {
 			return;
 		}
 
 		laser.SetActive(false);
 		selector.SetActive(false);
 		moving = true;
+		sailed = true;
 	}
 
 	public void MountUnits (List<Unit> unitList) {
