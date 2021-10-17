@@ -51,9 +51,6 @@ public class Game : MonoBehaviour {
 	public void RegisterPlayer(PlayerController playerControl)
     {
 		players.Add(playerControl);
-
-		// Boat boat = Instantiate<Boat>(boatPrefab);
-		// boat.SetPlayer(playerControl);
     }
 
 	public void Pause()
@@ -102,6 +99,12 @@ public class Game : MonoBehaviour {
 		}
 
 		return new Vector3(pos.x, yPos, pos.z);
+	}
+
+	public static Vector3 GetTopFromSide (Vector3 pos, Vector3 normal) {
+		Vector3 newPos = pos + (normal * -0.5f) + new Vector3(0, 0.5f, 0);
+
+		return GetGridPos(newPos);
 	}
 }
 

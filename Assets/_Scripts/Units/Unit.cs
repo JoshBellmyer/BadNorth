@@ -39,7 +39,10 @@ public abstract class Unit : MonoBehaviour
         set
         {
             _canMove = value;
-            // _navMeshAgent.isStopped = !value;
+            
+            if (_navMeshAgent.isOnNavMesh) {
+                _navMeshAgent.isStopped = !value;
+            }
 
             if (value == true)
             {

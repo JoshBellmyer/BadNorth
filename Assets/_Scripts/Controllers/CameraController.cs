@@ -47,6 +47,13 @@ public class CameraController : MonoBehaviour
         camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, zoomMin, zoomMax);
     }
 
+    public void ZoomOut () {
+        camera.orthographicSize = zoomMax;
+
+        float remainingAngle = camera.transform.eulerAngles.x - rotateMin;
+        camera.transform.RotateAround(rotationPoint, -camera.transform.right, remainingAngle);
+    }
+
     public void OnRotate(InputAction.CallbackContext value)
     {
         Vector2 inputRotate = value.ReadValue<Vector2>();

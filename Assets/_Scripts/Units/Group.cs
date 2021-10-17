@@ -30,22 +30,14 @@ public class Group<T> : Group where T : Unit {
         _targetPosition = Vector3.zero;
 
         GameObject prefab = UnitManager.instance.GetPrefabOfType(typeof(T));
-        // _units.Add(UnityEngine.Object.Instantiate(prefab).GetComponent<T>());
 
         for (int i = 0; i < prefab.GetComponent<Unit>().groupAmount; i++) {
-            // GameObject prefab = UnitManager.instance.GetPrefabOfType(typeof(T));
             var unit = UnityEngine.Object.Instantiate(prefab).GetComponent<T>();
             _units.Add(unit);
             unit.SetTeam(team);
             unit.SetGroup(this);
             TeamManager.instance.Add(team, unit);
         }
-
-        // foreach (var u in _units) {
-        //     u.SetTeam(team);
-        //     u.SetGroup(this);
-        //     TeamManager.instance.Add(team, u);
-        // }
 
         _canMove = false;
         _canAttack = false;
