@@ -84,21 +84,21 @@ public class CursorController : MonoBehaviour
     }
 
     private void MoveSelection (Vector3 position, Vector3 normal) {
-        if (player.gridSelection == null) {
+        if (player.GridSelection == null) {
             return;
         }
 
         SetSelectionActive(true);
-        player.gridSelection.transform.position = Game.GetGridPos(position);
-        player.gridSelection.transform.up = normal;
+        player.GridSelection.transform.position = Game.GetGridPos(position);
+        player.GridSelection.transform.up = normal;
     }
 
     private void SetSelectionActive (bool newActive) {
-        if (player.gridSelection == null) {
+        if (player.GridSelection == null) {
             return;
         }
 
-        player.gridSelection.SetActive(newActive);
+        player.GridSelection.SetActive(newActive);
     }
 
     private void OnDrawGizmos()

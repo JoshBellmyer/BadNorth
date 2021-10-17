@@ -91,6 +91,20 @@ public class UnitManager : MonoBehaviour
 
         dummyActive.Clear();
     }
+
+    public static Type UnitEnumToType (UnitType unitType) {
+        string str = $"{unitType.ToString()}Unit";
+        Type type;
+
+        try {
+            type = Type.GetType(str);
+        }
+        catch (TypeLoadException e) {
+            return null;
+        }
+
+        return type;
+    }
 }
 
 

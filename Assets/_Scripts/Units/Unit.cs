@@ -15,8 +15,17 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private int _health;
     private bool _canMove;
     private bool _canAttack;
+    public int groupAmount;
 
     public static readonly float MAX_PROXIMITY = 5.0f;
+
+    public Group Group {
+        get => _group;
+    }
+
+    internal NavMeshAgent NavMeshAgent {
+        get => _navMeshAgent;
+    }
 
 
     protected Unit(int health)
@@ -30,6 +39,8 @@ public abstract class Unit : MonoBehaviour
         set
         {
             _canMove = value;
+            // _navMeshAgent.isStopped = !value;
+
             if (value == true)
             {
                 _navMeshAgent.SetDestination(_destination);

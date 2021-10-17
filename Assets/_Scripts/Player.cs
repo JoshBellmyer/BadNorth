@@ -11,6 +11,19 @@ public class Player : MonoBehaviour
     static int numPlayers = 0;
     public int playerId;
 
+    private Boat _boat;
+
+    public Boat Boat {
+        get => _boat;
+        set { _boat = value; }
+    }
+
+    private GameObject _gridSelection;
+
+    public GameObject GridSelection {
+        get => _gridSelection;
+    }
+
     public string SelectedUnitType
     {
         get => unitOptions[_selectedUnitIndex];
@@ -34,6 +47,7 @@ public class Player : MonoBehaviour
     }
 
     int _selectedUnitIndex;
+
     private void Awake()
     {
         numPlayers++;
@@ -43,8 +57,20 @@ public class Player : MonoBehaviour
     private void Start()
     {
         settings = Settings.Load(playerId);
-        gridSelection = Instantiate(Game.instance.selectionPrefab);
-        gridSelection.layer = LayerMask.NameToLayer($"Player {playerId}");
-        gridSelection.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");;
+        _gridSelection = Instantiate(Game.instance.selectionPrefab);
+        _gridSelection.layer = LayerMask.NameToLayer($"Player {playerId}");
+        _gridSelection.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -11,7 +11,7 @@ public class Game : MonoBehaviour {
 	public static MapGenerator mapGenerator;
 
 	[Header("Prefabs")]
-	[SerializeField] private Boat boatPrefab;
+	public Boat boatPrefab;
 	public GameObject selectionPrefab;
 
 	private bool isPaused;
@@ -52,8 +52,8 @@ public class Game : MonoBehaviour {
     {
 		players.Add(playerControl);
 
-		Boat boat = Instantiate<Boat>(boatPrefab);
-		boat.SetPlayer(playerControl);
+		// Boat boat = Instantiate<Boat>(boatPrefab);
+		// boat.SetPlayer(playerControl);
     }
 
 	public void Pause()

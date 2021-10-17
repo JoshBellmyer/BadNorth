@@ -14,8 +14,9 @@ public class Boat : MonoBehaviour {
 	private GameObject cam;
 	private bool moving;
 	private bool following;
-	private Group<Unit> mountedGroup;
+	private Group mountedGroup;
 	private Rigidbody rb;
+	private List<Unit> mountedUnits = new List<Unit>();
 
 
 	private void Start () {
@@ -45,26 +46,40 @@ public class Boat : MonoBehaviour {
 		moving = true;
 	}
 
-	public void MountUnits (Group<Unit> unitGroup) {
-		unitGroup.CanMove = false;
-		unitGroup.CanAttack = false;
+	public void MountUnits (List<Unit> unitList) {
+		// Debug.Log(unitGroup);
 
-		// TODO: add units to boat
+		// unitGroup.CanMove = false;
+		// unitGroup.CanAttack = false;
 
-		mountedGroup = unitGroup;
+		int index = 0;
+
+		foreach (Unit u in unitList) {
+			u.transform.position = mountPoints[index].position;
+			u.transform.eulerAngles = mountPoints[index].transform.eulerAngles;
+			u.transform.SetParent(transform);
+			mountedUnits.Add(u);
+
+			index++;
+		}
+
+		mountedGroup = unitList[0].Group;
+		mountedGroup.SetAgentEnabled(false);
 	}
 
 	public void DismountUnits () {
 		moving = false;
 		following = false;
 
-		if (mountedGroup == null) {
-			return;
-		}
+		// if (mountedGroup == null) {
+		// 	return;
+		// }
 
 		// TODO: drop units off at the nearest walkable space
 
 		mountedGroup = null;
+
+		mountedUnits.Clear();
 	}
 
 	private void MoveForward () {
