@@ -48,6 +48,13 @@ public class Player : MonoBehaviour
 
     int _selectedUnitIndex;
 
+    private Group _selectedGroup;
+
+    public Group SelectedGroup {
+        get => _selectedGroup;
+        set { _selectedGroup = value; }
+    }
+
     private void Awake()
     {
         numPlayers++;
@@ -62,6 +69,10 @@ public class Player : MonoBehaviour
         _gridSelection.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");;
     }
 }
+
+
+
+
 
 
 

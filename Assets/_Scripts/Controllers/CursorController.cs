@@ -53,23 +53,50 @@ public class CursorController : MonoBehaviour
 
     public void OnCursorSelect(InputAction.CallbackContext context)
     {
-        if (Game.instance.IsPlayerRegistered(playerController)) // Accounts for Unity bug, see https://forum.unity.com/threads/player-input-manager-adds-an-extra-player-with-index-1.1039000/
-        {
-            if (context.performed)
-            {
-                if (camera == null) return; // OnCursorSelect() can happen before Start() ???
+        // Accounts for Unity bug, see https://forum.unity.com/threads/player-input-manager-adds-an-extra-player-with-index-1.1039000/
+        if (!Game.instance.IsPlayerRegistered(playerController)) {
+            return;
+        }
+        if (!context.performed) {
+            return;
+        }        
+        if (camera == null) return; // OnCursorSelect() can happen before Start() ???
 
-                Tuple<bool, RaycastHit> hitData = CastFromCursor(Game.everythingMask);
+        Tuple<bool, RaycastHit> hitData = CastFromCursor(Game.everythingMask);
 
-                if (hitData.Item1) {
-                    Vector3 location = hitData.Item2.point;
+        if (hitData.Item1) {
+            Vector3 location = hitData.Item2.point;
 
-                    Debug.Log($"{location} -> {Game.GetGridPos(location)}");
-                }
+            // Debug.Log($"{location} -> {Game.GetGridPos(location)}");
 
-                Debug.Log("Select");
+            switch (hitData.Item2.collider.tag) {
+                case "Terrain":
+
+                break;
+
+                case "Unit":
+                    TrySelectUnit(hitData.Item2.collider.GetComponent<Unit>());
+                break;
             }
         }
+
+        Debug.Log("Select");
+    }
+
+    private void TrySelectUnit (Unit unit) {
+        if (unit == null) {
+            return;
+        }
+
+        int teamId = int.Parse(unit.Team);
+
+        if (teamId != player.playerId) {
+            return;
+        }
+
+        player.SelectedGroup = unit.Group;
+
+        Debug.Log(unit.Group);
     }
 
     public Tuple<bool, RaycastHit> CastFromCursor (int layerMask) {

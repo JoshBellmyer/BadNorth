@@ -34,8 +34,8 @@ public class Group<T> : Group where T : Unit {
         for (int i = 0; i < prefab.GetComponent<Unit>().groupAmount; i++) {
             var unit = UnityEngine.Object.Instantiate(prefab).GetComponent<T>();
             _units.Add(unit);
-            unit.SetTeam(team);
-            unit.SetGroup(this);
+            unit.Team = team;
+            unit.Group = this;
             TeamManager.instance.Add(team, unit);
         }
 
@@ -95,7 +95,7 @@ public class Group<T> : Group where T : Unit {
         TeleportTo(position, 0f);
     }
 
-    public void MoveTo(Vector3 position)
+    public override void MoveTo(Vector3 position)
     {
         if (_canMove && !position.Equals(_targetPosition))
         {
@@ -133,7 +133,7 @@ public class Group<T> : Group where T : Unit {
         return _units;
     }
 
-    public List<Unit> GetUnitsBase () {
+    public override List<Unit> GetUnitsBase () {
         List<Unit> unitList = new List<Unit>(_units);
 
         return unitList;
@@ -163,6 +163,10 @@ public abstract class Group
     internal abstract void SetAgentEnabled(bool enabled);
 
     public abstract void TeleportTo(Vector3 position);
+
+    public abstract void MoveTo(Vector3 position);
+
+    public abstract List<Unit> GetUnitsBase();
 }
 
 

@@ -170,7 +170,7 @@ public class Boat : MonoBehaviour {
 
 	private void OnTriggerEnter (Collider other) {
 		if (other.tag.Equals("Terrain") && moving) {
-			if (Vector3.Distance(dismountPos, transform.position) > 2) {
+			if (Vector3.Distance(dismountPos, transform.position) > 3) {
 				return;
 			}
 

@@ -19,10 +19,6 @@ public abstract class Unit : MonoBehaviour
 
     public static readonly float MAX_PROXIMITY = 5.0f;
 
-    public Group Group {
-        get => _group;
-    }
-
     internal NavMeshAgent NavMeshAgent {
         get => _navMeshAgent;
     }
@@ -70,6 +66,16 @@ public abstract class Unit : MonoBehaviour
                 _directive = Directive.MOVE;
             }
         }
+    }
+
+    public string Team {
+        get => _team;
+        set { _team = value; }
+    }
+
+    public Group Group {
+        get => _group;
+        set { _group = value; }
     }
 
     enum Directive
@@ -212,15 +218,15 @@ public abstract class Unit : MonoBehaviour
         UnitManager.DeactivateDummy(agents.Item2);
     }
 
-    internal void SetTeam(string team)
-    {
-        _team = team;
-    }
+    // internal void SetTeam(string team)
+    // {
+    //     _team = team;
+    // }
 
-    internal void SetGroup(Group group)
-    {
-        _group = group;
-    }
+    // internal void SetGroup(Group group)
+    // {
+    //     _group = group;
+    // }
 
     protected void IssueAttackLocation(Vector3 target)
     {
