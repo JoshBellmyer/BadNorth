@@ -137,7 +137,7 @@ public class Boat : MonoBehaviour {
 	private void MoveForward () {
 		Vector3 movement = transform.forward * speed * Time.deltaTime;
 
-		rb.position = transform.position + movement;
+		transform.position += movement;
 	}
 
 	private void FollowCamera () {
