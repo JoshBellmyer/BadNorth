@@ -2,7 +2,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
+
 
 public class UIController : MonoBehaviour
 {
@@ -28,13 +32,34 @@ public class UIController : MonoBehaviour
 
     public void OnDeployUnit(InputAction.CallbackContext context)
     {
-        if (Game.instance.IsPlayerRegistered(playerController))
-        {
-            if (context.performed)
-            {
-                Debug.Log("Deploying: " + player.SelectedUnitType);
-                playerController.Boat.SetSail();
+        if (!Game.instance.IsPlayerRegistered(playerController)) {
+            return;
+        }
+        if (!context.performed) {
+            return;
+        }
+
+        OverlayMenu overlayMenu = playerUIManager.GetMenu<OverlayMenu>();
+
+        if (overlayMenu.unitsVisible) {
+            Type type = UnitManager.UnitEnumToType((UnitType)player.SelectedUnitIndex);
+            var typeG = typeof (Group<>).MakeGenericType(type);
+
+            if (type != null) {
+                dynamic unitGroup = Activator.CreateInstance(typeG);
+                unitGroup.Initialize($"{player.playerId}");
+                Boat boat = Instantiate<Boat>(Game.instance.boatPrefab);
+                boat.SetPlayer(playerController);
+                player.Boat = boat;
+                unitGroup.CanMove = false;
+                unitGroup.CanAttack = false;
+                boat.MountUnits( unitGroup.GetUnitsBase() );
+
+                overlayMenu.SetUnitsVisible(false);
             }
+        }
+        else {
+            player.Boat.SetSail();
         }
     }
 

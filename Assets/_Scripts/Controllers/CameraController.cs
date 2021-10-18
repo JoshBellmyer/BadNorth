@@ -27,6 +27,8 @@ public class CameraController : MonoBehaviour
     {
         camera = playerInput.camera;
         player = GetComponent<Player>();
+
+        SetCullingMask(player.playerId);
     }
 
     private void Update()
@@ -45,6 +47,13 @@ public class CameraController : MonoBehaviour
         camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, zoomMin, zoomMax);
     }
 
+    public void ZoomOut () {
+        camera.orthographicSize = zoomMax;
+
+        float remainingAngle = camera.transform.eulerAngles.x - rotateMin;
+        camera.transform.RotateAround(rotationPoint, -camera.transform.right, remainingAngle);
+    }
+
     public void OnRotate(InputAction.CallbackContext value)
     {
         Vector2 inputRotate = value.ReadValue<Vector2>();
@@ -57,4 +66,29 @@ public class CameraController : MonoBehaviour
         rawInputZoom = inputZoom;
 
     }
+
+    private void SetCullingMask (int number) {
+        int mask = 0;
+
+        for (int i = 1; i <= 4; i++) {
+            if (i != number) {
+                mask = mask | LayerMask.GetMask($"Player {i}");
+            }
+        }
+
+        camera.cullingMask = ~mask;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
