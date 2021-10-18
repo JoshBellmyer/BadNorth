@@ -11,6 +11,10 @@ public class SettingsMenu : PlayerMenu
     const float ZOOM_SENSITIVITY_STEP = 0.01f;
     const float ROTATE_SENSITIVITY_STEP = 5f;
 
+    float cursorSensitivityVisual;
+    float zoomSensitivityVisual;
+    float rotateSensitivityVisual;
+
     protected new void Start()
     {
         base.Start();
@@ -19,16 +23,19 @@ public class SettingsMenu : PlayerMenu
 
     public void LoadSettingsValues()
     {
-        cursorSensitivity.text = player.settings.cursorSensitivity + "";
-        zoomSensitivity.text = player.settings.zoomSensitivity + "";
-        rotateSensitivity.text = player.settings.rotateSensitivity + "";
+        cursorSensitivityVisual = player.settings.cursorSensitivity;
+        zoomSensitivityVisual = player.settings.zoomSensitivity;
+        rotateSensitivityVisual = player.settings.rotateSensitivity;
+        cursorSensitivity.text = string.Format("{0:0.00}", cursorSensitivityVisual);
+        zoomSensitivity.text = string.Format("{0:0.00}", zoomSensitivityVisual);
+        rotateSensitivity.text = string.Format("{0:0.00}", rotateSensitivityVisual);
     }
 
     public void SaveSettings()
     {
-        player.settings.cursorSensitivity = float.Parse(cursorSensitivity.text);
-        player.settings.zoomSensitivity = float.Parse(zoomSensitivity.text);
-        player.settings.rotateSensitivity = float.Parse(rotateSensitivity.text);
+        player.settings.cursorSensitivity = cursorSensitivityVisual;
+        player.settings.zoomSensitivity = zoomSensitivityVisual;
+        player.settings.rotateSensitivity = rotateSensitivityVisual;
         player.settings.Save();
     }
 
@@ -40,31 +47,37 @@ public class SettingsMenu : PlayerMenu
 
     public void IncreaseCursorSensitivity()
     {
-        cursorSensitivity.text = float.Parse(cursorSensitivity.text) + CURSOR_SENSITIVITY_STEP + "";
+        cursorSensitivityVisual += CURSOR_SENSITIVITY_STEP;
+        cursorSensitivity.text = string.Format("{0:0.00}", cursorSensitivityVisual);
     }
 
     public void DecreaseCursorSensitivity()
     {
-        cursorSensitivity.text = float.Parse(cursorSensitivity.text) - CURSOR_SENSITIVITY_STEP + "";
+        cursorSensitivityVisual -= CURSOR_SENSITIVITY_STEP;
+        cursorSensitivity.text = string.Format("{0:0.00}", cursorSensitivityVisual);
     }
 
     public void IncreaseZoomSensitivity()
     {
-        zoomSensitivity.text = float.Parse(zoomSensitivity.text) + ZOOM_SENSITIVITY_STEP + "";
+        zoomSensitivityVisual += ZOOM_SENSITIVITY_STEP;
+        zoomSensitivity.text = string.Format("{0:0.00}", zoomSensitivityVisual);
     }
 
     public void DecreaseZoomSensitivity()
     {
-        zoomSensitivity.text = float.Parse(zoomSensitivity.text) - ZOOM_SENSITIVITY_STEP + "";
+        zoomSensitivityVisual -= ZOOM_SENSITIVITY_STEP;
+        zoomSensitivity.text = string.Format("{0:0.00}", zoomSensitivityVisual);
     }
 
     public void IncreaseRotateSensitivity()
     {
-        rotateSensitivity.text = float.Parse(rotateSensitivity.text) + ROTATE_SENSITIVITY_STEP + "";
+        rotateSensitivityVisual += ROTATE_SENSITIVITY_STEP;
+        rotateSensitivity.text = string.Format("{0:0.00}", rotateSensitivityVisual);
     }
 
     public void DecreaseRotateSensitivity()
     {
-        rotateSensitivity.text = float.Parse(rotateSensitivity.text) - ROTATE_SENSITIVITY_STEP + "";
+        rotateSensitivityVisual -= ROTATE_SENSITIVITY_STEP;
+        rotateSensitivity.text = string.Format("{0:0.00}", rotateSensitivityVisual);
     }
 }

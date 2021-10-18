@@ -372,14 +372,6 @@ MonoBehaviour:
     m_ActionName: UI/Cancel[/Keyboard/escape,/XInputControllerWindows/buttonEast]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 81a0fc81-c3cc-47f6-91ea-9e17684dee95
-    m_ActionName: UI/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2f1f6f38-0635-420b-936f-ba221fc2735a
-    m_ActionName: UI/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: fe52e9b2-c578-4bed-9e21-793cf35a21f0
     m_ActionName: UI/ScrollWheel[/Mouse/scroll]
   - m_PersistentCalls:
@@ -598,11 +590,11 @@ MonoBehaviour:
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_ActionsAsset: {fileID: -944628639613478452, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
-  m_PointAction: {fileID: -5393786116301001397, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
+  m_PointAction: {fileID: 0}
   m_MoveAction: {fileID: 5832900139530919093, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
   m_SubmitAction: {fileID: 4742132641083442634, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
   m_CancelAction: {fileID: 7272812851524929105, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
-  m_LeftClickAction: {fileID: -3027588871724038004, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
+  m_LeftClickAction: {fileID: 0}
   m_MiddleClickAction: {fileID: 2575012032236323091, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
   m_RightClickAction: {fileID: -7007311740400536235, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
   m_ScrollWheelAction: {fileID: -6611570864352688282, guid: 464092d7b924e3a4684e1cd5b5644c89, type: 3}
