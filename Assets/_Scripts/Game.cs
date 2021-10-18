@@ -79,7 +79,7 @@ public class Game : MonoBehaviour {
 		float zPos = Mathf.Floor(pos.z) + 0.5f;
 
 		RaycastHit hit;
-		bool hitGround = Physics.Raycast(new Vector3(xPos, pos.y + 1, zPos), Vector3.down, out hit, LayerMask.GetMask("Terrain"));
+		bool hitGround = Physics.Raycast(new Vector3(xPos, pos.y + 1, zPos), Vector3.down, out hit, 1.5f, LayerMask.GetMask("Terrain"));
 
 		if (hitGround) {
 			yPos = hit.point.y;
@@ -92,7 +92,7 @@ public class Game : MonoBehaviour {
 	public static Vector3 GetGroundLevelPos (Vector3 pos) {
 		float yPos = pos.y;
 		RaycastHit hit;
-		bool hitGround = Physics.Raycast(new Vector3(pos.x, pos.y + 1, pos.z), Vector3.down, out hit, LayerMask.GetMask("Terrain"));
+		bool hitGround = Physics.Raycast(new Vector3(pos.x, pos.y + 1, pos.z), Vector3.down, out hit, 1.5f, LayerMask.GetMask("Terrain"));
 
 		if (hitGround) {
 			yPos = hit.point.y;

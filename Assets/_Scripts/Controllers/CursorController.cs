@@ -78,7 +78,7 @@ public class CursorController : MonoBehaviour
         Vector3 viewPortPosition = new Vector3(cursorPosition.x / canvasTransform.rect.width, cursorPosition.y / canvasTransform.rect.height); // view port is normalized
         cursorSelectRay = camera.ViewportPointToRay(viewPortPosition);
 
-        bool hitSomething = Physics.Raycast(cursorSelectRay, out hit, layerMask);
+        bool hitSomething = Physics.Raycast(cursorSelectRay, out hit, Mathf.Infinity, layerMask);
 
         return new Tuple<bool, RaycastHit>(hitSomething, hit);
     }

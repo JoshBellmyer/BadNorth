@@ -626,7 +626,7 @@ GameObject:
   - component: {fileID: 1165443234}
   - component: {fileID: 1165443233}
   - component: {fileID: 1165443235}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TerrainGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -926,7 +926,7 @@ GameObject:
   - component: {fileID: 1713943912}
   - component: {fileID: 1713943911}
   - component: {fileID: 1713943910}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
