@@ -27,9 +27,11 @@ public class OverlayMenu : PlayerMenu
         {
             Image image = new GameObject().AddComponent<Image>(); // TODO: Add real images
             image.transform.SetParent(canvas.transform, false);
-            image.transform.localPosition = new Vector3(offset + imageSize * i, 150, 0);
+            image.rectTransform.anchorMax = new Vector2(0.5f, 1);
+            image.rectTransform.anchorMin = new Vector2(0.5f, 1);
+            image.rectTransform.pivot = new Vector2(0, 1);
+            image.rectTransform.anchoredPosition = new Vector2(offset + imageSize * i, 0);
             image.rectTransform.sizeDelta = new Vector2(imageSize, imageSize);
-            image.rectTransform.pivot = Vector2.zero;
             image.name = "Unit Selection";
 
             unitImages.Add(image);
