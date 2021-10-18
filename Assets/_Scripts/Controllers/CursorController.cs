@@ -17,6 +17,8 @@ public class CursorController : MonoBehaviour
     private PlayerController playerController;
     private Player player;
 
+    private List<GameObject> selectedUnitSprites = new List<GameObject>();
+
     private void Start()
     {
         camera = playerInput.camera;
@@ -71,7 +73,9 @@ public class CursorController : MonoBehaviour
 
             switch (hitData.Item2.collider.tag) {
                 case "Terrain":
-
+                    if (hitData.Item2.normal.y > 0 && player.SelectedGroup != null) {
+                        MoveUnitGroup(hitData.Item2);
+                    }
                 break;
 
                 case "Unit":
@@ -79,8 +83,6 @@ public class CursorController : MonoBehaviour
                 break;
             }
         }
-
-        Debug.Log("Select");
     }
 
     private void TrySelectUnit (Unit unit) {
@@ -95,8 +97,32 @@ public class CursorController : MonoBehaviour
         }
 
         player.SelectedGroup = unit.Group;
+        List<Unit> unitList = unit.Group.GetUnitsBase();
 
-        Debug.Log(unit.Group);
+        foreach (Unit u in unitList) {
+            Sprite3D sprite = Instantiate<Sprite3D>(Game.instance.unitSelectPrefabs[player.playerId - 1]);
+            sprite.camera = camera;
+            sprite.transform.SetParent(u.transform);
+            sprite.transform.localPosition = new Vector3(0, 0.75f, 0);
+            selectedUnitSprites.Add(sprite.gameObject);
+        }
+    }
+
+    public void DeselectUnits () {
+        foreach (GameObject obj in selectedUnitSprites) {
+            Destroy(obj);
+        }
+
+        selectedUnitSprites.Clear();
+
+        player.SelectedGroup = null;
+    }
+
+    private void MoveUnitGroup (RaycastHit hit) {
+        Vector3 pos = Game.GetGridPos(hit.point);
+        player.SelectedGroup.MoveTo(pos);
+
+        DeselectUnits();
     }
 
     public Tuple<bool, RaycastHit> CastFromCursor (int layerMask) {

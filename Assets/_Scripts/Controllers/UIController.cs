@@ -58,7 +58,7 @@ public class UIController : MonoBehaviour
                 overlayMenu.SetUnitsVisible(false);
             }
         }
-        else {
+        else if (player.Boat != null) {
             player.Boat.SetSail();
         }
     }

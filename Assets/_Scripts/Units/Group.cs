@@ -39,8 +39,8 @@ public class Group<T> : Group where T : Unit {
             TeamManager.instance.Add(team, unit);
         }
 
-        _canMove = false;
-        _canAttack = false;
+        this.CanMove = true;
+        this.CanAttack = false;
     }
 
     public bool CanMove
@@ -100,6 +100,7 @@ public class Group<T> : Group where T : Unit {
         if (_canMove && !position.Equals(_targetPosition))
         {
             _targetPosition = position;
+
             foreach (var v in _units)
             {
                 v.IssueDestination(_targetPosition);
@@ -150,6 +151,8 @@ public class Group<T> : Group where T : Unit {
     }
 
     internal override void SetAgentEnabled (bool enabled) {
+        this.CanMove = true;
+
         foreach (Unit u in _units) {
             u.NavMeshAgent.enabled = enabled;
         }

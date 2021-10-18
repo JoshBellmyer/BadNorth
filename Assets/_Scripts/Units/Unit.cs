@@ -42,12 +42,18 @@ public abstract class Unit : MonoBehaviour
 
             if (value == true)
             {
-                _navMeshAgent.SetDestination(_destination);
+                if (_navMeshAgent.isOnNavMesh) {
+                    _navMeshAgent.SetDestination(_destination);
+                }
+                
                 _directive = Directive.MOVE;
             }
             else if (_directive != Directive.NONE)
             {
-                _navMeshAgent.ResetPath();
+                if (_navMeshAgent.isOnNavMesh) {
+                    _navMeshAgent.ResetPath();
+                }
+                
                 _directive = Directive.NONE;
             }
 
@@ -130,7 +136,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     internal void IssueDestination(Vector3 destination)
-    { 
+    {
         if (!_canMove) {
             return;
         }

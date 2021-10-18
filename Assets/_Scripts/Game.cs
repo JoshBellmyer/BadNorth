@@ -13,6 +13,7 @@ public class Game : MonoBehaviour {
 	[Header("Prefabs")]
 	public Boat boatPrefab;
 	public GameObject selectionPrefab;
+	public Sprite3D[] unitSelectPrefabs;
 
 	private bool isPaused;
 	private List<PlayerController> players;
