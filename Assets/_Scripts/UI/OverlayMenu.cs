@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,10 +21,11 @@ public class OverlayMenu : PlayerMenu
     void SetUpUnitOptionImages()
     {
         unitImages = new List<Image>();
+        int numUnitTypes = Enum.GetValues(typeof(UnitType)).Length;
 
         int imageSize = 100;
-        float offset = -player.unitOptions.Count * imageSize / 2f;
-        for (int i = 0; i < player.unitOptions.Count; i++)
+        float offset = -numUnitTypes * imageSize / 2f;
+        for (int i = 0; i < numUnitTypes; i++)
         {
             Image image = new GameObject().AddComponent<Image>(); // TODO: Add real images
             image.transform.SetParent(canvas.transform, false);

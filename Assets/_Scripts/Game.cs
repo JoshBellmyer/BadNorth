@@ -33,6 +33,9 @@ public class Game : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 
 		players = new List<PlayerController>();
+
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
 	}
 
 	public bool IsPlayerRegistered(PlayerController player)
