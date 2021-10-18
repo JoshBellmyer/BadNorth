@@ -90,7 +90,7 @@ public class Group<T> : Group where T : Unit {
         }
     }
 
-    public void TeleportTo(Vector3 position)
+    public override void TeleportTo(Vector3 position)
     {
         TeleportTo(position, 0f);
     }
@@ -161,6 +161,8 @@ public abstract class Group
     internal abstract void RemoveUnit(Unit unit);
 
     internal abstract void SetAgentEnabled(bool enabled);
+
+    public abstract void TeleportTo(Vector3 position);
 }
 
 

@@ -28,6 +28,7 @@ public class Boat : MonoBehaviour {
 	private bool canSail;
 	private bool sailed;
 	private Vector3 dismountPos;
+	private Player player;
 
 
 	private void Start () {
@@ -44,6 +45,10 @@ public class Boat : MonoBehaviour {
 		else if (cam != null && following) {
 			FollowCamera();
 			UpdateLaser();
+		}
+
+		if (!following && sailed) {
+			Sink();
 		}
 	}
 
@@ -83,9 +88,9 @@ public class Boat : MonoBehaviour {
 		player.Boat = this;
 		following = true;
 		sailed = false;
-		Player tempPlayer = player.GetComponent<Player>();
+		this.player = player.GetComponent<Player>();
 
-		int playerId = tempPlayer.playerId;
+		int playerId = this.player.playerId;
 		selector.transform.SetParent(null);
 		selector.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
 		laserMesh.gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
@@ -103,8 +108,6 @@ public class Boat : MonoBehaviour {
 		selector.SetActive(false);
 		moving = true;
 		sailed = true;
-
-		// rb.velocity = transform.forward * speed;
 	}
 
 	public void MountUnits (List<Unit> unitList) {
@@ -127,17 +130,34 @@ public class Boat : MonoBehaviour {
 		moving = false;
 		following = false;
 
-		// TODO: drop units off at the nearest walkable space
+		foreach (Unit u in mountedUnits) {
+			u.transform.SetParent(null);
+		}
+
+		mountedGroup.TeleportTo(dismountPos);
+		mountedGroup.SetAgentEnabled(true);
 
 		mountedGroup = null;
-
 		mountedUnits.Clear();
+
+		transform.RotateAround(transform.position, transform.right, -10);
+		transform.position += new Vector3(0, 0.2f, 0);
 	}
 
 	private void MoveForward () {
 		Vector3 movement = transform.forward * speed * Time.deltaTime;
 
 		transform.position += movement;
+	}
+
+	private void Sink () {
+		float sinkSpeed = 0.25f;
+		transform.position += new Vector3(0, -sinkSpeed * Time.deltaTime, 0);
+
+		if (transform.position.y < -1) {
+			player.Boat = null;
+			Destroy(gameObject);
+		}
 	}
 
 	private void FollowCamera () {

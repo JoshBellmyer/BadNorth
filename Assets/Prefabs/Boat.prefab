@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ff4bf77cb354c0185b6bc6e2a9dd9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 3
   islandDistance: 20
   mountPoints:
   - {fileID: 4844189560743041411}
