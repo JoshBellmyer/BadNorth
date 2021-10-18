@@ -103,6 +103,8 @@ public class Boat : MonoBehaviour {
 		selector.SetActive(false);
 		moving = true;
 		sailed = true;
+
+		// rb.velocity = transform.forward * speed;
 	}
 
 	public void MountUnits (List<Unit> unitList) {
@@ -135,7 +137,7 @@ public class Boat : MonoBehaviour {
 	private void MoveForward () {
 		Vector3 movement = transform.forward * speed * Time.deltaTime;
 
-		rb.MovePosition(transform.position + movement);
+		rb.position = transform.position + movement;
 	}
 
 	private void FollowCamera () {
