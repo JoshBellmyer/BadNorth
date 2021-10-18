@@ -42,7 +42,7 @@ public class UIController : MonoBehaviour
         OverlayMenu overlayMenu = playerUIManager.GetMenu<OverlayMenu>();
 
         if (overlayMenu.unitsVisible) {
-            Type type = UnitManager.UnitEnumToType((UnitType)player.SelectedUnitIndex);
+            Type type = UnitManager.UnitEnumToType(player.SelectedUnitType);
             var typeG = typeof (Group<>).MakeGenericType(type);
 
             if (type != null) {

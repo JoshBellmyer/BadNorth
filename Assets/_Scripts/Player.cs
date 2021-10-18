@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public List<string> unitOptions; // TODO: determine type
     public Settings settings;
     public GameObject gridSelection;
 
@@ -24,9 +24,9 @@ public class Player : MonoBehaviour
         get => _gridSelection;
     }
 
-    public string SelectedUnitType
+    public UnitType SelectedUnitType
     {
-        get => unitOptions[_selectedUnitIndex];
+        get => (UnitType)_selectedUnitIndex;
     }
 
     public int SelectedUnitIndex
@@ -35,21 +35,24 @@ public class Player : MonoBehaviour
         set
         {
             _selectedUnitIndex = value;
-            if (_selectedUnitIndex >= unitOptions.Count)
+            if (_selectedUnitIndex >= numUnitTypes)
             {
                 _selectedUnitIndex = 0;
             }
             if (_selectedUnitIndex < 0)
             {
-                _selectedUnitIndex = unitOptions.Count - 1;
+                _selectedUnitIndex = numUnitTypes - 1;
             }
         }
     }
 
     int _selectedUnitIndex;
 
+    private int numUnitTypes;
+
     private void Awake()
     {
+        numUnitTypes = Enum.GetValues(typeof(UnitType)).Length;
         numPlayers++;
         playerId = numPlayers;
     }

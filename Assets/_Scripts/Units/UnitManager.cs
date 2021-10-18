@@ -29,6 +29,7 @@ public class UnitManager : MonoBehaviour
 
     public GameObject GetPrefabOfType (UnitType type) {
         if (!prefabMap.ContainsKey(type)) {
+            Debug.LogError(string.Format("Prefab of type {0} not found!", type));
             return null;
         }
 
