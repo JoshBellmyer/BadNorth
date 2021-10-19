@@ -24,6 +24,12 @@ public class Player : MonoBehaviour
         get => _gridSelection;
     }
 
+    private GameObject _ladder;
+
+    public GameObject Ladder {
+        get => _ladder;
+    }
+
     public UnitType SelectedUnitType
     {
         get => (UnitType)_selectedUnitIndex;
@@ -67,9 +73,14 @@ public class Player : MonoBehaviour
     private void Start()
     {
         settings = Settings.Load(playerId);
+
         _gridSelection = Instantiate(Game.instance.selectionPrefab);
         _gridSelection.layer = LayerMask.NameToLayer($"Player {playerId}");
-        _gridSelection.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");;
+        _gridSelection.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
+
+        _ladder = Instantiate(Game.instance.ladderPrefab);
+        _ladder.layer = LayerMask.NameToLayer($"Player {playerId}");
+        _ladder.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
     }
 }
 

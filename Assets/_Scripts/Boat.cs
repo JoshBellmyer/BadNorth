@@ -61,9 +61,10 @@ public class Boat : MonoBehaviour {
 			laser.transform.localScale = new Vector3(1, 1, hit.distance);
 			selector.transform.position = Game.GetTopFromSide(hit.point, hit.normal);
 
-			Collider[] cols = Physics.OverlapSphere(selector.transform.position + new Vector3(0, 0.75f, 0), 0.35f, LayerMask.GetMask("Terrain"));
+			// Collider[] cols = Physics.OverlapSphere(selector.transform.position + new Vector3(0, 0.75f, 0), 0.35f, LayerMask.GetMask("Terrain"));
+			bool terrainAbove = Game.CheckForTerrainAbove(selector.transform.position);
 
-			if (cols.Length == 0 && selector.transform.position.y <= 1f) {
+			if (!terrainAbove && selector.transform.position.y <= 1f) {
 				canSail = true;
 				dismountPos = selector.transform.position;
 				selector.SetActive(true);

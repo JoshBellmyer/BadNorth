@@ -900,6 +900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatPrefab: {fileID: 7351449562876905076, guid: 5cdb48319c4554fb6a8b5678d3fce425, type: 3}
   selectionPrefab: {fileID: 3924132129150847151, guid: 2b80f1f8105b44ecf82112d569568685, type: 3}
+  ladderPrefab: {fileID: 5656670454479009409, guid: 47cefa0591147492482a0b7548c6918d, type: 3}
   unitSelectPrefabs:
   - {fileID: 8563697652202983109, guid: fbda5f993aae84d0fa6e50c5bc02361c, type: 3}
   - {fileID: 7679564185153152964, guid: 2985a377e453f4f0eab09d6442c9f145, type: 3}

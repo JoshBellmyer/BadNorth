@@ -10,7 +10,7 @@ public abstract class Unit : MonoBehaviour
     private Directive _directive;
     private string _team;
     private Group _group;
-    private Vector3 _destination;
+    protected Vector3 _destination;
 
     [SerializeField] private int _health;
     private bool _canMove;
@@ -115,7 +115,11 @@ public abstract class Unit : MonoBehaviour
         {
             _directive = Directive.ATTACK;
         }*/
+
+        UnitUpdate();
     }
+
+    protected virtual void UnitUpdate () {}
 
     private void LateUpdate()
     {
@@ -153,7 +157,7 @@ public abstract class Unit : MonoBehaviour
         List<Tuple<NavMeshAgent, NavMeshAgent>> agentTuples = new List<Tuple<NavMeshAgent, NavMeshAgent>>();
 
         foreach (Unit u in units) {
-            if (u is LadderUnit) {
+            if (u is LadderUnit && u != this) {
                 float heightDiff = Mathf.Abs(u.transform.position.y - transform.position.y);
                 float dist = Vector3.Distance(transform.position, u.transform.position);
 
@@ -169,6 +173,8 @@ public abstract class Unit : MonoBehaviour
         else {
             _navMeshAgent.isStopped = false;
         }
+
+        OnMove();
     }
 
     internal IEnumerator<bool> ChooseDestination (List<Tuple<NavMeshAgent, NavMeshAgent>> otherAgents) {
@@ -223,6 +229,8 @@ public abstract class Unit : MonoBehaviour
         UnitManager.DeactivateDummy(agents.Item1);
         UnitManager.DeactivateDummy(agents.Item2);
     }
+
+    protected virtual void OnMove () {}
 
     // internal void SetTeam(string team)
     // {

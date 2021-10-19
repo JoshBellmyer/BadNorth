@@ -19,6 +19,8 @@ public class CursorController : MonoBehaviour
 
     private List<GameObject> selectedUnitSprites = new List<GameObject>();
 
+    private Vector3 ladderFloorPos;
+
     private void Start()
     {
         camera = playerInput.camera;
@@ -37,14 +39,27 @@ public class CursorController : MonoBehaviour
 
         if (hitData.Item1) {
             if (hitData.Item2.normal.y > 0) {
+                SetLadderActive(false);
                 MoveSelection(hitData.Item2.point, hitData.Item2.normal);
             }
             else {
                 SetSelectionActive(false);
+
+                if (hitData.Item2.normal.y == 0 && player.SelectedGroup != null) {
+                    Unit testUnit = player.SelectedGroup.GetUnitsBase()[0];
+
+                    if (testUnit is LadderUnit) {
+                        MoveLadder(hitData.Item2.point, hitData.Item2.normal);
+                    }
+                    else {
+                        SetLadderActive(false);
+                    }
+                }
             }
         }
         else {
             SetSelectionActive(false);
+            SetLadderActive(false);
         }
     }
 
@@ -75,6 +90,9 @@ public class CursorController : MonoBehaviour
                 case "Terrain":
                     if (hitData.Item2.normal.y > 0 && player.SelectedGroup != null) {
                         MoveUnitGroup(hitData.Item2);
+                    }
+                    else if (hitData.Item2.normal.y == 0 && player.Ladder.activeSelf) {
+                        MoveLadderUnit();
                     }
                 break;
 
@@ -114,13 +132,25 @@ public class CursorController : MonoBehaviour
         }
 
         selectedUnitSprites.Clear();
+        SetLadderActive(false);
 
         player.SelectedGroup = null;
     }
 
     private void MoveUnitGroup (RaycastHit hit) {
         Vector3 pos = Game.GetGridPos(hit.point);
+        player.SelectedGroup.SetAgentEnabled(true);
         player.SelectedGroup.MoveTo(pos);
+
+        DeselectUnits();
+    }
+
+    private void MoveLadderUnit () {
+        player.SelectedGroup.SetAgentEnabled(true);
+        player.SelectedGroup.MoveTo(ladderFloorPos);
+        LadderUnit ladderUnit = (LadderUnit)player.SelectedGroup.GetUnitsBase()[0];
+
+        ladderUnit.AttachToWall(player.Ladder.transform.position, player.Ladder.transform.forward);
 
         DeselectUnits();
     }
@@ -152,6 +182,43 @@ public class CursorController : MonoBehaviour
         }
 
         player.GridSelection.SetActive(newActive);
+    }
+
+    private void MoveLadder (Vector3 pos, Vector3 normal) {
+        if (player.Ladder == null) {
+            return;
+        }
+
+        Vector3 topPos = Game.GetTopFromSide(pos, normal);
+        Vector3 topNormal = Game.GetGridNormal(topPos);
+        Vector3 sidePos = Game.GetSideGridPos(pos, normal);
+        ladderFloorPos = Game.GetGridPos(pos + (normal * 0.25f));
+        Vector3 floorNormal = Game.GetGridNormal(ladderFloorPos);
+
+        if (topNormal != Vector3.up || floorNormal != Vector3.up) {
+            SetLadderActive(false);
+            return;
+        }
+
+        float diff1 = Mathf.Abs(pos.y - topPos.y);
+        float diff2 = Mathf.Abs(pos.y - ladderFloorPos.y);
+
+        if (diff1 >= 1 || diff2 >= 1 || diff2 == 0) {
+            SetLadderActive(false);
+            return;
+        }
+
+        SetLadderActive(true);
+        player.Ladder.transform.position = sidePos;
+        player.Ladder.transform.forward = normal;
+    }
+
+    private void SetLadderActive (bool newActive) {
+        if (player.Ladder == null) {
+            return;
+        }
+
+        player.Ladder.SetActive(newActive);
     }
 
     private void OnDrawGizmos()
