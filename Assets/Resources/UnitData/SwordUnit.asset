@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 622bfa66b2b3292469963622313ff8fd, type: 3}
   m_Name: SwordUnit
   m_EditorClassIdentifier: 
-  type: 0
-  image: {fileID: 0}
+  type: 1
+  sprite: {fileID: 21300000, guid: 189b1c140b83bda4f8bab73a566d2229, type: 3}
