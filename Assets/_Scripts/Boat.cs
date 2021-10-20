@@ -83,7 +83,7 @@ public class Boat : MonoBehaviour {
 		}
 	}
 
-	public void SetPlayer (PlayerController player) {
+	public void SetPlayer (Player player) {
 		transform.SetParent(player.transform);
 		cam = player.GetComponent<CameraController>().camera.gameObject;
 		player.Boat = this;

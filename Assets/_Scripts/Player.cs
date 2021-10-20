@@ -82,6 +82,29 @@ public class Player : MonoBehaviour
         _ladder.layer = LayerMask.NameToLayer($"Player {playerId}");
         _ladder.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
     }
+
+    public void PrepBoat()
+    {
+        Type type = UnitManager.UnitEnumToType(SelectedUnitType);
+        var typeG = typeof(Group<>).MakeGenericType(type);
+
+        if (type != null)
+        {
+            dynamic unitGroup = Activator.CreateInstance(typeG);
+            unitGroup.Initialize($"{playerId}");
+            Boat boat = Instantiate<Boat>(Game.instance.boatPrefab);
+            boat.SetPlayer(this);
+            Boat = boat;
+            unitGroup.CanMove = false;
+            unitGroup.CanAttack = false;
+            boat.MountUnits(unitGroup.GetUnitsBase());
+        }
+    }
+
+    public void DeployBoat()
+    {
+        Boat.SetSail();
+    }
 }
 
 

@@ -9,8 +9,6 @@ public class OverlayMenu : PlayerMenu
     Canvas canvas;
     List<Image> unitImages;
 
-    public bool unitsVisible;
-
     protected new void Start()
     {
         base.Start();
@@ -39,8 +37,6 @@ public class OverlayMenu : PlayerMenu
             unitImages.Add(image);
         }
         SetSelectedUnitIndex(0);
-
-        unitsVisible = true;
     }
 
     public void SetSelectedUnitIndex(int index)
@@ -51,13 +47,5 @@ public class OverlayMenu : PlayerMenu
         }
 
         unitImages[index].color = Color.yellow;
-    }
-
-    public void SetUnitsVisible (bool visible) {
-        foreach (Image image in unitImages) {
-            image.gameObject.SetActive(visible);
-        }
-
-        unitsVisible = visible;
     }
 }

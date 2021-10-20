@@ -14,7 +14,9 @@ public class UIController : MonoBehaviour
     Player player;
 
     PlayerController playerController;
-    private MultiplayerEventSystem eventSystem;    
+    private MultiplayerEventSystem eventSystem;
+
+    private bool isDeploying;
 
     private void Start()
     {
@@ -39,27 +41,13 @@ public class UIController : MonoBehaviour
             return;
         }
 
-        OverlayMenu overlayMenu = playerUIManager.GetMenu<OverlayMenu>();
-
-        if (overlayMenu.unitsVisible) {
-            Type type = UnitManager.UnitEnumToType(player.SelectedUnitType);
-            var typeG = typeof (Group<>).MakeGenericType(type);
-
-            if (type != null) {
-                dynamic unitGroup = Activator.CreateInstance(typeG);
-                unitGroup.Initialize($"{player.playerId}");
-                Boat boat = Instantiate<Boat>(Game.instance.boatPrefab);
-                boat.SetPlayer(playerController);
-                player.Boat = boat;
-                unitGroup.CanMove = false;
-                unitGroup.CanAttack = false;
-                boat.MountUnits( unitGroup.GetUnitsBase() );
-
-                overlayMenu.SetUnitsVisible(false);
-            }
+        if (!isDeploying) {
+            player.PrepBoat();
+            isDeploying = true;
         }
         else if (player.Boat != null) {
-            player.Boat.SetSail();
+            player.DeployBoat();
+            isDeploying = false;
         }
     }
 
