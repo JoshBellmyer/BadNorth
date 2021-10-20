@@ -25,7 +25,10 @@ public class OverlayMenu : PlayerMenu
         float offset = -numUnitTypes * imageSize / 2f;
         for (int i = 0; i < numUnitTypes; i++)
         {
-            Image image = new GameObject().AddComponent<Image>(); // TODO: Add real images
+            Image image = new GameObject().AddComponent<Image>();
+            UnitData unitData = UnitDataLoader.GetUnitData((UnitType)i);
+            if (unitData != null) image.sprite = unitData.sprite;
+
             image.transform.SetParent(canvas.transform, false);
             image.rectTransform.anchorMax = new Vector2(0.5f, 1);
             image.rectTransform.anchorMin = new Vector2(0.5f, 1);
