@@ -62,6 +62,22 @@ public class Player : MonoBehaviour
     }
 
     private int numUnitTypes;
+    private float currentCooldown;
+    private float _deployCooldown;
+    private float DeployCooldown {
+        get => _deployCooldown;
+        set
+        {
+            _deployCooldown = value;
+            CooldownUpdated(_deployCooldown, currentCooldown);
+        }
+    }
+    public Action<float, float> CooldownUpdated;
+
+    private bool CanDeploy
+    {
+        get => _deployCooldown <= 0;
+    }
 
     private void Awake()
     {
@@ -83,7 +99,27 @@ public class Player : MonoBehaviour
         _ladder.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
     }
 
-    public void PrepBoat()
+    private void Update()
+    {
+        if(DeployCooldown > 0)
+        {
+            DeployCooldown -= Time.deltaTime;        
+        }
+    }
+
+    public bool TryPrepBoat()
+    {
+        if (CanDeploy)
+        {
+            Boat boat = Instantiate<Boat>(Game.instance.boatPrefab);
+            boat.SetPlayer(this);
+            Boat = boat;
+            return true;
+        }
+        return false;
+    }
+
+    public void DeployBoat()
     {
         Type type = UnitManager.UnitEnumToType(SelectedUnitType);
         var typeG = typeof(Group<>).MakeGenericType(type);
@@ -92,18 +128,15 @@ public class Player : MonoBehaviour
         {
             dynamic unitGroup = Activator.CreateInstance(typeG);
             unitGroup.Initialize($"{playerId}");
-            Boat boat = Instantiate<Boat>(Game.instance.boatPrefab);
-            boat.SetPlayer(this);
-            Boat = boat;
             unitGroup.CanMove = false;
             unitGroup.CanAttack = false;
-            boat.MountUnits(unitGroup.GetUnitsBase());
+            Boat.MountUnits(unitGroup.GetUnitsBase());
         }
-    }
-
-    public void DeployBoat()
-    {
         Boat.SetSail();
+
+        float cooldown = UnitDataLoader.GetUnitData(SelectedUnitType).cooldown;
+        currentCooldown = cooldown;
+        DeployCooldown = cooldown;
     }
 }
 

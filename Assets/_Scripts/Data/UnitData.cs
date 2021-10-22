@@ -8,4 +8,5 @@ public class UnitData : ScriptableObject
 {
     public UnitType type;
     public Sprite sprite;
+    public float cooldown;
 }

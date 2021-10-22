@@ -8,12 +8,20 @@ public class OverlayMenu : PlayerMenu
 {
     Canvas canvas;
     List<Image> unitImages;
+    Slider deployCooldownBar;
 
     protected new void Start()
     {
         base.Start();
         canvas = GetComponent<Canvas>();
         SetUpUnitOptionImages();
+        deployCooldownBar = transform.Find("DeployCooldown").GetComponent<Slider>();
+        player.CooldownUpdated += UpdateCooldownBar;
+    }
+
+    private void UpdateCooldownBar(float value, float total)
+    {
+        deployCooldownBar.value = 1f - value / total;
     }
 
     void SetUpUnitOptionImages()
