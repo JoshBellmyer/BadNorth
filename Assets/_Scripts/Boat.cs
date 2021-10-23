@@ -100,15 +100,17 @@ public class Boat : MonoBehaviour {
 		player.GetComponent<CameraController>().ZoomOut();
 	}
 
-	public void SetSail () {
+	public bool SetSail () {
 		if (!canSail || sailed) {
-			return;
+			return false;
 		}
 
 		laser.SetActive(false);
 		selector.SetActive(false);
 		moving = true;
 		sailed = true;
+
+		return true;
 	}
 
 	public void MountUnits (List<Unit> unitList) {
@@ -169,7 +171,7 @@ public class Boat : MonoBehaviour {
 		transform.position = direction * islandDistance;
 	}
 
-	private void OnTriggerEnter (Collider other) {
+	private void OnTriggerStay (Collider other) {
 		if (other.tag.Equals("Terrain") && moving) {
 			if (Vector3.Distance(dismountPos, transform.position) > 3) {
 				return;

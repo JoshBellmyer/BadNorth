@@ -133,13 +133,17 @@ public class Player : MonoBehaviour
         return true;
     }
 
-    public void DeployBoat()
+    public bool DeployBoat()
     {
-        Boat.SetSail();
+        if ( !Boat.SetSail() ) {
+            return false;
+        }
 
         float cooldown = UnitDataLoader.GetUnitData(SelectedUnitType).cooldown;
         currentCooldown = cooldown;
         DeployCooldown = cooldown;
+
+        return true;
     }
 }
 

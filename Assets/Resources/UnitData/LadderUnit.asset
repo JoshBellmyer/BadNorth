@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LadderUnit
   m_EditorClassIdentifier: 
   type: 6
-  sprite: {fileID: 21300000, guid: 189b1c140b83bda4f8bab73a566d2229, type: 3}
-  cooldown: 0
+  sprite: {fileID: 21300000, guid: 156804bf4423447d4841ed70b6d08e12, type: 3}
+  cooldown: 15
