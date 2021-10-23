@@ -114,6 +114,8 @@ public class CursorController : MonoBehaviour
             return;
         }
 
+        DeselectUnits();
+
         player.SelectedGroup = unit.Group;
         List<Unit> unitList = unit.Group.GetUnitsBase();
 
