@@ -109,29 +109,32 @@ public class Player : MonoBehaviour
 
     public bool TryPrepBoat()
     {
-        if (CanDeploy)
-        {
-            Boat boat = Instantiate<Boat>(Game.instance.boatPrefab);
-            boat.SetPlayer(this);
-            Boat = boat;
-            return true;
+        if (!CanDeploy) {
+            return false;
         }
-        return false;
+
+        Boat boat = Instantiate<Boat>(Game.instance.boatPrefab);
+        boat.SetPlayer(this);
+        Boat = boat;
+
+        Type type = UnitManager.UnitEnumToType(SelectedUnitType);
+        var typeG = typeof(Group<>).MakeGenericType(type);
+
+        if (type == null) {
+            return false;
+        }
+
+        dynamic unitGroup = Activator.CreateInstance(typeG);
+        unitGroup.Initialize($"{playerId}");
+        unitGroup.CanMove = false;
+        unitGroup.CanAttack = false;
+        Boat.MountUnits(unitGroup.GetUnitsBase());
+
+        return true;
     }
 
     public void DeployBoat()
     {
-        Type type = UnitManager.UnitEnumToType(SelectedUnitType);
-        var typeG = typeof(Group<>).MakeGenericType(type);
-
-        if (type != null)
-        {
-            dynamic unitGroup = Activator.CreateInstance(typeG);
-            unitGroup.Initialize($"{playerId}");
-            unitGroup.CanMove = false;
-            unitGroup.CanAttack = false;
-            Boat.MountUnits(unitGroup.GetUnitsBase());
-        }
         Boat.SetSail();
 
         float cooldown = UnitDataLoader.GetUnitData(SelectedUnitType).cooldown;
