@@ -114,6 +114,10 @@ public class TilePlacer : MonoBehaviour {
 
 	// Places a cube-shaped tile at the given x, y, z coords
 	private static void PlaceCube (int x, int y, int z) {
+		if (y < 1) {
+			return;
+		}
+
 		Vector3Int pos = new Vector3Int(x, y, z);
 		int front = GetEdge(pos, 0, 0)[0] ? 0b1000 : 0b0000;
 		int back = GetEdge(pos, 1, 0)[0] ? 0b0100 : 0b0000;
