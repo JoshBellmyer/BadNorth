@@ -59,19 +59,22 @@ public class UnitManager : MonoBehaviour
             return;
         }
 
+        agent.enabled = false;
         agent.gameObject.SetActive(false);
 
         dummyActive.Remove(agent);
         dummyInactive.Add(agent);
     }
 
-    public static NavMeshAgent GetDummyAgent () {
+    public static NavMeshAgent GetDummyAgent (Vector3 pos) {
         if (dummyInactive.Count < 1) {
             return null;
         }
 
         NavMeshAgent agent = dummyInactive[0];
+        agent.transform.position = pos;
         agent.gameObject.SetActive(true);
+        agent.enabled = true;
 
         dummyInactive.Remove(agent);
         dummyActive.Add(agent);
@@ -105,6 +108,26 @@ public class UnitManager : MonoBehaviour
         }
 
         return type;
+    }
+
+    public static float GetRemainingDistance (NavMeshAgent agent, float max) {
+        Vector3[] points = agent.path.corners;
+        float dist = 0;
+
+        if (points.Length == 1) {
+            return Vector3.Distance(agent.transform.position, points[0]);
+            // return agent.remainingDistance;
+        }
+
+        for (int i = 1; i < points.Length; i++) {
+            dist += Vector3.Distance(points[i - 1], points[i]);
+
+            if (dist > max) {
+                // return dist;
+            }
+        }
+
+        return dist;
     }
 }
 

@@ -11,6 +11,9 @@ public abstract class Unit : MonoBehaviour
     private string _team;
     private Group _group;
     protected Vector3 _destination;
+    private LadderUnit targetLadder;
+    private Vector3 secondDestination;
+    private bool climbing;
 
     [SerializeField] private int _health;
     private bool _canMove;
@@ -116,6 +119,10 @@ public abstract class Unit : MonoBehaviour
             _directive = Directive.ATTACK;
         }*/
 
+        if (targetLadder != null) {
+            UpdateLadderMovement();
+        }
+
         UnitUpdate();
     }
 
@@ -127,6 +134,43 @@ public abstract class Unit : MonoBehaviour
         {
             _group.RemoveUnit(this);
             TeamManager.instance.Remove(_team, this);
+        }
+    }
+
+    private void UpdateLadderMovement () {
+        if (climbing) {
+            transform.position = Vector3.MoveTowards(transform.position, targetLadder.GetEdgePos(), 0.75f * Time.deltaTime);
+
+            if (transform.position == targetLadder.GetEdgePos()) {
+                transform.position = targetLadder.GetEdgePos();
+                climbing = false;
+                _navMeshAgent.enabled = true;
+                targetLadder.Occupied = false;
+                targetLadder = null;
+                IssueDestination(secondDestination);
+            }
+
+            return;
+        }
+
+        if (!targetLadder.Attached) {
+            targetLadder = null;
+            IssueDestination(secondDestination);
+
+            return;
+        }
+
+        float ladderDist = Vector3.Distance(transform.position, targetLadder.GetBottomPos());
+
+        if (ladderDist < 0.3f && !targetLadder.Occupied) {
+            _navMeshAgent.ResetPath();
+            _navMeshAgent.enabled = false;
+            climbing = true;
+            targetLadder.Occupied = true;
+            // transform.position = targetLadder.GetEdgePos();
+            // _navMeshAgent.enabled = true;
+            // targetLadder = null;
+            // IssueDestination(secondDestination);
         }
     }
 
@@ -155,20 +199,24 @@ public abstract class Unit : MonoBehaviour
 
         HashSet<Unit> units = TeamManager.instance.GetOnTeam(_team);
         List<Tuple<NavMeshAgent, NavMeshAgent>> agentTuples = new List<Tuple<NavMeshAgent, NavMeshAgent>>();
+        Dictionary<NavMeshAgent, LadderUnit> ladders = new Dictionary<NavMeshAgent, LadderUnit>();
 
         foreach (Unit u in units) {
             if (u is LadderUnit && u != this) {
                 float heightDiff = Mathf.Abs(u.transform.position.y - transform.position.y);
                 float dist = Vector3.Distance(transform.position, u.transform.position);
+                LadderUnit lu = (LadderUnit)u;
 
-                if (heightDiff <= 0.5f && dist <= 6) {
-                    agentTuples.Add( SetDummyPath(u as LadderUnit, destination) );
+                if (heightDiff <= 0.5f && dist <= 6 && lu.Attached) {
+                    Tuple<NavMeshAgent, NavMeshAgent> tuple = SetDummyPath(u as LadderUnit, destination);
+                    agentTuples.Add(tuple);
+                    ladders.Add(tuple.Item1, lu);
                 }
             }
         }
 
         if (agentTuples.Count > 0) {
-            StartCoroutine( ChooseDestination(agentTuples) );
+            StartCoroutine( ChooseDestination(agentTuples, ladders) );
         }
         else {
             _navMeshAgent.isStopped = false;
@@ -177,7 +225,7 @@ public abstract class Unit : MonoBehaviour
         OnMove();
     }
 
-    internal IEnumerator<bool> ChooseDestination (List<Tuple<NavMeshAgent, NavMeshAgent>> otherAgents) {
+    internal IEnumerator<bool> ChooseDestination (List<Tuple<NavMeshAgent, NavMeshAgent>> otherAgents, Dictionary<NavMeshAgent, LadderUnit> ladders) {
         bool foundPaths = false;
 
         while (!foundPaths) {
@@ -191,35 +239,61 @@ public abstract class Unit : MonoBehaviour
             yield return false;
         }
 
-        float minDistance = _navMeshAgent.remainingDistance;
+        float minDistance = UnitManager.GetRemainingDistance(_navMeshAgent, 1000);
         NavMeshAgent pathAgent = _navMeshAgent;
+        Vector3 dest1 = _destination;
+        Vector3 dest2 = _destination;
+
+        if (_navMeshAgent.path.status != NavMeshPathStatus.PathComplete) {
+            minDistance += 100;
+        }
+
+        // Debug.Log($"min: {minDistance}");
 
         foreach (Tuple<NavMeshAgent, NavMeshAgent> tuple in otherAgents) {
-            float dist = tuple.Item1.remainingDistance + tuple.Item2.remainingDistance;
+            // float dist = tuple.Item1.remainingDistance + tuple.Item2.remainingDistance;
+            float dist1 = UnitManager.GetRemainingDistance(tuple.Item1, minDistance);
+            float dist2 = UnitManager.GetRemainingDistance(tuple.Item2, minDistance);
+            // float dist = UnitManager.GetRemainingDistance(tuple.Item1, minDistance) + UnitManager.GetRemainingDistance(tuple.Item2, minDistance);
+            float dist = dist1 + dist2;
+
+            if (tuple.Item1.path.status != NavMeshPathStatus.PathComplete || tuple.Item2.path.status != NavMeshPathStatus.PathComplete) {
+                dist += 100;
+            }
+
+            // Debug.Log(tuple.Item1.transform.position);
+            // Debug.Log($"first: {dist1}  second: {dist2}");
 
             if (dist < minDistance) {
                 minDistance = dist;
                 pathAgent = tuple.Item1;
+                dest1 = tuple.Item1.destination;
+                dest2 = tuple.Item2.destination;
             }
 
             ClearDummyPath(tuple);
         }
 
         if (pathAgent != _navMeshAgent) {
-            _navMeshAgent.SetDestination(pathAgent.destination);
+            // Debug.Log(pathAgent);
+            _navMeshAgent.ResetPath();
+            _destination = dest1;
+            secondDestination = dest2;
+            targetLadder = ladders[pathAgent];
+            _navMeshAgent.SetDestination(dest1);
         }
 
         _navMeshAgent.isStopped = false;
     }
 
     internal Tuple<NavMeshAgent, NavMeshAgent> SetDummyPath (LadderUnit ladderUnit, Vector3 destination) {
-        NavMeshAgent agent1 = UnitManager.GetDummyAgent();
-        NavMeshAgent agent2 = UnitManager.GetDummyAgent();
+        NavMeshAgent agent1 = UnitManager.GetDummyAgent(transform.position);
+        NavMeshAgent agent2 = UnitManager.GetDummyAgent(ladderUnit.GetEdgePos());
 
-        agent1.transform.position = transform.position;
-        agent1.SetDestination(ladderUnit.transform.position);
+        // agent1.transform.position = transform.position;
+        agent1.SetDestination(ladderUnit.GetBottomPos());
 
-        agent2.transform.position = ladderUnit.GetEdgePos();
+        // agent2.transform.position = ladderUnit.GetEdgePos();
         agent2.SetDestination(destination);
 
         return new Tuple<NavMeshAgent, NavMeshAgent>(agent1, agent2);

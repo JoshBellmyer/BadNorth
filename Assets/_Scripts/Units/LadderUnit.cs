@@ -12,6 +12,19 @@ public class LadderUnit : Unit
     private Vector3 attachPos;
     private Vector3 attachNormal;
     private Vector3 landingPos;
+    private Vector3 bottomPos;
+
+    private bool _attached;
+    private bool _occupied;
+
+    public bool Attached {
+        get => _attached;
+    }
+
+    public bool Occupied {
+        get => _occupied;
+        set { _occupied = value; }
+    }
 
 
     internal LadderUnit() : base(HEALTH)
@@ -28,6 +41,8 @@ public class LadderUnit : Unit
     }
 
     protected override void OnMove () {
+        _occupied = false;
+        _attached = false;
         ladder.transform.localPosition = new Vector3(0, 0.6f, 0);
         ladder.transform.forward = Vector3.up;
         ladder.transform.localEulerAngles = new Vector3(ladder.transform.localEulerAngles.x, 0, 0);
@@ -49,7 +64,11 @@ public class LadderUnit : Unit
     }
 
     public Vector3 GetEdgePos () {
-    	return Vector3.zero;
+    	return landingPos + (transform.forward * -0.4f);
+    }
+
+    public Vector3 GetBottomPos () {
+        return bottomPos;
     }
 
     private void FinishAttach () {
@@ -58,10 +77,12 @@ public class LadderUnit : Unit
         transform.forward = -attachNormal;
         ladder.transform.localPosition = new Vector3(0, 0.5f, 0.5f);
         ladder.transform.forward = -attachNormal;
+        bottomPos = transform.position + (attachNormal * -0.3f);
         // ladder.transform.up = -transform.forward;
         // ladder.transform.localEulerAngles = new Vector3(ladder.transform.localEulerAngles.x, 0, 0);
 
         attaching = false;
+        _attached = true;
     }
 }
 
