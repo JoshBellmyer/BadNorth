@@ -126,16 +126,14 @@ public class Group<T> : Group where T : Unit {
                 return;
             }
 
+            int i = 0;
+
             foreach (var v in _units)
             {
-                int i = 0;
                 float angleIncrement = 2 * Mathf.PI / _units.Count;
-                foreach (var v in _units)
-                {
-                    Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement), 0, Mathf.Sin(i * angleIncrement));
-                    v.IssueDestination(_targetPosition + offset);
-                    i++;
-                }
+                Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement), 0, Mathf.Sin(i * angleIncrement));
+                v.IssueDestination(_targetPosition + offset);
+                i++;
             }
         }
     }
