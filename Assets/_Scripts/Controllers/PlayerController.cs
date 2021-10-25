@@ -1,24 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
     private PlayerInput playerInput;
     private string currentControlScheme;
-    private MultiplayerEventSystem eventSystem;
-    
-    private Boat _boat;
-
-    public Boat Boat {
-        get => _boat;
-        set { _boat = value; }
-    }
 
 
     private void Start()
@@ -27,7 +16,6 @@ public class PlayerController : MonoBehaviour
         currentControlScheme = playerInput.currentControlScheme;
 
         Game.instance.RegisterPlayer(this);
-        eventSystem = GetComponent<MultiplayerEventSystem>();
     }
 
     public void SetControlsActivated(bool enabled)
@@ -45,18 +33,6 @@ public class PlayerController : MonoBehaviour
     public void SetActionMap(string name)
     {
         playerInput.SwitchCurrentActionMap(name);
-    }
-
-    public void OnPause(InputAction.CallbackContext context)
-    {
-        if (Game.instance.IsPlayerRegistered(this)) // Accounts for Unity bug, see https://forum.unity.com/threads/player-input-manager-adds-an-extra-player-with-index-1.1039000/
-        {
-            if (context.performed)
-            {
-                Game.instance.Pause(this);
-                eventSystem.SetSelectedGameObject(FindObjectOfType<Selectable>().gameObject, new BaseEventData(eventSystem));
-            }
-        }            
     }
 
     //This is automatically called from PlayerInput, when the input device has changed
