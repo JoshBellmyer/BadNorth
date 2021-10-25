@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class OverlayMenu : PlayerMenu
 {
+    [SerializeField] float selectionAnimationSpeed;
     Canvas canvas;
     List<Image> unitImages;
     List<Vector2> imageLocations;
@@ -80,7 +81,17 @@ public class OverlayMenu : PlayerMenu
             {
                 currentIndex -= unitImages.Count;
             }
-            unitImages[currentIndex].rectTransform.anchoredPosition = imageLocations[i];
+            StartCoroutine(Slide(unitImages[currentIndex].rectTransform, imageLocations[i]));
+        }
+    }
+
+    IEnumerator Slide(RectTransform rectTransform, Vector2 targetLocation) // TODO: slide behind other images
+    {
+        Vector2 startLocation = rectTransform.anchoredPosition;
+        for(float f = 0f; f < 1f; f += Time.deltaTime * selectionAnimationSpeed)
+        {
+            rectTransform.anchoredPosition = Vector2.Lerp(startLocation, targetLocation, f);
+            yield return null;
         }
     }
 }
