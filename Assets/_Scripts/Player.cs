@@ -49,10 +49,12 @@ public class Player : MonoBehaviour
             {
                 _selectedUnitIndex = numUnitTypes - 1;
             }
+            OnSelectedUnitIndexChanged?.Invoke(_selectedUnitIndex);
         }
     }
 
     int _selectedUnitIndex;
+    public Action<int> OnSelectedUnitIndexChanged;
 
     private Group _selectedGroup;
 
@@ -69,7 +71,7 @@ public class Player : MonoBehaviour
         set
         {
             _deployCooldown = value;
-            CooldownUpdated(_deployCooldown, currentCooldown);
+            CooldownUpdated?.Invoke(_deployCooldown, currentCooldown);
         }
     }
     public Action<float, float> CooldownUpdated;

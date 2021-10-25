@@ -11,7 +11,7 @@ public class OverlayMenu : PlayerMenu
     Slider deployCooldownBar;
     private Image selectionImage;
 
-    private int imageSize;
+    private static int IMAGE_SIZE = 100;
     private float offset;
 
     protected new void Start()
@@ -21,6 +21,7 @@ public class OverlayMenu : PlayerMenu
         SetUpUnitOptionImages();
         deployCooldownBar = transform.Find("DeployCooldown").GetComponent<Slider>();
         player.CooldownUpdated += UpdateCooldownBar;
+        player.OnSelectedUnitIndexChanged += SetSelectedUnitIndex;
     }
 
     private void UpdateCooldownBar(float value, float total)
@@ -32,23 +33,13 @@ public class OverlayMenu : PlayerMenu
     {
         unitImages = new List<Image>();
         int numUnitTypes = Enum.GetValues(typeof(UnitType)).Length;
-
-        imageSize = 100;
-        offset = -numUnitTypes * imageSize / 2f;
+        offset = -numUnitTypes * IMAGE_SIZE / 2f;
 
         for (int i = 0; i < numUnitTypes; i++)
         {
             Image image = new GameObject().AddComponent<Image>();
             UnitData unitData = UnitDataLoader.GetUnitData((UnitType)i);
             if (unitData != null) image.sprite = unitData.sprite;
-
-            // image.transform.SetParent(canvas.transform, false);
-            // image.rectTransform.anchorMax = new Vector2(0.5f, 1);
-            // image.rectTransform.anchorMin = new Vector2(0.5f, 1);
-            // image.rectTransform.pivot = new Vector2(0, 1);
-            // image.rectTransform.anchoredPosition = new Vector2(offset + imageSize * i, 0);
-            // image.rectTransform.sizeDelta = new Vector2(imageSize, imageSize);
-            // image.name = "Unit Selection";
 
             AddImageToCanvas(image, i);
             unitImages.Add(image);
@@ -67,11 +58,11 @@ public class OverlayMenu : PlayerMenu
         image.rectTransform.anchorMax = new Vector2(0.5f, 1);
         image.rectTransform.anchorMin = new Vector2(0.5f, 1);
         image.rectTransform.pivot = new Vector2(0, 1);
-        image.rectTransform.anchoredPosition = new Vector2(offset + imageSize * imageIndex, 0);
-        image.rectTransform.sizeDelta = new Vector2(imageSize, imageSize);
+        image.rectTransform.anchoredPosition = new Vector2(offset + IMAGE_SIZE * imageIndex, 0);
+        image.rectTransform.sizeDelta = new Vector2(IMAGE_SIZE, IMAGE_SIZE);
     }
 
-    public void SetSelectedUnitIndex(int index)
+    public void SetSelectedUnitIndex(int index) // TODO: rotate selection wheel
     {
         // foreach (Image image in unitImages)
         // {
@@ -80,7 +71,7 @@ public class OverlayMenu : PlayerMenu
 
         // unitImages[index].color = Color.yellow;
 
-        selectionImage.rectTransform.anchoredPosition = new Vector2(offset + imageSize * index, 0);
+        selectionImage.rectTransform.anchoredPosition = new Vector2(offset + IMAGE_SIZE * index, 0);
     }
 }
 
