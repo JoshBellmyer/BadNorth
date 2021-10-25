@@ -127,11 +127,12 @@ public class Group<T> : Group where T : Unit {
             }
 
             int i = 0;
+            float angleIncrement = 2 * Mathf.PI / _units.Count;
+            float rotationCorrection = angleIncrement / 2;
 
             foreach (var v in _units)
             {
-                float angleIncrement = 2 * Mathf.PI / _units.Count;
-                Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement), 0, Mathf.Sin(i * angleIncrement));
+                Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement + rotationCorrection), 0, Mathf.Sin(i * angleIncrement + rotationCorrection));
                 v.IssueDestination(_targetPosition + offset);
                 i++;
             }
