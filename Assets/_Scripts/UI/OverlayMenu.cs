@@ -8,11 +8,11 @@ public class OverlayMenu : PlayerMenu
 {
     Canvas canvas;
     List<Image> unitImages;
+    List<Vector2> imageLocations;
     Slider deployCooldownBar;
     private Image selectionImage;
 
     private static int IMAGE_SIZE = 100;
-    private float offset;
 
     protected new void Start()
     {
@@ -32,8 +32,9 @@ public class OverlayMenu : PlayerMenu
     void SetUpUnitOptionImages()
     {
         unitImages = new List<Image>();
+        imageLocations = new List<Vector2>();
         int numUnitTypes = Enum.GetValues(typeof(UnitType)).Length;
-        offset = -numUnitTypes * IMAGE_SIZE / 2f;
+        float offset = -numUnitTypes * IMAGE_SIZE;
 
         for (int i = 0; i < numUnitTypes; i++)
         {
@@ -41,37 +42,46 @@ public class OverlayMenu : PlayerMenu
             UnitData unitData = UnitDataLoader.GetUnitData((UnitType)i);
             if (unitData != null) image.sprite = unitData.sprite;
 
-            AddImageToCanvas(image, i);
+            float wrapAround = 0;
+            if(i > numUnitTypes / 2)
+            {
+                wrapAround = offset;
+            }
+
+            Vector2 position = new Vector2(wrapAround + IMAGE_SIZE * i, 0);
+            AddImageToCanvas(image, position);
+            imageLocations.Add(position);
             unitImages.Add(image);
         }
 
         selectionImage = new GameObject().AddComponent<Image>();
         selectionImage.sprite = Resources.Load<Sprite>($"Textures/unit_selection");
         selectionImage.color = Color.yellow;
-        AddImageToCanvas(selectionImage, 0);
+        AddImageToCanvas(selectionImage, new Vector2(0, 0));
 
         SetSelectedUnitIndex(0);
     }
 
-    private void AddImageToCanvas (Image image, int imageIndex) {
+    private void AddImageToCanvas (Image image, Vector2 position) {
         image.transform.SetParent(canvas.transform, false);
         image.rectTransform.anchorMax = new Vector2(0.5f, 1);
         image.rectTransform.anchorMin = new Vector2(0.5f, 1);
-        image.rectTransform.pivot = new Vector2(0, 1);
-        image.rectTransform.anchoredPosition = new Vector2(offset + IMAGE_SIZE * imageIndex, 0);
+        image.rectTransform.pivot = new Vector2(0.5f, 1);
+        image.rectTransform.anchoredPosition = position;
         image.rectTransform.sizeDelta = new Vector2(IMAGE_SIZE, IMAGE_SIZE);
     }
 
-    public void SetSelectedUnitIndex(int index) // TODO: rotate selection wheel
+    public void SetSelectedUnitIndex(int index)
     {
-        // foreach (Image image in unitImages)
-        // {
-        //     image.color = Color.white;
-        // }
-
-        // unitImages[index].color = Color.yellow;
-
-        selectionImage.rectTransform.anchoredPosition = new Vector2(offset + IMAGE_SIZE * index, 0);
+        for (int i=0; i<unitImages.Count; i++)
+        {
+            int currentIndex = index + i;
+            if (currentIndex >= unitImages.Count)
+            {
+                currentIndex -= unitImages.Count;
+            }
+            unitImages[currentIndex].rectTransform.anchoredPosition = imageLocations[i];
+        }
     }
 }
 
