@@ -105,7 +105,6 @@ public abstract class Unit : MonoBehaviour
     }
     internal void IssueDestination(Vector3 destination)
     {
-        // TODO: Transform destination before setting.
         Debug.Log(_navMeshAgent is null);
         _destination = destination;
         if (_canMove)

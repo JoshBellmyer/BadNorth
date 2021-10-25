@@ -66,7 +66,24 @@ public class Group<T> : Group where T : Unit {
     {
         foreach (var u in _units)
         {
-            u.transform.position = position;
+            if (_units.Count > 1)
+            {
+                int i = 0;
+                float angleIncrement = 2 * Mathf.PI / _units.Count;
+                foreach (var v in _units)
+                {
+                    Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement + rotation), 0, Mathf.Sin(i * angleIncrement + rotation));
+                    u.transform.position = position + offset;
+                    i++;
+                }
+            }
+            else
+            {
+                foreach (var v in _units)
+                {
+                    u.transform.position = position;
+                }
+            }
         }
     }
     public void TeleportTo(Vector3 position)
@@ -75,12 +92,26 @@ public class Group<T> : Group where T : Unit {
     }
     public void MoveTo(Vector3 position)
     {
-        if (_canMove && !position.Equals(_targetPosition))
+        if (!position.Equals(_targetPosition))
         {
             _targetPosition = position;
-            foreach (var v in _units)
+            if (_units.Count > 1)
             {
-                v.IssueDestination(_targetPosition);
+                int i = 0;
+                float angleIncrement = 2 * Mathf.PI / _units.Count;
+                foreach (var v in _units)
+                {
+                    Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement), 0, Mathf.Sin(i * angleIncrement));
+                    v.IssueDestination(_targetPosition + offset);
+                    i++;
+                }
+            } 
+            else
+            {
+                foreach (var v in _units)
+                {
+                    v.IssueDestination(_targetPosition);
+                }
             }
         }
     }
