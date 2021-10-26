@@ -10,12 +10,6 @@ public class Game : MonoBehaviour {
 	public static Game instance;
 	public static MapGenerator mapGenerator;
 
-	[Header("Prefabs")]
-	public Boat boatPrefab;
-	public GameObject selectionPrefab;
-	public GameObject ladderPrefab;
-	public Sprite3D[] unitSelectPrefabs;
-
 	private bool isPaused;
 	private List<PlayerController> players;
 
@@ -33,6 +27,8 @@ public class Game : MonoBehaviour {
 		}
 
 		DontDestroyOnLoad(gameObject);
+
+		PrefabFactory.Initialize();
 
 		players = new List<PlayerController>();
 

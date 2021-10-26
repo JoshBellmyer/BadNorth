@@ -126,11 +126,8 @@ public class CursorController : MonoBehaviour
         List<Unit> unitList = unit.Group.GetUnitsBase();
 
         foreach (Unit u in unitList) {
-            Sprite3D sprite = Instantiate<Sprite3D>(Game.instance.unitSelectPrefabs[player.playerId - 1]);
-            sprite.camera = camera;
-            sprite.transform.SetParent(u.transform);
-            sprite.transform.localPosition = new Vector3(0, 0.75f, 0);
-            selectedUnitSprites.Add(sprite.gameObject);
+            GameObject sprite = PrefabFactory.CreateUnitSelectSprite(player, u);
+            selectedUnitSprites.Add(sprite);
         }
     }
 
