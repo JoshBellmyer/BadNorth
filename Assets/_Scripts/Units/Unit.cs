@@ -109,15 +109,14 @@ public abstract class Unit : MonoBehaviour
     private void Update()
     {
         // There has got to be a better way to implement this.
-        /*
-        if (_navMeshAgent.isStopped)
+        if (_navMeshAgent.isOnNavMesh && _navMeshAgent.isStopped)
         {
             _directive = Directive.NONE;
         }
-        if (_canAttack && (_directive == Directive.NONE || _navMeshAgent.remainingDistance < MAX_PROXIMITY) && FindAttack() && !_navMeshAgent.isStopped)
+        if (_navMeshAgent.isOnNavMesh && _canAttack && (_directive == Directive.NONE || _navMeshAgent.remainingDistance < MAX_PROXIMITY) && FindAttack() && !_navMeshAgent.isStopped)
         {
             _directive = Directive.ATTACK;
-        }*/
+        }
 
         if (targetLadder != null) {
             UpdateLadderMovement();
