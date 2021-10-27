@@ -9,6 +9,7 @@ public class Group<T> : Group where T : Unit {
     private bool _canMove;
     private bool _canAttack;
 
+    public static readonly float DEFAULT_RADIUS = 0.5f;
     // public Group(string team) {
     //     _units = new List<T>();
     //     _targetPosition = Vector3.zero;
@@ -82,7 +83,7 @@ public class Group<T> : Group where T : Unit {
         }
     }
 
-    public void TeleportTo(Vector3 position, float rotation)
+    public void TeleportTo(Vector3 position, float rotation, float radius)
     {
         foreach (var u in _units)
         {
@@ -90,9 +91,10 @@ public class Group<T> : Group where T : Unit {
             {
                 int i = 0;
                 float angleIncrement = 2 * Mathf.PI / _units.Count;
+                float rotationCorrection = angleIncrement / 2;
                 foreach (var v in _units)
                 {
-                    Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement + rotation), 0, Mathf.Sin(i * angleIncrement + rotation));
+                    Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement + rotation + rotationCorrection), 0, Mathf.Sin(i * angleIncrement + rotation + rotationCorrection)) * radius;
                     u.transform.position = position + offset;
                     i++;
                 }
@@ -109,10 +111,14 @@ public class Group<T> : Group where T : Unit {
 
     public override void TeleportTo(Vector3 position)
     {
-        TeleportTo(position, 0f);
+        TeleportTo(position, 0f, DEFAULT_RADIUS);
     }
 
     public override void MoveTo(Vector3 position)
+    {
+        MoveTo(position, 0f, DEFAULT_RADIUS);
+    }
+    public void MoveTo(Vector3 position, float rotation, float radius)
     {
         if (!position.Equals(_targetPosition))
         {
@@ -132,7 +138,7 @@ public class Group<T> : Group where T : Unit {
 
             foreach (var v in _units)
             {
-                Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement + rotationCorrection), 0, Mathf.Sin(i * angleIncrement + rotationCorrection));
+                Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement + rotationCorrection + rotation), 0, Mathf.Sin(i * angleIncrement + rotationCorrection + rotation)) * radius;
                 v.IssueDestination(_targetPosition + offset);
                 i++;
             }
@@ -146,7 +152,10 @@ public class Group<T> : Group where T : Unit {
 
     public void DestroyGroup()
     {
-        // TODO: Implement
+        foreach (var v in _units)
+        {
+            v.Die();
+        }
     }
 
     public Vector3 GetDestination()
@@ -174,6 +183,7 @@ public class Group<T> : Group where T : Unit {
     internal void RemoveUnit(T unit)
     {
         _units.Remove(unit);
+        if (_units.Count == 0) DestroyGroup();
     }
 
     internal override void RemoveUnit(Unit unit)

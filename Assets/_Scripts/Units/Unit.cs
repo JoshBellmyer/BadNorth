@@ -26,7 +26,6 @@ public abstract class Unit : MonoBehaviour
         get => _navMeshAgent;
     }
 
-
     protected Unit(int health)
     {
         _health = health;
@@ -131,9 +130,15 @@ public abstract class Unit : MonoBehaviour
     {
         if (_health <= 0)
         {
-            _group.RemoveUnit(this);
-            TeamManager.instance.Remove(_team, this);
+            Die();
         }
+    }
+
+    internal void Die()
+    {
+        _group.RemoveUnit(this);
+        TeamManager.instance.Remove(_team, this);
+        Destroy(gameObject);
     }
 
     private void UpdateLadderMovement () {
@@ -305,22 +310,12 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void OnMove () {}
 
-    // internal void SetTeam(string team)
-    // {
-    //     _team = team;
-    // }
-
-    // internal void SetGroup(Group group)
-    // {
-    //     _group = group;
-    // }
-
     protected void IssueAttackLocation(Vector3 target)
     {
         if (_canMove)
         {
             _navMeshAgent.SetDestination(target);
-            if (_navMeshAgent.remainingDistance > MAX_PROXIMITY)
+            if (UnitManager.GetRemainingDistance(_navMeshAgent, MAX_PROXIMITY + 1) > MAX_PROXIMITY)
             {
                 _navMeshAgent.ResetPath();
             }
