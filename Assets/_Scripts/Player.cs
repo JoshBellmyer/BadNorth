@@ -49,10 +49,12 @@ public class Player : MonoBehaviour
             {
                 _selectedUnitIndex = numUnitTypes - 1;
             }
+            OnSelectedUnitIndexChanged?.Invoke(_selectedUnitIndex);
         }
     }
 
     int _selectedUnitIndex;
+    public Action<int> OnSelectedUnitIndexChanged;
 
     private Group _selectedGroup;
 
@@ -69,7 +71,7 @@ public class Player : MonoBehaviour
         set
         {
             _deployCooldown = value;
-            CooldownUpdated(_deployCooldown, currentCooldown);
+            CooldownUpdated?.Invoke(_deployCooldown, currentCooldown);
         }
     }
     public Action<float, float> CooldownUpdated;
@@ -78,6 +80,8 @@ public class Player : MonoBehaviour
     {
         get => _deployCooldown <= 0;
     }
+
+    public new Camera camera;
 
     private void Awake()
     {
@@ -88,15 +92,12 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        camera = transform.Find("Camera").GetComponent<Camera>();
+
         settings = Settings.Load(playerId);
 
-        _gridSelection = Instantiate(Game.instance.selectionPrefab);
-        _gridSelection.layer = LayerMask.NameToLayer($"Player {playerId}");
-        _gridSelection.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
-
-        _ladder = Instantiate(Game.instance.ladderPrefab);
-        _ladder.layer = LayerMask.NameToLayer($"Player {playerId}");
-        _ladder.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
+        _gridSelection = PrefabFactory.CreateGridSelectionVisual(this);
+        _ladder = PrefabFactory.CreateLadderVisual(this);
     }
 
     private void Update()
@@ -113,22 +114,8 @@ public class Player : MonoBehaviour
             return false;
         }
 
-        Boat boat = Instantiate<Boat>(Game.instance.boatPrefab);
-        boat.SetPlayer(this);
+        Boat boat = PrefabFactory.CreateBoat(this, SelectedUnitType);
         Boat = boat;
-
-        Type type = UnitManager.UnitEnumToType(SelectedUnitType);
-        var typeG = typeof(Group<>).MakeGenericType(type);
-
-        if (type == null) {
-            return false;
-        }
-
-        dynamic unitGroup = Activator.CreateInstance(typeG);
-        unitGroup.Initialize($"{playerId}");
-        unitGroup.CanMove = false;
-        unitGroup.CanAttack = false;
-        Boat.MountUnits(unitGroup.GetUnitsBase());
 
         return true;
     }

@@ -58,7 +58,6 @@ public class UIController : MonoBehaviour
             if (context.performed)
             {
                 player.SelectedUnitIndex += (int)context.ReadValue<float>();
-                playerUIManager.GetMenu<OverlayMenu>().SetSelectedUnitIndex(player.SelectedUnitIndex);
             }
         }
     }
