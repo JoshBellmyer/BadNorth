@@ -81,8 +81,40 @@ public class OverlayMenu : PlayerMenu
             {
                 currentIndex -= unitImages.Count;
             }
-            StartCoroutine(Slide(unitImages[currentIndex].rectTransform, imageLocations[i]));
+
+            float moveDistance = Mathf.Abs(unitImages[currentIndex].rectTransform.anchoredPosition.x - imageLocations[i].x);
+            if(moveDistance > IMAGE_SIZE)
+            {
+                StartCoroutine(FadeAndMove(unitImages[currentIndex], imageLocations[i]));
+            }
+            else
+            {
+                StartCoroutine(Slide(unitImages[currentIndex].rectTransform, imageLocations[i]));
+            }
         }
+    }
+
+    IEnumerator FadeAndMove(Image image, Vector2 targetLocation)
+    {
+        RectTransform rectTransform = image.rectTransform;
+        Vector2 startLocation = rectTransform.anchoredPosition;
+        float f = 1f;
+        Color color = image.color;
+        for (; f > 0f; f -= Time.deltaTime * selectionAnimationSpeed * 2)
+        {
+            color.a = f;
+            image.color = color;
+            yield return null;
+        }
+        rectTransform.anchoredPosition = targetLocation;
+        for (; f < 1f; f += Time.deltaTime * selectionAnimationSpeed * 2)
+        {
+            color.a = f;
+            image.color = color;
+            yield return null;
+        }
+        color.a = 1;
+        image.color = color;
     }
 
     IEnumerator Slide(RectTransform rectTransform, Vector2 targetLocation) // TODO: slide behind other images
@@ -93,6 +125,7 @@ public class OverlayMenu : PlayerMenu
             rectTransform.anchoredPosition = Vector2.Lerp(startLocation, targetLocation, f);
             yield return null;
         }
+        rectTransform.anchoredPosition = targetLocation;
     }
 }
 
