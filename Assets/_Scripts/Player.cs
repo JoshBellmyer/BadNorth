@@ -6,7 +6,6 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Settings settings;
-    public GameObject gridSelection;
 
     static int numPlayers = 0;
     public int playerId;
@@ -71,10 +70,10 @@ public class Player : MonoBehaviour
         set
         {
             _deployCooldown = value;
-            CooldownUpdated?.Invoke(_deployCooldown, currentCooldown);
+            OnCooldownUpdated?.Invoke(_deployCooldown, currentCooldown);
         }
     }
-    public Action<float, float> CooldownUpdated;
+    public Action<float, float> OnCooldownUpdated;
 
     private bool CanDeploy
     {

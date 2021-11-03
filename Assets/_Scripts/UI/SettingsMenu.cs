@@ -15,9 +15,9 @@ public class SettingsMenu : PlayerMenu
     float zoomSensitivityVisual;
     float rotateSensitivityVisual;
 
-    protected new void Start()
+    protected new void Awake()
     {
-        base.Start();
+        base.Awake();
         LoadSettingsValues();
     }
 

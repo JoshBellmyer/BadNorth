@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class OverlayMenu : PlayerMenu
 {
     [SerializeField] float selectionAnimationSpeed;
+    [SerializeField] RectTransform cursorTransform;
     Canvas canvas;
+    RectTransform canvasTransform;
     List<Image> unitImages;
     List<Vector2> imageLocations;
     Slider deployCooldownBar;
@@ -15,14 +17,37 @@ public class OverlayMenu : PlayerMenu
 
     private static int IMAGE_SIZE = 100;
 
-    protected new void Start()
+    private new void Awake()
     {
-        base.Start();
+        base.Awake();
         canvas = GetComponent<Canvas>();
+        canvasTransform = GetComponent<RectTransform>();
         SetUpUnitOptionImages();
         deployCooldownBar = transform.Find("DeployCooldown").GetComponent<Slider>();
-        player.CooldownUpdated += UpdateCooldownBar;
+        player.OnCooldownUpdated += UpdateCooldownBar;
         player.OnSelectedUnitIndexChanged += SetSelectedUnitIndex;
+    }
+
+    public void MoveCursor(Vector2 delta)
+    {
+        if (player == null) return;
+        cursorTransform.localPosition += new Vector3(delta.x, delta.y) * player.settings.cursorSensitivity;
+        float clampX = Mathf.Clamp(cursorTransform.localPosition.x, -canvasTransform.rect.width / 2, canvasTransform.rect.width / 2);
+        float clampY = Mathf.Clamp(cursorTransform.localPosition.y, -canvasTransform.rect.height / 2, canvasTransform.rect.height / 2);
+        cursorTransform.localPosition = new Vector3(clampX, clampY);
+    }
+
+    public Tuple<bool, RaycastHit> CastFromCursor(int layerMask)
+    {
+        RaycastHit hit;
+        Debug.Log(canvasTransform);
+        Vector3 cursorPosition = cursorTransform.localPosition + new Vector3(canvasTransform.rect.width / 2, canvasTransform.rect.height / 2);
+        Vector3 viewPortPosition = new Vector3(cursorPosition.x / canvasTransform.rect.width, cursorPosition.y / canvasTransform.rect.height); // view port is normalized
+        Ray cursorSelectRay = player.camera.ViewportPointToRay(viewPortPosition);
+
+        bool hitSomething = Physics.Raycast(cursorSelectRay, out hit, Mathf.Infinity, layerMask);
+
+        return new Tuple<bool, RaycastHit>(hitSomething, hit);
     }
 
     private void UpdateCooldownBar(float value, float total)
