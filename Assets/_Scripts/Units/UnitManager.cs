@@ -8,9 +8,9 @@ using UnityEngine.AI;
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager instance;
-    private static Dictionary<UnitType, GameObject> prefabMap = new Dictionary<UnitType, GameObject>();
-    private static List<NavMeshAgent> dummyActive = new List<NavMeshAgent>();
-    private static List<NavMeshAgent> dummyInactive = new List<NavMeshAgent>();
+    private Dictionary<UnitType, GameObject> prefabMap = new Dictionary<UnitType, GameObject>();
+    private List<NavMeshAgent> dummyActive = new List<NavMeshAgent>();
+    private List<NavMeshAgent> dummyInactive = new List<NavMeshAgent>();
 
     private void Awake()
     {
@@ -54,7 +54,7 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public static void DeactivateDummy (NavMeshAgent agent) {
+    public void DeactivateDummy (NavMeshAgent agent) {
         if (!dummyActive.Contains(agent)) {
             return;
         }
@@ -66,7 +66,7 @@ public class UnitManager : MonoBehaviour
         dummyInactive.Add(agent);
     }
 
-    public static NavMeshAgent GetDummyAgent (Vector3 pos) {
+    public NavMeshAgent GetDummyAgent (Vector3 pos) {
         if (dummyInactive.Count < 1) {
             return null;
         }

@@ -9,4 +9,9 @@ public class TitleScreen : MonoBehaviour
     {
         SceneManager.LoadScene("Island");
     }
+
+    public void OnExitGame()
+    {
+        Game.instance.ExitGame();
+    }
 }

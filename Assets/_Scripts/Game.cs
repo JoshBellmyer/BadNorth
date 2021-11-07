@@ -12,7 +12,7 @@ public class Game : MonoBehaviour {
 	public static MapGenerator mapGenerator;
 
 	private bool isPaused;
-	private List<PlayerController> players;
+	public List<PlayerController> players;
 
 	public const int everythingMask = 0x7FFFFFFF; 
 
@@ -48,6 +48,7 @@ public class Game : MonoBehaviour {
 
 	public void SetupGame()
     {
+		Player.numPlayers = 0;
 		players = new List<PlayerController>();
 		players.Add(PrefabFactory.CreatePlayerController());
 		players.Add(PrefabFactory.CreatePlayerController());
@@ -68,6 +69,11 @@ public class Game : MonoBehaviour {
 		UnityEditor.EditorApplication.isPlaying = false;
 #endif
 	}
+
+	public void SwitchToMainMenu()
+    {
+		SceneManager.LoadScene("Title");
+    }
 
 	public void RegisterPlayer(PlayerController playerControl)
     {

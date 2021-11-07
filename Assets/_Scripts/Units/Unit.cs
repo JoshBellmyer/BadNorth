@@ -291,8 +291,8 @@ public abstract class Unit : MonoBehaviour
     }
 
     internal Tuple<NavMeshAgent, NavMeshAgent> SetDummyPath (LadderUnit ladderUnit, Vector3 destination) {
-        NavMeshAgent agent1 = UnitManager.GetDummyAgent(transform.position);
-        NavMeshAgent agent2 = UnitManager.GetDummyAgent(ladderUnit.GetEdgePos());
+        NavMeshAgent agent1 = UnitManager.instance.GetDummyAgent(transform.position);
+        NavMeshAgent agent2 = UnitManager.instance.GetDummyAgent(ladderUnit.GetEdgePos());
 
         // agent1.transform.position = transform.position;
         agent1.SetDestination(ladderUnit.GetBottomPos());
@@ -304,8 +304,8 @@ public abstract class Unit : MonoBehaviour
     }
 
     internal void ClearDummyPath (Tuple<NavMeshAgent, NavMeshAgent> agents) {
-        UnitManager.DeactivateDummy(agents.Item1);
-        UnitManager.DeactivateDummy(agents.Item2);
+        UnitManager.instance.DeactivateDummy(agents.Item1);
+        UnitManager.instance.DeactivateDummy(agents.Item2);
     }
 
     protected virtual void OnMove () {}
