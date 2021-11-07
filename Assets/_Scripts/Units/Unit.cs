@@ -211,7 +211,7 @@ public abstract class Unit : MonoBehaviour
                 float dist = Vector3.Distance(transform.position, u.transform.position);
                 LadderUnit lu = (LadderUnit)u;
 
-                if (heightDiff <= 0.5f && dist <= 6 && lu.Attached) {
+                if (heightDiff <= 0.5f && dist <= 10 && lu.Attached) {
                     Tuple<NavMeshAgent, NavMeshAgent> tuple = SetDummyPath(u as LadderUnit, destination);
                     agentTuples.Add(tuple);
                     ladders.Add(tuple.Item1, lu);

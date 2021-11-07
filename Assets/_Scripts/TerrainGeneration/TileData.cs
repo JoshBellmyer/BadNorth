@@ -26,7 +26,7 @@ public class TileData {
 
 		sizeX = noise.GetLength(0);
 		sizeZ = noise.GetLength(1);
-		sizeY = (int)meshScale + 2;
+		sizeY = (int)meshScale + 5;
 		maxHeight = 0;
 
 		tileTypes = new TileType[sizeX, sizeY, sizeZ];
