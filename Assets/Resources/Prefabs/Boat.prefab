@@ -354,6 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7351449562876905077}
   - component: {fileID: 7351449562876905076}
+  - component: {fileID: 1958649528252793764}
   - component: {fileID: 7351449562876905078}
   - component: {fileID: 1511257565835170770}
   m_Layer: 0
@@ -408,6 +409,20 @@ MonoBehaviour:
   selector: {fileID: 3776383824296592265}
   red: {fileID: 2100000, guid: 7f8dc2ca86a0d41b5987a05b064e4035, type: 2}
   green: {fileID: 2100000, guid: 931991389930b42e7a8f8e16d23f3416, type: 2}
+--- !u!114 &1958649528252793764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351449562876905035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f6b8dbbe5ed461199850fb72d5950f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flatColorParts: {fileID: 0}
+  lightColorParts: {fileID: 0}
 --- !u!135 &7351449562876905078
 SphereCollider:
   m_ObjectHideFlags: 0
