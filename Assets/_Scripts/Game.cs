@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
 
@@ -30,6 +31,23 @@ public class Game : MonoBehaviour {
 
 		PrefabFactory.Initialize();
 
+		SceneManager.sceneLoaded += HandleSceneChange;
+		if(SceneManager.GetActiveScene().name == "Island")
+		{
+			SetupGame();
+		}
+	}
+
+	public void HandleSceneChange(Scene scene, LoadSceneMode mode)
+    {
+		if(scene.name == "Island")
+        {
+			SetupGame();
+        }
+    }
+
+	public void SetupGame()
+    {
 		players = new List<PlayerController>();
 		players.Add(PrefabFactory.CreatePlayerController());
 		players.Add(PrefabFactory.CreatePlayerController());
@@ -145,15 +163,3 @@ public class Game : MonoBehaviour {
 		return (cols.Length > 0);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
