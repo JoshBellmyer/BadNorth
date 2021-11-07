@@ -7,20 +7,18 @@ public class CameraController : MonoBehaviour
 {
     public PlayerInput playerInput;
 
-    public Vector3 rotationPoint = Vector3.zero;
+    private Vector3 rotationPoint = Vector3.zero;
 
-    public float rotateSpeed;
-    public float rotateMin;
-    public float rotateMax;
+    [SerializeField] float rotateMin;
+    [SerializeField] float rotateMax;
 
-    public float zoomSpeed;
-    public float zoomMin;
-    public float zoomMax;
+    [SerializeField] float zoomMin;
+    [SerializeField] float zoomMax;
 
     private Vector2 rawInputRotation;
     private float rawInputZoom;
 
-    public new Camera camera;
+    private new Camera camera;
     private Player player;
 
     private void Start()

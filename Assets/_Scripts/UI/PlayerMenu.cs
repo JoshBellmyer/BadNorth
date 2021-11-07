@@ -9,7 +9,7 @@ public class PlayerMenu : MonoBehaviour
     protected Player player;
     protected PlayerUIManager playerUIManager;
 
-    protected void Start()
+    protected void Awake()
     {
         FindPlayer();
         FindPlayerUIManager();

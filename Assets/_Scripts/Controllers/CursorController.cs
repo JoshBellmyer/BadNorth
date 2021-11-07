@@ -6,13 +6,13 @@ using UnityEngine.InputSystem;
 
 public class CursorController : MonoBehaviour
 {
-    [SerializeField] RectTransform cursorTransform;
-    [SerializeField] RectTransform canvasTransform;
+    [SerializeField] PlayerUIManager playerUIManager;
+    OverlayMenu overlayMenu;
+
     [SerializeField] PlayerInput playerInput;
 
     private Vector2 rawInputDelta;
     private new Camera camera;
-    private Ray cursorSelectRay;
 
     private PlayerController playerController;
     private Player player;
@@ -26,16 +26,14 @@ public class CursorController : MonoBehaviour
         camera = playerInput.camera;
         playerController = GetComponent<PlayerController>();
         player = GetComponent<Player>();
+        overlayMenu = playerUIManager.GetMenu<OverlayMenu>();
     }
 
     private void Update()
     {
-        cursorTransform.localPosition += new Vector3(rawInputDelta.x, rawInputDelta.y) * player.settings.cursorSensitivity;
-        float clampX = Mathf.Clamp(cursorTransform.localPosition.x, -canvasTransform.rect.width / 2, canvasTransform.rect.width / 2);
-        float clampY = Mathf.Clamp(cursorTransform.localPosition.y, -canvasTransform.rect.height / 2, canvasTransform.rect.height / 2);
-        cursorTransform.localPosition = new Vector3(clampX, clampY);
+        overlayMenu.MoveCursor(rawInputDelta);
 
-        Tuple<bool, RaycastHit> hitData = CastFromCursor(LayerMask.GetMask("Terrain"));
+        Tuple<bool, RaycastHit> hitData = overlayMenu.CastFromCursor(LayerMask.GetMask("Terrain"));
 
         if (hitData.Item1) {
             if (hitData.Item2.normal.y > 0) {
@@ -79,7 +77,7 @@ public class CursorController : MonoBehaviour
         }        
         if (camera == null) return; // OnCursorSelect() can happen before Start() ???
 
-        Tuple<bool, RaycastHit> hitData = CastFromCursor(Game.everythingMask);
+        Tuple<bool, RaycastHit> hitData = overlayMenu.CastFromCursor(Game.everythingMask);
 
         if (hitData.Item1) {
             Vector3 location = hitData.Item2.point;
@@ -160,17 +158,6 @@ public class CursorController : MonoBehaviour
         DeselectUnits();
     }
 
-    public Tuple<bool, RaycastHit> CastFromCursor (int layerMask) {
-        RaycastHit hit;
-        Vector3 cursorPosition = cursorTransform.localPosition + new Vector3(canvasTransform.rect.width / 2, canvasTransform.rect.height / 2);
-        Vector3 viewPortPosition = new Vector3(cursorPosition.x / canvasTransform.rect.width, cursorPosition.y / canvasTransform.rect.height); // view port is normalized
-        cursorSelectRay = camera.ViewportPointToRay(viewPortPosition);
-
-        bool hitSomething = Physics.Raycast(cursorSelectRay, out hit, Mathf.Infinity, layerMask);
-
-        return new Tuple<bool, RaycastHit>(hitSomething, hit);
-    }
-
     private void MoveSelection (Vector3 position, Vector3 normal) {
         if (player.GridSelection == null) {
             return;
@@ -224,12 +211,6 @@ public class CursorController : MonoBehaviour
         }
 
         player.Ladder.SetActive(newActive);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawRay(cursorSelectRay);
-
     }
 }
 
