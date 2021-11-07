@@ -17,6 +17,7 @@ public class TileData {
 	private int[,] tileHeights;
 
 	private static Dictionary<TileType, int[]> tileEdges;
+	private List<string> tempSlopes;
 	
 
 	public TileData (float[,] _noise, float _meshScale) {
@@ -55,6 +56,8 @@ public class TileData {
 
 	// Enhances the terrain by placing slope tiles and some additional cube-shaped tiles
 	private void EnhanceTiles () {
+		tempSlopes = new List<string>();
+
 		for (int x = 0; x < sizeX; x++) {
 			for (int z = 0; z < sizeZ; z++) {
 				PlaceSlope(x, z);
@@ -64,7 +67,7 @@ public class TileData {
 
 				// Place additional cubes
 				while (height >= 0 && !placedFinal) {
-					int neighbors = GetNeighborBelow(x, height, z);
+					int neighbors = GetNeighborBelow(x, height + 1, z);
 
 					tileTypes[x, height, z] = TileType.Cube;
 					tileLocations.Add( new TileLocation(TileType.Cube, new Vector3Int(x, height, z)) );
@@ -196,6 +199,12 @@ public class TileData {
 
 	// Places a 45 degree slope
 	private void PlaceFullSlope (int x, int y, int z, TileType type) {
+		if (tempSlopes.Contains($"{new Vector3Int(x, y, z)}")) {
+			return;
+		}
+
+		tempSlopes.Add($"{new Vector3Int(x, y, z)}");
+
 		tileTypes[x, y, z] = type;
 		tileLocations.Add( new TileLocation(type, new Vector3Int(x, y, z)) );
 
@@ -204,6 +213,13 @@ public class TileData {
 
 	// Places a long 22.5 degree slope if it fits, otherwise places a 45 degree slope
 	private void PlaceLongSlope (int x, int y, int z, Vector3Int backDir, int mask, TileType type) {
+		if (tempSlopes.Contains($"{new Vector3Int(x, y, z)}")) {
+			return;
+		}
+		if (tempSlopes.Contains($"{new Vector3Int(x + backDir.x, y, z + backDir.z)}")) {
+			return;
+		}
+
 		int neighbors = GetNeighborDifference(x + backDir.x, y, z + backDir.z, -1);
 
 		if (tileTypes[x + backDir.x, y, z + backDir.z] != TileType.None) {
@@ -214,6 +230,9 @@ public class TileData {
 
 			return;
 		}
+
+		tempSlopes.Add($"{new Vector3Int(x, y, z)}");
+		tempSlopes.Add($"{new Vector3Int(x + backDir.x, y, z + backDir.z)}");
 
 		int temp = (int)type - (int)TileType.FullRampU;
 		TileType raisedType = (TileType)((int)TileType.RaisedRampU + temp);

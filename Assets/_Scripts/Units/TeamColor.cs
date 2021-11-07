@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class TeamColor : MonoBehaviour {
 
-	[SerializeField] private MeshRenderer flatColorParts;
-	[SerializeField] private MeshRenderer lightColorParts;
+	[SerializeField] private MaterialGroup[] flatColorParts;
+	[SerializeField] private MaterialGroup[] lightColorParts;
 
 	private static bool initialized;
 	private static Material[] flatMaterials;
 	private static Material[] lightMaterials;
 
 
-	public void SetColor () {
+	public void SetColor (int colorId) {
 		if (!initialized) {
 			InitializeMaterials();
+		}
+
+		foreach (MaterialGroup mg in flatColorParts) {
+			Material[] materials = mg.meshRenderer.materials;
+			materials[mg.materialIndex] = flatMaterials[colorId - 1];
+			mg.meshRenderer.materials = materials;
+		}
+		foreach (MaterialGroup mg in lightColorParts) {
+			Material[] materials = mg.meshRenderer.materials;
+			materials[mg.materialIndex] = lightMaterials[colorId - 1];
+			mg.meshRenderer.materials = materials;
 		}
 	}
 
@@ -29,4 +40,12 @@ public class TeamColor : MonoBehaviour {
 			lightMaterials[i] = Resources.Load<Material>($"Materials/team_light_{i + 1}");
 		}
 	}
+}
+
+
+[System.Serializable]
+public class MaterialGroup {
+
+	public MeshRenderer meshRenderer;
+	public int materialIndex;
 }

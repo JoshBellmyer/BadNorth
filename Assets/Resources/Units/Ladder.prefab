@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 52149078092712431}
   - component: {fileID: 52149078092712400}
   - component: {fileID: 2586844357038066654}
+  - component: {fileID: 5433238717330562047}
   m_Layer: 11
   m_Name: Ladder
   m_TagString: Unit
@@ -167,6 +168,24 @@ MonoBehaviour:
   _health: 100
   groupAmount: 1
   ladder: {fileID: 278406746766360649}
+--- !u!114 &5433238717330562047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52149078092712402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f6b8dbbe5ed461199850fb72d5950f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flatColorParts:
+  - meshRenderer: {fileID: 52149077778347255}
+    materialIndex: 0
+  lightColorParts:
+  - meshRenderer: {fileID: 6464945217611897354}
+    materialIndex: 0
 --- !u!1 &278406746766360649
 GameObject:
   m_ObjectHideFlags: 0

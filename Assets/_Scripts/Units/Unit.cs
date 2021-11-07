@@ -102,7 +102,7 @@ public abstract class Unit : MonoBehaviour
 
     private void Start()
     {
-
+        GetComponent<TeamColor>().SetColor(int.Parse(_team));
     }
 
     private void Update()

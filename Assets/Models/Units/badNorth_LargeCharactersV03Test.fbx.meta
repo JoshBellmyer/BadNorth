@@ -3,7 +3,12 @@ guid: 0299cf3152bbc450aa4eeb4e1b8225ec
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: shieldCharacterTexture
+    second: {fileID: 2800000, guid: 110f59d1c158246e1a68b68f6e119749, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
