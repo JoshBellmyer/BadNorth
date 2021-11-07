@@ -888,6 +888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb99a2789d1454b799989353e6a01046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startState: 1
 --- !u!4 &1685019288
 Transform:
   m_ObjectHideFlags: 0

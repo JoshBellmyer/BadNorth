@@ -536,8 +536,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUIManager: {fileID: 4823997099460646592}
-  cursorTransform: {fileID: 7654383597929029811}
-  canvasTransform: {fileID: 1554923549114292813}
   playerInput: {fileID: 7100564001335670523}
 --- !u!114 &3427785615071788072
 MonoBehaviour:
@@ -1267,7 +1265,7 @@ GameObject:
   - component: {fileID: 6254321068457131953}
   - component: {fileID: 3898274470662214505}
   m_Layer: 5
-  m_Name: ExitButton
+  m_Name: MainMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1377,7 +1375,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2470003029319251782}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: OnExitGameButton
+        m_MethodName: OnMainMenuButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1544,7 +1542,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Exit Game
+  m_Text: Main Menu
 --- !u!1 &3761626168980332203
 GameObject:
   m_ObjectHideFlags: 0

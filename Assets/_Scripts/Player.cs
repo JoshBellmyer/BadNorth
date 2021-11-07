@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     public Settings settings;
 
-    static int numPlayers = 0;
+    public static int numPlayers = 0;
     public int playerId;
 
     private Boat _boat;

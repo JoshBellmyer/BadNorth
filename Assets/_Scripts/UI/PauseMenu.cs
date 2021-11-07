@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PauseMenu : PlayerMenu
 {
-    public void OnExitGameButton()
+    public void OnMainMenuButton()
     {
-        Game.instance.ExitGame();
+        Game.instance.SwitchToMainMenu();
     }
 
     public void OnPlayButton()

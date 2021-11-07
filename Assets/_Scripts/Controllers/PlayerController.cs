@@ -8,11 +8,13 @@ public class PlayerController : MonoBehaviour
 {
     private PlayerInput playerInput;
     private string currentControlScheme;
+    public Player player;
 
 
     private void Start()
     {
         playerInput = GetComponent<PlayerInput>();
+        player = GetComponent<Player>();
         currentControlScheme = playerInput.currentControlScheme;
 
         Game.instance.RegisterPlayer(this);
