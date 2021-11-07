@@ -9,6 +9,7 @@ public static class PrefabFactory
     private static Sprite3D unitSelectPrefabPlayer1;
     private static Sprite3D unitSelectPrefabPlayer2;
     private static Boat boatPrefab;
+    private static PlayerController playerControllerPrefab;
 
     public static void Initialize()
     {
@@ -17,6 +18,12 @@ public static class PrefabFactory
         unitSelectPrefabPlayer1 = Resources.Load<Sprite3D>("Prefabs/Unit Select P1");
         unitSelectPrefabPlayer2 = Resources.Load<Sprite3D>("Prefabs/Unit Select P2");
         boatPrefab = Resources.Load<Boat>("Prefabs/Boat");
+        playerControllerPrefab = Resources.Load<PlayerController>("Prefabs/Player");
+    }
+
+    public static PlayerController CreatePlayerController()
+    {
+        return Object.Instantiate(playerControllerPrefab);
     }
 
     public static GameObject CreateLadderVisual(Player player)
