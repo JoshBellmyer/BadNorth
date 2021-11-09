@@ -141,7 +141,7 @@ public class Boat : MonoBehaviour {
 
 		mountedGroup.TeleportTo(dismountPos);
 		mountedGroup.SetAgentEnabled(true);
-
+		
 		mountedGroup = null;
 		mountedUnits.Clear();
 
@@ -156,10 +156,10 @@ public class Boat : MonoBehaviour {
 	}
 
 	private void Sink () {
-		float sinkSpeed = 0.25f;
+		float sinkSpeed = 0.35f;
 		transform.position += new Vector3(0, -sinkSpeed * Time.deltaTime, 0);
 
-		if (transform.position.y < -1) {
+		if (transform.position.y < -2) {
 			player.Boat = null;
 			Destroy(gameObject);
 		}

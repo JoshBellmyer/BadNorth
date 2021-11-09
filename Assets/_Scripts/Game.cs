@@ -32,7 +32,7 @@ public class Game : MonoBehaviour {
 		PrefabFactory.Initialize();
 
 		SceneManager.sceneLoaded += HandleSceneChange;
-		if(SceneManager.GetActiveScene().name == "Island")
+		if(SceneManager.GetActiveScene().name != "Title")
 		{
 			SetupGame();
 		}
@@ -40,7 +40,7 @@ public class Game : MonoBehaviour {
 
 	public void HandleSceneChange(Scene scene, LoadSceneMode mode)
     {
-		if(scene.name == "Island")
+		if(scene.name != "Title")
         {
 			SetupGame();
         }
