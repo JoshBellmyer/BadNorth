@@ -9,7 +9,7 @@ public class Group<T> : Group where T : Unit {
     private bool _canMove;
     private bool _canAttack;
 
-    public static readonly float DEFAULT_RADIUS = 0.5f;
+    public static readonly float DEFAULT_RADIUS = 0.35f;
     // public Group(string team) {
     //     _units = new List<T>();
     //     _targetPosition = Vector3.zero;

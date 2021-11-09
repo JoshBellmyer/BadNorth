@@ -120,6 +120,9 @@ public abstract class Unit : MonoBehaviour
         if (targetLadder != null) {
             UpdateLadderMovement();
         }
+        else if (_directive == Directive.MOVE && !climbing) {
+            // UpdateEdgeJumping();
+        }
 
         UnitUpdate();
     }
@@ -139,6 +142,45 @@ public abstract class Unit : MonoBehaviour
         _group.RemoveUnit(this);
         TeamManager.instance.Remove(_team, this);
         Destroy(gameObject);
+    }
+
+    private void UpdateEdgeJumping () {
+        if (!_navMeshAgent.isOnNavMesh) {
+            return;
+        }
+        if (_navMeshAgent.pathStatus != NavMeshPathStatus.PathPartial) {
+            return;
+        }
+        if (_destination.y >= (transform.position.y - 0.25f)) {
+            return;
+        }
+
+        NavMeshHit hit;
+        bool foundEdge = _navMeshAgent.FindClosestEdge(out hit);
+
+        if (hit.distance > 0.02f) {
+            return;
+        }
+
+        Vector3 normal = Vector3.zero;
+
+        if (Mathf.Abs(hit.normal.x) == 1) {
+            normal = new Vector3(hit.normal.x * -1, 0, 0);
+        }
+        if (Mathf.Abs(hit.normal.z) == 1) {
+            normal = new Vector3(0, 0, hit.normal.z * -1);
+        }
+
+        if (normal == Vector3.zero) {
+            return;
+        }
+
+        _navMeshAgent.enabled = false;
+
+        transform.position += (normal * 0.5f);
+        transform.position += Vector3.down;
+
+        _navMeshAgent.enabled = true;
     }
 
     private void UpdateLadderMovement () {

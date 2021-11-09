@@ -141,6 +141,10 @@ public class CursorController : MonoBehaviour
     }
 
     private void MoveUnitGroup (RaycastHit hit) {
+        if (player.SelectedGroup == null) {
+            return;
+        }
+
         Vector3 pos = Game.GetGridPos(hit.point);
         player.SelectedGroup.SetAgentEnabled(true);
         player.SelectedGroup.MoveTo(pos);
@@ -149,6 +153,10 @@ public class CursorController : MonoBehaviour
     }
 
     private void MoveLadderUnit () {
+        if (player.SelectedGroup == null) {
+            return;
+        }
+
         player.SelectedGroup.SetAgentEnabled(true);
         player.SelectedGroup.MoveTo(ladderFloorPos);
         LadderUnit ladderUnit = (LadderUnit)player.SelectedGroup.GetUnitsBase()[0];

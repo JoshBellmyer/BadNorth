@@ -40,7 +40,7 @@ public class OverlayMenu : PlayerMenu
     public Tuple<bool, RaycastHit> CastFromCursor(int layerMask)
     {
         RaycastHit hit;
-        Debug.Log(canvasTransform);
+        // Debug.Log(canvasTransform);
         Vector3 cursorPosition = cursorTransform.localPosition + new Vector3(canvasTransform.rect.width / 2, canvasTransform.rect.height / 2);
         Vector3 viewPortPosition = new Vector3(cursorPosition.x / canvasTransform.rect.width, cursorPosition.y / canvasTransform.rect.height); // view port is normalized
         Ray cursorSelectRay = player.camera.ViewportPointToRay(viewPortPosition);

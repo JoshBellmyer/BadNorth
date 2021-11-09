@@ -34,6 +34,8 @@ public class Boat : MonoBehaviour {
 	private void Start () {
 		rb = GetComponent<Rigidbody>();
 		canSail = false;
+
+		GetComponent<TeamColor>().SetColor(player.playerId);
 	}
 
 	private void Update () {
