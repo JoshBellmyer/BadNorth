@@ -6,12 +6,8 @@ using Unity.AI.Navigation;
 
 public class MapGenerator : MonoBehaviour {
 
-	[Header("Tile Sets")]
-	[SerializeField] private TileSet tileSet1;
-	[SerializeField] private TileSet tileSet2;
+	[Header("References")]
 	public GameObject[] otherMeshes;
-
-	[Header("Other References")]
 	[SerializeField] private TerrainGenerator terrainGenerator;
 	[SerializeField] private GameObject meshObject;
 	[SerializeField] private NavMeshSurface surface;
@@ -32,7 +28,7 @@ public class MapGenerator : MonoBehaviour {
 		terrainGenerator.GenerateMap();
 		float[,] noise = terrainGenerator.GenerateMapNoise();
 		TileData tileData = new TileData(noise, meshScale);
-		TileSet tileSet = tileSet2;
+		TileSet tileSet = TileSetLoader.LoadTileSet(0);
 
 		filter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, terrainGenerator.meshFilter);
 		renderer.material = tileSet.material;
