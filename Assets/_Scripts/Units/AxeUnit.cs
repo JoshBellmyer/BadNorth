@@ -10,9 +10,4 @@ public class AxeUnit : Unit
     internal AxeUnit() : base(HEALTH) {
 
     }
-
-    protected override bool FindAttack()
-    {
-        throw new System.NotImplementedException();
-    }
 }

@@ -40,6 +40,10 @@ public class LadderUnit : Unit
         }
     }
 
+    protected override bool FindAttack () {
+        return false;
+    }
+
     protected override void OnMove () {
         _occupied = false;
         _attached = false;
@@ -48,11 +52,6 @@ public class LadderUnit : Unit
         ladder.transform.localEulerAngles = new Vector3(ladder.transform.localEulerAngles.x, 0, 0);
         // ladder.transform.up = -transform.forward;
         // ladder.transform.right = transform.right;
-    }
-
-    protected override bool FindAttack()
-    {
-        return false;
     }
 
     public void AttachToWall (Vector3 pos, Vector3 normal) {

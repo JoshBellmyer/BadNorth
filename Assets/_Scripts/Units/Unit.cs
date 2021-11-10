@@ -20,6 +20,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private UnitType _unitType;
     [SerializeField] private int _health;
     [SerializeField] private float _attackRange;
+    [SerializeField] private float _attackDistance;
     [SerializeField] private float _attackCooldown;
     [SerializeField] private DamageType _damageType;
     private bool _canMove;
@@ -130,7 +131,6 @@ public abstract class Unit : MonoBehaviour
         if (_navMeshAgent.isOnNavMesh && _canAttack && (_directive == Directive.NONE || _navMeshAgent.remainingDistance < MAX_PROXIMITY) && FindAttack() && !_navMeshAgent.isStopped)
         {
             _directive = Directive.ATTACK;
-            // _currentCooldown = 0;
         }
 
         if (targetLadder != null) {
@@ -177,6 +177,31 @@ public abstract class Unit : MonoBehaviour
 
         _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
         _currentCooldown = _attackCooldown;
+    }
+
+    protected virtual bool FindAttack () {
+        HashSet<Unit> units = TeamManager.instance.GetNotOnTeam(Team);
+
+        float minDist = _attackDistance;
+        Unit target = null;
+
+        foreach (Unit u in units) {
+            float dist = Vector3.Distance(transform.position, u.transform.position);
+
+            if (dist <= minDist) {
+                minDist = dist;
+                target = u;
+            }
+        }
+
+        if (target == null) {
+            return false;
+        }
+
+        _targetEnemy = target;
+        IssueTemporaryDestination(target.transform.position);
+
+        return true;
     }
 
     private void LateUpdate()
@@ -417,8 +442,6 @@ public abstract class Unit : MonoBehaviour
             }
         }
     }
-
-    protected abstract bool FindAttack();
 
     protected HashSet<Unit> GetEnemies()
     {

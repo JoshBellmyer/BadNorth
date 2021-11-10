@@ -10,8 +10,4 @@ public class PolearmUnit : Unit
     {
 
     }
-    protected override bool FindAttack()
-    {
-        throw new System.NotImplementedException();
-    }
 }

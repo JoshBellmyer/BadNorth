@@ -14,9 +14,4 @@ public class DefaultUnit : Unit
     {
         
     }
-    protected override bool FindAttack()
-    {
-        return false;
-    }
-
 }
