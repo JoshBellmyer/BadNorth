@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class TitleScreen : MonoBehaviour
+public class TitleScreen : UIScreen
 {
     [SerializeField] Text missingPlayerText;
 
@@ -63,6 +63,11 @@ public class TitleScreen : MonoBehaviour
         {
             missingPlayerText.gameObject.SetActive(true);
         }
+    }
+
+    public void OnGameSettings()
+    {
+        manager.SetUIScreen("Game Settings Screen");
     }
 
     public void OnExitGame()
