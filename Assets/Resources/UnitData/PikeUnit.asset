@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 622bfa66b2b3292469963622313ff8fd, type: 3}
-  m_Name: SwordUnit
+  m_Name: PikeUnit
   m_EditorClassIdentifier: 
-  type: 1
-  sprite: {fileID: 21300000, guid: 189b1c140b83bda4f8bab73a566d2229, type: 3}
+  type: 4
+  sprite: {fileID: 21300000, guid: ac56f413fa4ed4fa2a110b1e223bc674, type: 3}
   cooldown: 10

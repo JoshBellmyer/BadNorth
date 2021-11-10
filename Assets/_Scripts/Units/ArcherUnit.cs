@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ProjectileUnit : Unit
+public class ArcherUnit : Unit
 {
     public static readonly float MAX_SIGHT_RANGE = 10.0F;
     public static readonly float LAUNCH_SPEED = 5.0F;
     public static readonly int HEALTH = 100;
 
-    internal ProjectileUnit() : base(HEALTH)
+    internal ArcherUnit() : base(HEALTH)
     {
 
     }

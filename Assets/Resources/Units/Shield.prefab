@@ -331,6 +331,7 @@ MonoBehaviour:
   _unitType: 5
   _health: 100
   _attackRange: 0.5
+  _attackDistance: 2
   _attackCooldown: 2
   _damageType: 201
   groupAmount: 4
