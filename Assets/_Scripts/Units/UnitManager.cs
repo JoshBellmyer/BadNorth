@@ -75,6 +75,7 @@ public class UnitManager : MonoBehaviour
         agent.transform.position = pos;
         agent.gameObject.SetActive(true);
         agent.enabled = true;
+        agent.isStopped = true;
 
         dummyInactive.Remove(agent);
         dummyActive.Add(agent);

@@ -50,20 +50,17 @@ public class LadderUnit : Unit
         ladder.transform.localPosition = new Vector3(0, 0.6f, 0);
         ladder.transform.forward = Vector3.up;
         ladder.transform.localEulerAngles = new Vector3(ladder.transform.localEulerAngles.x, 0, 0);
-        // ladder.transform.up = -transform.forward;
-        // ladder.transform.right = transform.right;
     }
 
     public void AttachToWall (Vector3 pos, Vector3 normal) {
         attachPos = pos;
         attachNormal = normal;
         landingPos = Game.GetTopFromSide(pos, normal);
-
         attaching = true;
     }
 
     public Vector3 GetEdgePos () {
-    	return landingPos + (transform.forward * -0.4f);
+    	return landingPos + (transform.forward * -0.35f);
     }
 
     public Vector3 GetBottomPos () {
@@ -77,8 +74,6 @@ public class LadderUnit : Unit
         ladder.transform.localPosition = new Vector3(0, 0.5f, 0.5f);
         ladder.transform.forward = -attachNormal;
         bottomPos = transform.position + (attachNormal * -0.3f);
-        // ladder.transform.up = -transform.forward;
-        // ladder.transform.localEulerAngles = new Vector3(ladder.transform.localEulerAngles.x, 0, 0);
 
         attaching = false;
         _attached = true;
