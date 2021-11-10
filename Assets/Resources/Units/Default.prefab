@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 52149078092712400}
   - component: {fileID: 52149078092712401}
   - component: {fileID: 4066541524973010518}
+  - component: {fileID: 6870065104498656901}
   m_Layer: 11
   m_Name: Default
   m_TagString: Unit
@@ -164,7 +165,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c065cd19a7b3f1408e2540547e84997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unitType: 0
   _health: 100
+  _attackRange: 0.3
+  _attackCooldown: 1
+  _damageType: 203
   groupAmount: 4
 --- !u!114 &4066541524973010518
 MonoBehaviour:
@@ -182,3 +187,15 @@ MonoBehaviour:
   - meshRenderer: {fileID: 52149077778347255}
     materialIndex: 0
   lightColorParts: []
+--- !u!114 &6870065104498656901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52149078092712402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b0b9cdd1591a4b9ca49c949436d8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -256,6 +256,7 @@ GameObject:
   - component: {fileID: 5117292425781138240}
   - component: {fileID: 5117292425781138241}
   - component: {fileID: 9210497780530537670}
+  - component: {fileID: -4933948619717010911}
   m_Layer: 11
   m_Name: Shield
   m_TagString: Unit
@@ -327,7 +328,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d775e2dca637ea46b294735fca7ca6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unitType: 5
   _health: 100
+  _attackRange: 0.5
+  _attackCooldown: 2
+  _damageType: 201
   groupAmount: 4
 --- !u!114 &9210497780530537670
 MonoBehaviour:
@@ -347,6 +352,18 @@ MonoBehaviour:
   lightColorParts:
   - meshRenderer: {fileID: 2812545887375594728}
     materialIndex: 1
+--- !u!114 &-4933948619717010911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5117292425781138242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b0b9cdd1591a4b9ca49c949436d8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5117292426565283433
 GameObject:
   m_ObjectHideFlags: 0

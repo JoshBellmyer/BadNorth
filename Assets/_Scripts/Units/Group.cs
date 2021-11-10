@@ -41,7 +41,7 @@ public class Group<T> : Group where T : Unit {
         }
 
         this.CanMove = true;
-        this.CanAttack = false;
+        this.CanAttack = true;
     }
 
     public bool CanMove

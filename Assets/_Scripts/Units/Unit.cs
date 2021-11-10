@@ -14,8 +14,14 @@ public abstract class Unit : MonoBehaviour
     private LadderUnit targetLadder;
     private Vector3 secondDestination;
     private bool climbing;
+    protected Unit _targetEnemy;
+    private float _currentCooldown;
 
+    [SerializeField] private UnitType _unitType;
     [SerializeField] private int _health;
+    [SerializeField] private float _attackRange;
+    [SerializeField] private float _attackCooldown;
+    [SerializeField] private DamageType _damageType;
     private bool _canMove;
     private bool _canAttack;
     public int groupAmount;
@@ -86,6 +92,15 @@ public abstract class Unit : MonoBehaviour
         set { _group = value; }
     }
 
+    public int Health {
+        get => _health;
+        set {_health = value;}
+    }
+
+    public UnitType Type {
+        get => _unitType;
+    }
+
     enum Directive
     {
         MOVE, ATTACK, NONE
@@ -94,8 +109,8 @@ public abstract class Unit : MonoBehaviour
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        _canAttack = false;
-        _canMove = false;
+        _canAttack = true;
+        _canMove = true;
         _destination = Vector3.zero;
         _directive = Directive.NONE;
     }
@@ -115,6 +130,7 @@ public abstract class Unit : MonoBehaviour
         if (_navMeshAgent.isOnNavMesh && _canAttack && (_directive == Directive.NONE || _navMeshAgent.remainingDistance < MAX_PROXIMITY) && FindAttack() && !_navMeshAgent.isStopped)
         {
             _directive = Directive.ATTACK;
+            // _currentCooldown = 0;
         }
 
         if (targetLadder != null) {
@@ -125,9 +141,43 @@ public abstract class Unit : MonoBehaviour
         }
 
         UnitUpdate();
+
+        if (_directive == Directive.ATTACK) {
+            AttackUpdate();
+        }
     }
 
     protected virtual void UnitUpdate () {}
+
+    protected virtual void AttackUpdate () {
+        if (_targetEnemy == null) {
+            _directive = Directive.MOVE;
+
+            return;
+        }
+
+        if (_currentCooldown > 0) {
+            _currentCooldown -= Time.deltaTime;
+
+            if (_currentCooldown <= 0) {
+                _currentCooldown = 0;
+            }
+            else {
+                return;
+            }
+        }
+
+        float dist = Vector3.Distance(transform.position, _targetEnemy.transform.position);
+
+        if (dist > _attackRange) {
+            return;
+        }
+
+        Debug.Log("ATTACK");
+
+        _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
+        _currentCooldown = _attackCooldown;
+    }
 
     private void LateUpdate()
     {
@@ -227,6 +277,10 @@ public abstract class Unit : MonoBehaviour
             _navMeshAgent.ResetPath();
             _directive = Directive.NONE;
         }
+    }
+
+    protected void IssueTemporaryDestination (Vector3 destination) {
+        _navMeshAgent.SetDestination(destination);
     }
 
     internal void IssueDestination(Vector3 destination)

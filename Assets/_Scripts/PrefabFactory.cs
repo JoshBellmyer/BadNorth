@@ -69,8 +69,8 @@ public static class PrefabFactory
 
         dynamic unitGroup = System.Activator.CreateInstance(typeG);
         unitGroup.Initialize($"{player.playerId}");
-        unitGroup.CanMove = false;
-        unitGroup.CanAttack = false;
+        unitGroup.CanMove = true;
+        unitGroup.CanAttack = true;
         boat.MountUnits(unitGroup.GetUnitsBase());
         return boat;
     }
