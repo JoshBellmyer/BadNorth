@@ -12,8 +12,27 @@ public class SwordUnit : Unit
     {
 
     }
+
     protected override bool FindAttack()
     {
-        throw new System.NotImplementedException();
+        HashSet<Unit> units = TeamManager.instance.GetNotOnTeam(Team);
+
+        float minDist = MAX_MOVEMENT;
+        Unit target = null;
+
+        foreach (Unit u in units) {
+        	float dist = Vector3.Distance(transform.position, u.transform.position);
+
+        	if (dist <= minDist) {
+        		minDist = dist;
+        		target = u;
+        	}
+        }
+
+        if (target == null) {
+        	return false;
+        }
+
+        return true;
     }
 }

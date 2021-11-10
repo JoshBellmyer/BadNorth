@@ -12,6 +12,27 @@ public class ShieldUnit : Unit
 
     protected override bool FindAttack()
     {
-        throw new System.NotImplementedException();
+        HashSet<Unit> units = TeamManager.instance.GetNotOnTeam(Team);
+
+        float minDist = 10;
+        Unit target = null;
+
+        foreach (Unit u in units) {
+        	float dist = Vector3.Distance(transform.position, u.transform.position);
+
+        	if (dist <= minDist) {
+        		minDist = dist;
+        		target = u;
+        	}
+        }
+
+        if (target == null) {
+        	return false;
+        }
+
+        _targetEnemy = target;
+        IssueTemporaryDestination(target.transform.position);
+
+        return true;
     }
 }
