@@ -14,14 +14,19 @@ public class Game : MonoBehaviour {
 	private bool isPaused;
 	public List<PlayerController> players;
 
-	public const int everythingMask = 0x7FFFFFFF; 
+	public const int everythingMask = 0x7FFFFFFF;
+
+	public Transform sand;
 
 
-	private void Start () {
-		if (instance == null || instance == this) {
+	private void Start()
+	{
+		if (instance == null || instance == this)
+		{
 			instance = this;
 		}
-		else {
+		else
+		{
 			Destroy(gameObject);
 
 			return;
@@ -31,14 +36,25 @@ public class Game : MonoBehaviour {
 
 		PrefabFactory.Initialize();
 
-		SceneManager.sceneLoaded += HandleSceneChange;
-		if(SceneManager.GetActiveScene().name != "Title")
-		{
-			SetupGame();
-		}
+		SetUpSceneManagement();
 	}
 
-	public void HandleSceneChange(Scene scene, LoadSceneMode mode)
+
+	private void SetUpSceneManagement()
+    {
+        SceneManager.sceneLoaded += HandleSceneChange;
+        if (SceneManager.GetActiveScene().name != "Title")
+        {
+            SetupGame();
+        }
+    }
+
+	private void OnGameOver()
+    {
+		throw new NotImplementedException();
+    }
+
+    public void HandleSceneChange(Scene scene, LoadSceneMode mode)
     {
 		if(scene.name != "Title")
         {
