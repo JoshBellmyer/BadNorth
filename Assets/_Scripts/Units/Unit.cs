@@ -13,7 +13,12 @@ public abstract class Unit : MonoBehaviour
     protected Vector3 _destination;
     private LadderUnit targetLadder;
     private Vector3 secondDestination;
+
     private bool climbing;
+    private bool falling;
+    private bool knockback;
+    private Vector3 knockDestination;
+
     protected Unit _targetEnemy;
     private float _currentCooldown;
 
@@ -25,6 +30,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private DamageType _damageType;
     private bool _canMove;
     private bool _canAttack;
+    private bool _inBoat;
     public int groupAmount;
 
     public static readonly float MAX_PROXIMITY = 5.0f;
@@ -83,6 +89,11 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    public bool InBoat {
+        get => _inBoat;
+        set { _inBoat = value; }
+    }
+
     public string Team {
         get => _team;
         set { _team = value; }
@@ -133,7 +144,17 @@ public abstract class Unit : MonoBehaviour
             _directive = Directive.ATTACK;
         }
 
-        if (targetLadder != null) {
+        if (!climbing) {
+            CheckForGround();
+        }
+
+        if (falling) {
+            FallUpdate();
+        }
+        else if (knockback) {
+            KnockbackUpdate();
+        }
+        else if (targetLadder != null) {
             UpdateLadderMovement();
         }
         else if (_directive == Directive.MOVE && !climbing) {
@@ -152,6 +173,7 @@ public abstract class Unit : MonoBehaviour
     protected virtual void AttackUpdate () {
         if (_targetEnemy == null) {
             _directive = Directive.MOVE;
+            IssueDestination(_destination);
 
             return;
         }
@@ -172,8 +194,6 @@ public abstract class Unit : MonoBehaviour
         if (dist > _attackRange) {
             return;
         }
-
-        Debug.Log("ATTACK");
 
         _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
         _currentCooldown = _attackCooldown;
@@ -199,14 +219,14 @@ public abstract class Unit : MonoBehaviour
         }
 
         _targetEnemy = target;
-        IssueTemporaryDestination(target.transform.position);
+        IssueAttackLocation(target.transform.position);
 
         return true;
     }
 
     private void LateUpdate()
     {
-        if (_health <= 0)
+        if (_health <= 0 || transform.position.y < Sand.height)
         {
             Die();
         }
@@ -288,24 +308,70 @@ public abstract class Unit : MonoBehaviour
             _navMeshAgent.enabled = false;
             climbing = true;
             targetLadder.Occupied = true;
-            // transform.position = targetLadder.GetEdgePos();
-            // _navMeshAgent.enabled = true;
-            // targetLadder = null;
-            // IssueDestination(secondDestination);
         }
     }
 
-    internal void CeaseMovement()
-    {
-        if (_directive != Directive.NONE)
-        {
+    private void FallUpdate () {
+        if (_inBoat) {
+            return;
+        }
+
+        transform.position += (Vector3.down * 1 * Time.deltaTime);
+    }
+
+    private void KnockbackUpdate () {
+        transform.position = Vector3.MoveTowards(transform.position, knockDestination, 5 * Time.deltaTime);
+
+        if (transform.position == knockDestination) {
+            knockback = false;
+            _navMeshAgent.enabled = true;
+        }
+    }
+
+    public void SetKnockback (Vector3 knockVector) {
+        knockback = true;
+        _navMeshAgent.enabled = false;
+
+        float strength = Vector3.Magnitude(knockVector);
+        Vector3 direction = Vector3.Normalize(knockVector);
+        direction = new Vector3(direction.x, 0, direction.z);
+
+        RaycastHit hit;
+        bool didHit = Physics.Raycast(transform.position + (Vector3.up * 0.2f), direction, out hit, strength, LayerMask.GetMask("Terrain"));
+
+        if (didHit) {
+            knockDestination = transform.position + (direction * hit.distance);
+        }
+        else {
+            knockDestination = transform.position + (direction * strength);
+        }
+    }
+
+    private void CheckForGround () {
+        if (_inBoat) {
+            return;
+        }
+
+        RaycastHit hit;
+        bool didHit = Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.5f, LayerMask.GetMask("Terrain"));
+
+        if (falling && didHit) {
+            falling = false;
+            _navMeshAgent.enabled = true;
+        }
+        else if (!falling && !didHit) {
+            falling = true;
+            _navMeshAgent.enabled = false;
+        }
+    }
+
+    internal void CeaseMovement () {
+        if (_navMeshAgent.isOnNavMesh) {
             _navMeshAgent.ResetPath();
-            _directive = Directive.NONE;
         }
-    }
 
-    protected void IssueTemporaryDestination (Vector3 destination) {
-        _navMeshAgent.SetDestination(destination);
+        _destination = transform.position;
+        _directive = Directive.NONE;
     }
 
     internal void IssueDestination(Vector3 destination)
@@ -373,21 +439,14 @@ public abstract class Unit : MonoBehaviour
             minDistance += 100;
         }
 
-        // Debug.Log($"min: {minDistance}");
-
         foreach (Tuple<NavMeshAgent, NavMeshAgent> tuple in otherAgents) {
-            // float dist = tuple.Item1.remainingDistance + tuple.Item2.remainingDistance;
             float dist1 = UnitManager.GetRemainingDistance(tuple.Item1, minDistance);
             float dist2 = UnitManager.GetRemainingDistance(tuple.Item2, minDistance);
-            // float dist = UnitManager.GetRemainingDistance(tuple.Item1, minDistance) + UnitManager.GetRemainingDistance(tuple.Item2, minDistance);
             float dist = dist1 + dist2;
 
             if (tuple.Item1.path.status != NavMeshPathStatus.PathComplete || tuple.Item2.path.status != NavMeshPathStatus.PathComplete) {
                 dist += 100;
             }
-
-            // Debug.Log(tuple.Item1.transform.position);
-            // Debug.Log($"first: {dist1}  second: {dist2}");
 
             if (dist < minDistance) {
                 minDistance = dist;
@@ -400,7 +459,6 @@ public abstract class Unit : MonoBehaviour
         }
 
         if (pathAgent != _navMeshAgent) {
-            // Debug.Log(pathAgent);
             _navMeshAgent.ResetPath();
             _destination = dest1;
             secondDestination = dest2;
@@ -415,10 +473,7 @@ public abstract class Unit : MonoBehaviour
         NavMeshAgent agent1 = UnitManager.instance.GetDummyAgent(transform.position);
         NavMeshAgent agent2 = UnitManager.instance.GetDummyAgent(ladderUnit.GetEdgePos());
 
-        // agent1.transform.position = transform.position;
         agent1.SetDestination(ladderUnit.GetBottomPos());
-
-        // agent2.transform.position = ladderUnit.GetEdgePos();
         agent2.SetDestination(destination);
 
         return new Tuple<NavMeshAgent, NavMeshAgent>(agent1, agent2);

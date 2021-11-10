@@ -6,10 +6,16 @@ public class Sand : MonoBehaviour
 {
     [SerializeField] float risingSpeed;
 
+    public static float height;
+
     // Start is called before the first frame update
     void Start()
     {
         Clock.instance.clockFinished += OnClockFinished;
+    }
+
+    private void Update () {
+        height = transform.position.y - 0.5f;
     }
 
     private void OnClockFinished()

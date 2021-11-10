@@ -129,6 +129,7 @@ public class Boat : MonoBehaviour {
 
 		mountedGroup = unitList[0].Group;
 		mountedGroup.SetAgentEnabled(false);
+		mountedGroup.SetInBoat(true);
 	}
 
 	public void DismountUnits () {
@@ -141,6 +142,7 @@ public class Boat : MonoBehaviour {
 
 		mountedGroup.TeleportTo(dismountPos);
 		mountedGroup.SetAgentEnabled(true);
+		mountedGroup.SetInBoat(false);
 		
 		mountedGroup = null;
 		mountedUnits.Clear();

@@ -29,13 +29,18 @@ public class DamageHelper : MonoBehaviour
         }
 
         unit.Health -= damage;
+
+        if (knockback.ContainsKey(damageType)) {
+            Vector3 knockDir = Vector3.Normalize(direction);
+            unit.SetKnockback(knockDir * knockback[damageType]);
+        }
     }
 
     private static void Initialize () {
         knockback = new Dictionary<DamageType, float>();
-        knockback.Add(DamageType.Blunt, 0.4f);
-        knockback.Add(DamageType.Slashing, 0.2f);
-        knockback.Add(DamageType.HeavySlashing, 0.3f);
+        knockback.Add(DamageType.Blunt, 0.8f);
+        knockback.Add(DamageType.Slashing, 0.4f);
+        knockback.Add(DamageType.HeavySlashing, 0.6f);
 
         convertDamage = new Dictionary<string, int>();
         convertDamage.Add($"{DamageType.Piercing}{UnitType.Axe}", 2);
