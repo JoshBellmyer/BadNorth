@@ -82,8 +82,6 @@ public class CursorController : MonoBehaviour
         if (hitData.Item1) {
             Vector3 location = hitData.Item2.point;
 
-            // Debug.Log($"{location} -> {Game.GetGridPos(location)}");
-
             switch (hitData.Item2.collider.tag) {
                 case "Terrain":
                     if (hitData.Item2.normal.y > 0 && player.SelectedGroup != null) {
