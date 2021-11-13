@@ -8,6 +8,7 @@ public class Group<T> : Group where T : Unit {
     private List<T> _units;
     private bool _canMove;
     private bool _canAttack;
+    private bool _inBoat;
 
     public static readonly float DEFAULT_RADIUS = 0.35f;
     // public Group(string team) {
@@ -83,6 +84,17 @@ public class Group<T> : Group where T : Unit {
         }
     }
 
+    public bool InBoat {
+        get => _inBoat;
+        set {
+            _inBoat = value;
+            
+            foreach (var v in _units) {
+                v.InBoat = value;
+            }
+        }
+    }
+
     public void TeleportTo(Vector3 position, float rotation, float radius)
     {
         if (_units.Count > 1)
@@ -94,6 +106,7 @@ public class Group<T> : Group where T : Unit {
             {
                 Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement + rotation + rotationCorrection), 0, Mathf.Sin(i * angleIncrement + rotation + rotationCorrection)) * radius;
                 v.transform.position = position + offset;
+                v.CeaseMovement();
                 i++;
             }
         }
@@ -102,6 +115,7 @@ public class Group<T> : Group where T : Unit {
             foreach (var v in _units)
             {
                 v.transform.position = position;
+                v.CeaseMovement();
             }
         }
     }
@@ -195,6 +209,12 @@ public class Group<T> : Group where T : Unit {
             u.NavMeshAgent.enabled = enabled;
         }
     }
+
+    public override void SetInBoat (bool inBoat) {
+        InBoat = inBoat;
+        CanMove = !inBoat;
+        CanAttack = !inBoat;
+    }
 }
 
 public abstract class Group
@@ -208,6 +228,8 @@ public abstract class Group
     public abstract void MoveTo(Vector3 position);
 
     public abstract List<Unit> GetUnitsBase();
+
+    public abstract void SetInBoat(bool inBoat);
 }
 
 
