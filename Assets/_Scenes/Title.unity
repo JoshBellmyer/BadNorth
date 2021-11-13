@@ -987,6 +987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstSelected: {fileID: 1405388744}
+  tileSetSelection: {fileID: 1405388746}
 --- !u!114 &535194988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1465,6 +1466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
+  selectedTileSetType: 0
 --- !u!4 &695625020
 Transform:
   m_ObjectHideFlags: 0
