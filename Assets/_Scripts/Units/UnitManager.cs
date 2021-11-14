@@ -134,13 +134,12 @@ public class UnitManager : MonoBehaviour
 
 
 public enum UnitType {
-    Default = 0,
-    Sword = 1,
-    Axe = 2,
-    Archer = 3,
-    Pike = 4,
-    Shield = 5,
-    Ladder = 6,
+    Sword = 0,
+    Axe = 1,
+    Archer = 2,
+    Pike = 3,
+    Shield = 4,
+    Ladder = 5,
 }
 
 

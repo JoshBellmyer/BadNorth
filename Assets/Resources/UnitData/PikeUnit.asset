@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 622bfa66b2b3292469963622313ff8fd, type: 3}
   m_Name: PikeUnit
   m_EditorClassIdentifier: 
-  type: 4
+  type: 3
   sprite: {fileID: 21300000, guid: ac56f413fa4ed4fa2a110b1e223bc674, type: 3}
   cooldown: 10

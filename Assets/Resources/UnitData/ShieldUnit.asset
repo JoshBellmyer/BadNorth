@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 622bfa66b2b3292469963622313ff8fd, type: 3}
   m_Name: ShieldUnit
   m_EditorClassIdentifier: 
-  type: 5
+  type: 4
   sprite: {fileID: 21300000, guid: bff9194c91db2e24db49020cede011f7, type: 3}
   cooldown: 10
