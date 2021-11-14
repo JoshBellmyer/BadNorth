@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4e05b0f6f2f4831a68d3b728eb4b17, type: 3}
   m_Name: TileSet 1
   m_EditorClassIdentifier: 
-  setName: Say
+  type: 1
+  tileSetName: Say
   topType: 1
   topLayers: 2
   topMinLayer: 1

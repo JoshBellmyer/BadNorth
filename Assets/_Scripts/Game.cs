@@ -16,7 +16,7 @@ public class Game : MonoBehaviour {
 
 	public const int everythingMask = 0x7FFFFFFF;
 
-	public Transform sand;
+	public TileSetType selectedTileSetType;
 
 
 	private void Start()

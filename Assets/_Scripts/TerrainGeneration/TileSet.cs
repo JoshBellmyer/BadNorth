@@ -6,7 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TileSet", menuName = "ScriptableObjects/TileSet", order = 1)]
 public class TileSet : ScriptableObject {
 
-	public string setName;
+	public TileSetType type;
+	public string tileSetName;
 	public TopType topType;
 	public int topLayers;
 	public int topMinLayer;
@@ -55,4 +56,11 @@ public class TileGroup {
 
 		return tVariations[0];
 	}
+}
+
+public enum TileSetType
+{
+	Random = 0,
+	A = 1,
+	B = 2,
 }

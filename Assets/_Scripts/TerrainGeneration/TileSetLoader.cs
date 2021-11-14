@@ -1,42 +1,71 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class TileSetLoader {
 
-	// Loads a tileset based on index (starting from 0)
-	public static TileSet LoadTileSet (int index) {
-		TileSet tileSet = Resources.Load<TileSet>($"TileSets/TileSet {index + 1}");
+	static readonly string TILESET_DATA_PATH = "TileSets/";
+	static Dictionary<TileSetType, TileSet> tileSetMap;
 
-		return tileSet;
+	public static int TileSetCount
+    {
+		get
+		{
+			if (tileSetMap == null)
+			{
+				LoadTileSetMap();
+			}
+
+			return tileSetMap.Count;
+		}
+    }
+
+	public static void LoadTileSetMap()
+	{
+		tileSetMap = new Dictionary<TileSetType, TileSet>();
+		IEnumerable<string> files = Directory.GetFiles("Assets/Resources/" + TILESET_DATA_PATH)
+			.Where(f => !f.Contains(".meta"))
+			.Select(f => Path.GetFileNameWithoutExtension(f));
+		foreach (string file in files)
+		{
+			TileSet tileSet = Resources.Load<TileSet>(TILESET_DATA_PATH + file);
+			tileSetMap[tileSet.type] = tileSet;
+		}
 	}
 
-	// Loads all tilesets and returns them in a List
-	public static List<TileSet> LoadAllTileSets () {
-		int length = 0;
-		TileSet tileSet = LoadTileSet(length);
-		List<TileSet> tileSets = new List<TileSet>();
-
-		while (tileSet != null) {
-			tileSets.Add(tileSet);
-			length++;
-			tileSet = LoadTileSet(length);
+	public static TileSet GetTileSet(TileSetType type)
+    {
+		if (tileSetMap == null)
+		{
+			LoadTileSetMap();
 		}
 
-		return tileSets;
-	}
+		if(type == TileSetType.Random)
+        {
+			return GetRandomTileSet();
+        }
 
-	// Returns an array containing the names of all tilesets
-	//  This has to load all of the tilesets anyways so it might not be super useful.
-	public static string[] GetTileSetNames () {
-		List<TileSet> tileSets = LoadAllTileSets();
-
-		string[] names = new string[tileSets.Count];
-
-		for (int i = 0; i < names.Length; i++) {
-			names[i] = tileSets[i].setName;
+		try
+		{
+			return tileSetMap[type];
 		}
-
-		return names;
+		catch (KeyNotFoundException)
+		{
+			return null;
+		}
 	}
+
+	public static TileSet GetRandomTileSet()
+    {
+		List<TileSet> tileSets = GetTileSets();
+		int rand = Random.Range(0, tileSets.Count);
+		return tileSets[rand];
+    }
+
+	public static List<TileSet> GetTileSets()
+    {
+		return tileSetMap.Values.ToList();
+    }
 }
