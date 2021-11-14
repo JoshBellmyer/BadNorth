@@ -30,7 +30,7 @@ public class GameSettingsScreen : UIScreen
             if(tileSet != null)
             {
                 valueTypeMap.Add(valueCount, type);
-                tileSetSelection.options.Add(new OptionData(tileSet.name));
+                tileSetSelection.options.Add(new OptionData(tileSet.tileSetName));
                 valueCount++;
             }
         }
