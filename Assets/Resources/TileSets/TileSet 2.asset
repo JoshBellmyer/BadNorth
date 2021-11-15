@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TileSet 2
   m_EditorClassIdentifier: 
   type: 2
-  tileSetName: Paul
+  tileSetName: 2
   topType: 0
   topLayers: 0
   topMinLayer: 0
