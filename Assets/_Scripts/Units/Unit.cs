@@ -14,6 +14,9 @@ public abstract class Unit : MonoBehaviour
     private LadderUnit targetLadder;
     private Vector3 secondDestination;
 
+    private TeamColor teamColor;
+    private MeshRenderer[] renderers;
+
     private bool climbing;
     private bool falling;
     private bool knockback;
@@ -129,8 +132,10 @@ public abstract class Unit : MonoBehaviour
     }
 
     private void Start()
-    {
-        GetComponent<TeamColor>().SetColor(int.Parse(_team));
+    {   
+        teamColor = GetComponent<TeamColor>();
+        teamColor.SetColor(int.Parse(_team));
+        renderers = GetComponentsInChildren<MeshRenderer>();
     }
 
     private void Update()
@@ -179,6 +184,8 @@ public abstract class Unit : MonoBehaviour
 
             return;
         }
+
+        LookAt(_targetEnemy.transform.position);
 
         if (_currentCooldown > 0) {
             _currentCooldown -= Time.deltaTime;
@@ -238,6 +245,9 @@ public abstract class Unit : MonoBehaviour
     {
         _group.RemoveUnit(this);
         TeamManager.instance.Remove(_team, this);
+
+        DestroyMaterialInstances();
+
         Destroy(gameObject);
     }
 
@@ -335,6 +345,11 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    internal void LookAt (Vector3 pos) {
+        transform.LookAt(pos);
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+    }
+
     public void SetKnockback (Vector3 knockVector) {
         knockback = true;
         _navMeshAgent.enabled = false;
@@ -344,13 +359,51 @@ public abstract class Unit : MonoBehaviour
         direction = new Vector3(direction.x, 0, direction.z);
 
         RaycastHit hit;
-        bool didHit = Physics.Raycast(transform.position + (Vector3.up * 0.2f), direction, out hit, strength, LayerMask.GetMask("Terrain"));
+        bool didHit = Physics.Raycast(transform.position + (Vector3.up * 0.2f), direction, out hit, strength + 0.2f, LayerMask.GetMask("Terrain"));
 
         if (didHit) {
-            knockDestination = transform.position + (direction * hit.distance);
+            knockDestination = transform.position + (direction * (hit.distance - 0.2f));
         }
         else {
             knockDestination = transform.position + (direction * strength);
+        }
+    }
+
+    public void SetColor (Color color) {
+        foreach (MeshRenderer r in renderers) {
+            if (r == null) {
+                continue;
+            }
+
+            Material[] materials = r.materials;
+
+            foreach (Material m in materials) {
+                m.color = color;
+            }
+
+            r.materials = materials;
+        }
+    }
+
+    public void SetTeamColor (int number) {
+        teamColor.SetColor(number);
+    }
+
+    public void ResetTeamColor () {
+        teamColor.SetColor(int.Parse(_team));
+    }
+
+    private void DestroyMaterialInstances () {
+        foreach (MeshRenderer r in renderers) {
+            if (r == null) {
+                continue;
+            }
+
+            Material[] materials = r.materials;
+
+            foreach (Material m in materials) {
+                Destroy(m);
+            }
         }
     }
 
@@ -389,6 +442,9 @@ public abstract class Unit : MonoBehaviour
     internal void IssueDestination(Vector3 destination)
     {
         if (!_canMove) {
+            return;
+        }
+        if (!_navMeshAgent.isOnNavMesh) {
             return;
         }
 

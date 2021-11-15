@@ -34,6 +34,27 @@ public class DamageHelper : MonoBehaviour
             Vector3 knockDir = Vector3.Normalize(direction);
             unit.SetKnockback(knockDir * knockback[damageType]);
         }
+
+        SetRed(0.2f);
+    }
+
+    private void SetRed (float redTime) {
+        if (unit == null) {
+            return;
+        }
+
+        unit.SetColor(Color.red);
+        unit.SetTeamColor(0);
+
+        StartCoroutine( UnsetRed(redTime) );
+    }
+
+    private IEnumerator UnsetRed (float redTime) {
+
+        yield return new WaitForSeconds(redTime);
+
+        unit.SetColor(Color.white);
+        unit.ResetTeamColor();
     }
 
     private static void Initialize () {
