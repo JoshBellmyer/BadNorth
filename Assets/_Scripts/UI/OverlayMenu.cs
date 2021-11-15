@@ -60,7 +60,7 @@ public class OverlayMenu : PlayerMenu
         unitImages = new List<Image>();
         imageLocations = new List<Vector2>();
         int numUnitTypes = Enum.GetValues(typeof(UnitType)).Length;
-        float offset = -numUnitTypes * IMAGE_SIZE;
+        float offset = -2 * IMAGE_SIZE;
 
         for (int i = 0; i < numUnitTypes; i++)
         {
@@ -68,14 +68,8 @@ public class OverlayMenu : PlayerMenu
             UnitData unitData = UnitDataLoader.GetUnitData((UnitType)i);
             if (unitData != null) image.sprite = unitData.sprite;
 
-            float wrapAround = 0;
-            if(i > numUnitTypes / 2)
-            {
-                wrapAround = offset;
-            }
-
-            Vector2 position = new Vector2(wrapAround + IMAGE_SIZE * i, 0);
-            AddImageToCanvas(image, position);
+            Vector2 position = new Vector2(offset + IMAGE_SIZE * i, 0);
+            AddImageToCanvas(image);
             imageLocations.Add(position);
             unitImages.Add(image);
         }
@@ -83,17 +77,17 @@ public class OverlayMenu : PlayerMenu
         selectionImage = new GameObject().AddComponent<Image>();
         selectionImage.sprite = Resources.Load<Sprite>($"Textures/unit_selection");
         selectionImage.color = Color.white;
-        AddImageToCanvas(selectionImage, new Vector2(0, 0));
+        AddImageToCanvas(selectionImage);
+        selectionImage.rectTransform.anchoredPosition = new Vector2(0, 0);
 
         SetSelectedUnitIndex(0);
     }
 
-    private void AddImageToCanvas (Image image, Vector2 position) {
+    private void AddImageToCanvas (Image image) {
         image.transform.SetParent(canvas.transform, false);
         image.rectTransform.anchorMax = new Vector2(0.5f, 1);
         image.rectTransform.anchorMin = new Vector2(0.5f, 1);
         image.rectTransform.pivot = new Vector2(0.5f, 1);
-        image.rectTransform.anchoredPosition = position;
         image.rectTransform.sizeDelta = new Vector2(IMAGE_SIZE, IMAGE_SIZE);
     }
 
@@ -101,38 +95,38 @@ public class OverlayMenu : PlayerMenu
     {
         for (int i=0; i<unitImages.Count; i++)
         {
-            int currentIndex = index + i;
+            int currentIndex = index + i - 2;
             if (currentIndex >= unitImages.Count)
             {
                 currentIndex -= unitImages.Count;
             }
-
-            float moveDistance = Mathf.Abs(unitImages[currentIndex].rectTransform.anchoredPosition.x - imageLocations[i].x);
-            if(moveDistance > IMAGE_SIZE)
+            if (currentIndex < 0)
             {
-                StartCoroutine(FadeAndMove(unitImages[currentIndex], imageLocations[i]));
+                currentIndex += unitImages.Count;
+            }
+
+            if(i == 1 || i == 2 || i == 3)
+            {
+                StartCoroutine(FadeIn(unitImages[currentIndex]));
             }
             else
             {
-                StartCoroutine(Slide(unitImages[currentIndex].rectTransform, imageLocations[i]));
+                StartCoroutine(FadeOut(unitImages[currentIndex]));
             }
+
+            StartCoroutine(Slide(unitImages[currentIndex].rectTransform, imageLocations[i]));
         }
     }
 
-    IEnumerator FadeAndMove(Image image, Vector2 targetLocation)
+    IEnumerator FadeIn(Image image)
     {
-        RectTransform rectTransform = image.rectTransform;
-        Vector2 startLocation = rectTransform.anchoredPosition;
-        float f = 1f;
         Color color = image.color;
-        for (; f > 0f; f -= Time.deltaTime * selectionAnimationSpeed * 2)
+        if(color.a == 1)
         {
-            color.a = f;
-            image.color = color;
-            yield return null;
+            yield break;
         }
-        rectTransform.anchoredPosition = targetLocation;
-        for (; f < 1f; f += Time.deltaTime * selectionAnimationSpeed * 2)
+
+        for (float f = 0; f < 1f; f += Time.deltaTime * selectionAnimationSpeed * 2)
         {
             color.a = f;
             image.color = color;
@@ -142,7 +136,25 @@ public class OverlayMenu : PlayerMenu
         image.color = color;
     }
 
-    IEnumerator Slide(RectTransform rectTransform, Vector2 targetLocation) // TODO: slide behind other images
+    IEnumerator FadeOut(Image image)
+    {
+        Color color = image.color;
+        if (color.a == 0)
+        {
+            yield break;
+        }
+
+        for (float f = 1; f > 0f; f -= Time.deltaTime * selectionAnimationSpeed * 2)
+        {
+            color.a = f;
+            image.color = color;
+            yield return null;
+        }
+        color.a = 0;
+        image.color = color;
+    }
+
+    IEnumerator Slide(RectTransform rectTransform, Vector2 targetLocation)
     {
         Vector2 startLocation = rectTransform.anchoredPosition;
         for(float f = 0f; f < 1f; f += Time.deltaTime * selectionAnimationSpeed)
