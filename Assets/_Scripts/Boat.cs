@@ -158,10 +158,10 @@ public class Boat : MonoBehaviour {
 	}
 
 	private void Sink () {
-		float sinkSpeed = 0.35f;
+		float sinkSpeed = 0.6f;
 		transform.position += new Vector3(0, -sinkSpeed * Time.deltaTime, 0);
 
-		if (transform.position.y < -2) {
+		if (transform.position.y < -2.5f) {
 			player.Boat = null;
 			Destroy(gameObject);
 		}

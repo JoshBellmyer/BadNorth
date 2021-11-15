@@ -82,7 +82,7 @@ public class OverlayMenu : PlayerMenu
 
         selectionImage = new GameObject().AddComponent<Image>();
         selectionImage.sprite = Resources.Load<Sprite>($"Textures/unit_selection");
-        selectionImage.color = Color.yellow;
+        selectionImage.color = Color.white;
         AddImageToCanvas(selectionImage, new Vector2(0, 0));
 
         SetSelectedUnitIndex(0);
