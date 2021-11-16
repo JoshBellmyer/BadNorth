@@ -301,32 +301,33 @@ public class TileData {
 		}
 
 		if (!tileEdges.ContainsKey(type)) {
-			return new int[] {0b0000, 0b0000, 0b0000};
+			return new int[] {0b0000, 0b0000, 0b0000, 0b0000, 0b0000};
 		}
 
 		return tileEdges[type];
 	}
 
 	// ^ Initializes the edges of the different tile types
+	// {FullBlock,  FullRampSide, RaisedRampSide, HalfRampSide, HalfBlock}
 	private static void InitializeEdges () {
 		tileEdges = new Dictionary<TileType, int[]>();
 
-		tileEdges.Add(TileType.Cube, new int[] {0b1111, 0b0000, 0b0000});
+		tileEdges.Add(TileType.Cube, new int[] {0b1111, 0b0000, 0b0000, 0b0000, 0b0000});
 
-		tileEdges.Add(TileType.FullRampU, new int[] {0b1000, 0b0000, 0b0011});
-		tileEdges.Add(TileType.FullRampD, new int[] {0b0100, 0b0000, 0b0011});
-		tileEdges.Add(TileType.FullRampL, new int[] {0b0010, 0b0000, 0b1100});
-		tileEdges.Add(TileType.FullRampR, new int[] {0b0001, 0b0000, 0b1100});
+		tileEdges.Add(TileType.FullRampU, new int[] {0b1000, 0b0011, 0b0000, 0b0000, 0b0000});
+		tileEdges.Add(TileType.FullRampD, new int[] {0b0100, 0b0011, 0b0000, 0b0000, 0b0000});
+		tileEdges.Add(TileType.FullRampL, new int[] {0b0010, 0b1100, 0b0000, 0b0000, 0b0000});
+		tileEdges.Add(TileType.FullRampR, new int[] {0b0001, 0b1100, 0b0000, 0b0000, 0b0000});
 
-		tileEdges.Add(TileType.HalfRampU, new int[] {0b0000, 0b1000, 0b0011});
-		tileEdges.Add(TileType.HalfRampD, new int[] {0b0000, 0b0100, 0b0011});
-		tileEdges.Add(TileType.HalfRampL, new int[] {0b0000, 0b0010, 0b1100});
-		tileEdges.Add(TileType.HalfRampR, new int[] {0b0000, 0b0001, 0b1100});
+		tileEdges.Add(TileType.HalfRampU, new int[] {0b0000, 0b0000, 0b0000, 0b0011, 0b1000});
+		tileEdges.Add(TileType.HalfRampD, new int[] {0b0000, 0b0000, 0b0000, 0b0011, 0b0100});
+		tileEdges.Add(TileType.HalfRampL, new int[] {0b0000, 0b0000, 0b0000, 0b1100, 0b0010});
+		tileEdges.Add(TileType.HalfRampR, new int[] {0b0000, 0b0000, 0b0000, 0b1100, 0b0001});
 
-		tileEdges.Add(TileType.RaisedRampU, new int[] {0b1000, 0b0100, 0b0011});
-		tileEdges.Add(TileType.RaisedRampD, new int[] {0b0100, 0b1000, 0b0011});
-		tileEdges.Add(TileType.RaisedRampL, new int[] {0b0010, 0b0001, 0b1100});
-		tileEdges.Add(TileType.RaisedRampR, new int[] {0b0001, 0b0010, 0b1100});
+		tileEdges.Add(TileType.RaisedRampU, new int[] {0b1000, 0b0000, 0b0011, 0b0000, 0b0100});
+		tileEdges.Add(TileType.RaisedRampD, new int[] {0b0100, 0b0000, 0b0011, 0b0000, 0b1000});
+		tileEdges.Add(TileType.RaisedRampL, new int[] {0b0010, 0b0000, 0b1100, 0b0000, 0b0001});
+		tileEdges.Add(TileType.RaisedRampR, new int[] {0b0001, 0b0000, 0b1100, 0b0000, 0b0010});
 	}
 }
 

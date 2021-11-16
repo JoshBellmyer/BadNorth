@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class TilePlacer : MonoBehaviour {
 
-	private static Dictionary<string, int> tileEdges;
+	// private static Dictionary<string, int> tileEdges;
+	private static Dictionary<int, int> cubeEdges;
+	private static Dictionary<string, int> rampEdges;
+
 	private static TileData tileData;
 	private static TileSet tileSet;
 	private static CombineInstance[] cInstances;
@@ -23,7 +26,7 @@ public class TilePlacer : MonoBehaviour {
 		tileData = _tileData;
 		tileSet = _tileSet;
 
-		if (tileEdges == null) {
+		if (cubeEdges == null) {
 			InitializeEdges();
 		}
 
@@ -125,28 +128,28 @@ public class TilePlacer : MonoBehaviour {
 		int right = GetEdge(pos, 3, 0)[0] ? 0b0001 : 0b0000;
 
 		int edgeBool = (front | back | left | right);
-		string[] index = new string[4];
+		int[] index = new int[4];
 		int tileIndex = -1;
 		int rotation = 0;
 
-		index[0] = $"{edgeBool},{0b0000},{0b0000}";
-		index[1] = $"{RotateEdges(edgeBool, 1)},{0b0000},{0b0000}";
-		index[2] = $"{RotateEdges(edgeBool, 2)},{0b0000},{0b0000}";
-		index[3] = $"{RotateEdges(edgeBool, 3)},{0b0000},{0b0000}";
+		index[0] = edgeBool;
+		index[1] = RotateEdges(edgeBool, 1);
+		index[2] = RotateEdges(edgeBool, 2);
+		index[3] = RotateEdges(edgeBool, 3);
 
-		if (tileEdges.ContainsKey(index[0])) {
-			tileIndex = tileEdges[index[0]];
+		if (cubeEdges.ContainsKey(index[0])) {
+			tileIndex = cubeEdges[index[0]];
 		}
-		else if (tileEdges.ContainsKey(index[1])) {
-			tileIndex = tileEdges[index[1]];
+		else if (cubeEdges.ContainsKey(index[1])) {
+			tileIndex = cubeEdges[index[1]];
 			rotation = 1;
 		}
-		else if (tileEdges.ContainsKey(index[2])) {
-			tileIndex = tileEdges[index[2]];
+		else if (cubeEdges.ContainsKey(index[2])) {
+			tileIndex = cubeEdges[index[2]];
 			rotation = 2;
 		}
-		else if (tileEdges.ContainsKey(index[3])) {
-			tileIndex = tileEdges[index[3]];
+		else if (cubeEdges.ContainsKey(index[3])) {
+			tileIndex = cubeEdges[index[3]];
 			rotation = 3;
 		}
 
@@ -163,10 +166,26 @@ public class TilePlacer : MonoBehaviour {
 		int left = GetEdge(pos, 2, 0)[0] ? 0b0010 : 0b0000;
 		int right = GetEdge(pos, 3, 0)[0] ? 0b0001 : 0b0000;
 
-		int frontR = GetEdge(pos, 0, 0)[2] ? 0b1000 : 0b0000;
-		int backR = GetEdge(pos, 1, 0)[2] ? 0b0100 : 0b0000;
-		int leftR = GetEdge(pos, 2, 0)[2] ? 0b0010 : 0b0000;
-		int rightR = GetEdge(pos, 3, 0)[2] ? 0b0001 : 0b0000;
+		int rampType = 0;
+
+		switch (slopeType) {
+			case 0b0000:
+				rampType = 1;
+			break;
+
+			case 0b0100:
+				rampType = 2;
+			break;
+
+			case 0b1000:
+				rampType = 3;
+			break;
+		}
+
+		int frontR = GetEdge(pos, 0, 0)[rampType] ? 0b1000 : 0b0000;
+		int backR = GetEdge(pos, 1, 0)[rampType] ? 0b0100 : 0b0000;
+		int leftR = GetEdge(pos, 2, 0)[rampType] ? 0b0010 : 0b0000;
+		int rightR = GetEdge(pos, 3, 0)[rampType] ? 0b0001 : 0b0000;
 
 		front = (front | frontR);
 		back = (back | backR);
@@ -174,11 +193,11 @@ public class TilePlacer : MonoBehaviour {
 		right = (right | rightR);
 
 		int edgeBool = (front | back | left | right);
-		string index = $"{0b0000},{slopeType},{RotateEdges(edgeBool, rotation)}";
+		string index = $"{slopeType},{RotateEdges(edgeBool, rotation)}";
 
-		if (tileEdges.ContainsKey(index)) {
-			PlaceTile(x, y, z, rotation, tileEdges[index]);
-			PlaceMeshTile(x, y, z, rotation, tileEdges[index]);
+		if (rampEdges.ContainsKey(index)) {
+			PlaceTile(x, y, z, rotation, rampEdges[index]);
+			PlaceMeshTile(x, y, z, rotation, rampEdges[index]);
 		}
 	}
 
@@ -286,7 +305,7 @@ public class TilePlacer : MonoBehaviour {
 			return new bool[] {false, false, false};
 		}
 
-		bool[] results = new bool[3];
+		bool[] results = new bool[5];
 		int[] edges = TileData.GetEdges(tileData.tileTypes[newPos.x, newPos.y, newPos.z]);
 		int opDir = GetOppositeDirection(direction);
 		int mask = (0b1000 >> opDir);
@@ -294,6 +313,8 @@ public class TilePlacer : MonoBehaviour {
 		results[0] = (edges[0] & mask) != 0;
 		results[1] = (edges[1] & mask) != 0;
 		results[2] = (edges[2] & mask) != 0;
+		results[3] = (edges[3] & mask) != 0;
+		results[4] = (edges[4] & mask) != 0;
 
 		return results;
 	}
@@ -357,32 +378,60 @@ public class TilePlacer : MonoBehaviour {
 
 
 	// Initializes the lookup table for tile edges
+	// private static void InitializeEdges () {
+	// 	tileEdges = new Dictionary<string, int>();
+
+	// 	// Cubes
+	// 	tileEdges.Add($"{0b1111},{0b0000},{0b0000}", 0);
+	// 	tileEdges.Add($"{0b1011},{0b0000},{0b0000}", 1);
+	// 	tileEdges.Add($"{0b1001},{0b0000},{0b0000}", 2);
+	// 	tileEdges.Add($"{0b1100},{0b0000},{0b0000}", 3);
+	// 	tileEdges.Add($"{0b1000},{0b0000},{0b0000}", 4);
+	// 	tileEdges.Add($"{0b0000},{0b0000},{0b0000}", 5);
+
+	// 	// Ramps
+	// 	tileEdges.Add($"{0b0000},{0b0000},{0b1011}", 6);
+	// 	tileEdges.Add($"{0b0000},{0b0000},{0b1001}", 7);
+	// 	tileEdges.Add($"{0b0000},{0b0000},{0b1010}", 8);
+	// 	tileEdges.Add($"{0b0000},{0b0000},{0b1000}", 9);
+
+	// 	tileEdges.Add($"{0b0000},{0b0100},{0b1011}", 10);
+	// 	tileEdges.Add($"{0b0000},{0b0100},{0b1001}", 11);
+	// 	tileEdges.Add($"{0b0000},{0b0100},{0b1010}", 12);
+	// 	tileEdges.Add($"{0b0000},{0b0100},{0b1000}", 13);
+
+	// 	tileEdges.Add($"{0b0000},{0b1000},{0b0011}", 14);
+	// 	tileEdges.Add($"{0b0000},{0b1000},{0b0001}", 15);
+	// 	tileEdges.Add($"{0b0000},{0b1000},{0b0010}", 16);
+	// 	tileEdges.Add($"{0b0000},{0b1000},{0b0000}", 17);
+	// }
+
 	private static void InitializeEdges () {
-		tileEdges = new Dictionary<string, int>();
+		cubeEdges = new Dictionary<int, int>();
 
-		// Cubes
-		tileEdges.Add($"{0b1111},{0b0000},{0b0000}", 0);
-		tileEdges.Add($"{0b1011},{0b0000},{0b0000}", 1);
-		tileEdges.Add($"{0b1001},{0b0000},{0b0000}", 2);
-		tileEdges.Add($"{0b1100},{0b0000},{0b0000}", 3);
-		tileEdges.Add($"{0b1000},{0b0000},{0b0000}", 4);
-		tileEdges.Add($"{0b0000},{0b0000},{0b0000}", 5);
+		cubeEdges.Add(0b1111, 0);
+		cubeEdges.Add(0b1011, 1);
+		cubeEdges.Add(0b1001, 2);
+		cubeEdges.Add(0b1100, 3);
+		cubeEdges.Add(0b1000, 4);
+		cubeEdges.Add(0b0000, 5);
 
-		// Ramps
-		tileEdges.Add($"{0b0000},{0b0000},{0b1011}", 6);
-		tileEdges.Add($"{0b0000},{0b0000},{0b1001}", 7);
-		tileEdges.Add($"{0b0000},{0b0000},{0b1010}", 8);
-		tileEdges.Add($"{0b0000},{0b0000},{0b1000}", 9);
+		rampEdges = new Dictionary<string, int>();
 
-		tileEdges.Add($"{0b0000},{0b0100},{0b1011}", 10);
-		tileEdges.Add($"{0b0000},{0b0100},{0b1001}", 11);
-		tileEdges.Add($"{0b0000},{0b0100},{0b1010}", 12);
-		tileEdges.Add($"{0b0000},{0b0100},{0b1000}", 13);
+		rampEdges.Add($"{0b0000},{0b1011}", 6);
+		rampEdges.Add($"{0b0000},{0b1001}", 7);
+		rampEdges.Add($"{0b0000},{0b1010}", 8);
+		rampEdges.Add($"{0b0000},{0b1000}", 9);
 
-		tileEdges.Add($"{0b0000},{0b1000},{0b0011}", 14);
-		tileEdges.Add($"{0b0000},{0b1000},{0b0001}", 15);
-		tileEdges.Add($"{0b0000},{0b1000},{0b0010}", 16);
-		tileEdges.Add($"{0b0000},{0b1000},{0b0000}", 17);
+		rampEdges.Add($"{0b0100},{0b1011}", 10);
+		rampEdges.Add($"{0b0100},{0b1001}", 11);
+		rampEdges.Add($"{0b0100},{0b1010}", 12);
+		rampEdges.Add($"{0b0100},{0b1000}", 13);
+
+		rampEdges.Add($"{0b1000},{0b0011}", 14);
+		rampEdges.Add($"{0b1000},{0b0001}", 15);
+		rampEdges.Add($"{0b1000},{0b0010}", 16);
+		rampEdges.Add($"{0b1000},{0b0000}", 17);
 	}
 }
 
