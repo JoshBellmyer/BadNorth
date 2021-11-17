@@ -18,6 +18,10 @@ public class SettingsMenu : PlayerMenu
     protected new void Awake()
     {
         base.Awake();
+    }
+
+    private void OnEnable()
+    {
         LoadSettingsValues();
     }
 
