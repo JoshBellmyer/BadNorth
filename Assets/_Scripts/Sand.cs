@@ -15,7 +15,7 @@ public class Sand : MonoBehaviour
     }
 
     private void Update () {
-        height = transform.position.y - 0.7f;
+        height = transform.position.y - 0.5f;
     }
 
     private void OnClockFinished()

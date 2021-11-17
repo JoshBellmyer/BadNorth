@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public abstract class Unit : MonoBehaviour
 {
     private NavMeshAgent _navMeshAgent;
-    private Directive _directive;
+    [SerializeField] private Directive _directive;
     private string _team;
     private Group _group;
     protected Vector3 _destination;
@@ -23,7 +23,7 @@ public abstract class Unit : MonoBehaviour
     private bool resumeMovement;
     private Vector3 knockDestination;
 
-    protected Unit _targetEnemy;
+    [SerializeField] protected Unit _targetEnemy;
     private float _currentCooldown;
 
     [SerializeField] private UnitType _unitType;
@@ -62,10 +62,10 @@ public abstract class Unit : MonoBehaviour
             if (value == true)
             {
                 if (_navMeshAgent.isOnNavMesh) {
-                    _navMeshAgent.SetDestination(_destination);
+                    // _navMeshAgent.SetDestination(_destination);
                 }
                 
-                _directive = Directive.MOVE;
+                // _directive = Directive.MOVE;
             }
             else if (_directive != Directive.NONE)
             {
@@ -87,8 +87,8 @@ public abstract class Unit : MonoBehaviour
             _canAttack = value;
             if (value == false && _directive == Directive.ATTACK)
             {
-                _navMeshAgent.SetDestination(_destination);
-                _directive = Directive.MOVE;
+                // _navMeshAgent.SetDestination(_destination);
+                // _directive = Directive.MOVE;
             }
         }
     }
@@ -141,11 +141,13 @@ public abstract class Unit : MonoBehaviour
     private void Update()
     {
         // There has got to be a better way to implement this.
-        if (_navMeshAgent.isOnNavMesh && _navMeshAgent.isStopped)
+        float dist = Vector3.Distance(transform.position, _destination);
+
+        if (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 1f) && _directive == Directive.MOVE)
         {
             _directive = Directive.NONE;
         }
-        if (_navMeshAgent.isOnNavMesh && _canAttack && (_directive == Directive.NONE || _navMeshAgent.remainingDistance < MAX_PROXIMITY) && FindAttack() && !_navMeshAgent.isStopped)
+        if (_navMeshAgent.isOnNavMesh && _canAttack && (_directive == Directive.NONE) && FindAttack() && !_navMeshAgent.isStopped)
         {
             _directive = Directive.ATTACK;
         }
@@ -185,7 +187,19 @@ public abstract class Unit : MonoBehaviour
             return;
         }
 
-        LookAt(_targetEnemy.transform.position);
+        float dist = Vector3.Distance(transform.position, _targetEnemy.transform.position);
+
+        if (dist > _attackDistance + 0.5f) {
+            _targetEnemy = null;
+            _directive = Directive.MOVE;
+            IssueDestination(_destination);
+
+            return;
+        }
+
+        if (_navMeshAgent.isOnNavMesh) {
+            _navMeshAgent.SetDestination(_targetEnemy.transform.position);
+        }
 
         if (_currentCooldown > 0) {
             _currentCooldown -= Time.deltaTime;
@@ -198,11 +212,11 @@ public abstract class Unit : MonoBehaviour
             }
         }
 
-        float dist = Vector3.Distance(transform.position, _targetEnemy.transform.position);
-
         if (dist > _attackRange) {
             return;
         }
+
+        LookAt(_targetEnemy.transform.position);
 
         _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
         _currentCooldown = _attackCooldown;
