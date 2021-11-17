@@ -68,6 +68,13 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
+                if (isDeploying)
+                {
+                    player.CancelBoat();
+                    isDeploying = false;
+                    return;
+                }
+
                 Game.instance.Pause();
 
                 playerController.SetControlsActivated(true);
