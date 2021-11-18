@@ -120,11 +120,11 @@ public class Player : MonoBehaviour
     }
 
     public void CancelBoat()
-    {
+    {   
         if(Boat != null)
         {
-            Boat.CancelDeploy();
             Destroy(Boat.gameObject);
+            Boat.CancelDeploy(); 
         }
     }
 

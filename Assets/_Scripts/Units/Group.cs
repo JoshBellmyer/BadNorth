@@ -156,7 +156,7 @@ public class Group<T> : Group where T : Unit {
         }
     }
 
-    public int GetLiving()
+    public override int GetLiving()
     {
         return _units.Count;
     }
@@ -230,6 +230,8 @@ public abstract class Group
     public abstract List<Unit> GetUnitsBase();
 
     public abstract void SetInBoat(bool inBoat);
+
+    public abstract int GetLiving();
 }
 
 

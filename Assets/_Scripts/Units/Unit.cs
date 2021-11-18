@@ -22,6 +22,7 @@ public abstract class Unit : MonoBehaviour
     private bool knockback;
     private bool resumeMovement;
     private Vector3 knockDestination;
+    private bool paused;
 
     [SerializeField] protected Unit _targetEnemy;
     private float _currentCooldown;
@@ -141,6 +142,17 @@ public abstract class Unit : MonoBehaviour
     private void Update()
     {
         if (InBoat) return;
+
+        if (Game.instance.isPaused) {
+            if (!paused) {
+                Pause();
+            }
+
+            return;
+        }
+        else if (paused) {
+            UnPause();
+        }
 
         // There has got to be a better way to implement this.
         float dist = Vector3.Distance(transform.position, _destination);
@@ -453,6 +465,22 @@ public abstract class Unit : MonoBehaviour
 
         _destination = transform.position;
         _directive = Directive.NONE;
+    }
+
+    internal void Pause () {
+        if (_navMeshAgent.isOnNavMesh) {
+            _navMeshAgent.ResetPath();
+        }
+
+        paused = true;
+    }
+
+    internal void UnPause () {
+        if (_directive == Directive.MOVE) {
+            IssueDestination(_destination);
+        }
+
+        paused = false;
     }
 
     internal void IssueDestination(Vector3 destination)

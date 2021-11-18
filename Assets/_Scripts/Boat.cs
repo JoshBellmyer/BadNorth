@@ -39,6 +39,10 @@ public class Boat : MonoBehaviour {
 	}
 
 	private void Update () {
+		if (Game.instance.isPaused) {
+			return;
+		}
+
 		if (moving) {
 			MoveForward();
 
@@ -119,6 +123,12 @@ public class Boat : MonoBehaviour {
 	{
 		laser.SetActive(false);
 		selector.SetActive(false);
+
+		foreach (Unit u in mountedUnits) {
+			TeamManager.instance.Remove(u.Team, u);
+		}
+
+		player.Boat = null;
 	}
 
 	public void MountUnits (List<Unit> unitList) {

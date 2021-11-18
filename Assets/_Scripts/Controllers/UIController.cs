@@ -41,7 +41,7 @@ public class UIController : MonoBehaviour
             return;
         }
 
-        if (!isDeploying) {
+        if (!isDeploying && player.Boat == null) {
             if(player.TryPrepBoat()) isDeploying = true;
         }
         else if (player.Boat != null) {

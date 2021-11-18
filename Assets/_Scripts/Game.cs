@@ -11,7 +11,7 @@ public class Game : MonoBehaviour {
 	public static Game instance;
 	public static MapGenerator mapGenerator;
 
-	private bool isPaused;
+	public bool isPaused;
 	public List<PlayerController> players;
 
 	public const int everythingMask = 0x7FFFFFFF;

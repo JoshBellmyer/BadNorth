@@ -36,9 +36,7 @@ public class CursorController : MonoBehaviour
         Tuple<bool, RaycastHit> hitData = overlayMenu.CastFromCursor(LayerMask.GetMask("Terrain"));
 
         if (player.SelectedGroup != null) {
-            List<Unit> units = player.SelectedGroup.GetUnitsBase();
-
-            if (units.Count < 1) {
+            if (player.SelectedGroup.GetLiving() < 1) {
                 DeselectUnits();
             }
         }
