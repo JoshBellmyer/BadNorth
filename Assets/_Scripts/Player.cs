@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
 
     private bool CanDeploy
     {
-        get => _deployCooldown <= 0;
+        get => _deployCooldown <= 0 && !Clock.instance.finished;
     }
 
     public new Camera camera;
@@ -92,6 +92,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         camera = transform.Find("Camera").GetComponent<Camera>();
+        Clock.instance.clockFinished += CancelBoat;
 
         settings = Settings.Load(playerId);
 
@@ -113,10 +114,18 @@ public class Player : MonoBehaviour
             return false;
         }
 
-        Boat boat = PrefabFactory.CreateBoat(this, SelectedUnitType);
-        Boat = boat;
+        Boat = PrefabFactory.CreateBoat(this, SelectedUnitType); ;
 
         return true;
+    }
+
+    public void CancelBoat()
+    {
+        if(Boat != null)
+        {
+            Boat.CancelDeploy();
+            Destroy(Boat.gameObject);
+        }
     }
 
     public bool DeployBoat()

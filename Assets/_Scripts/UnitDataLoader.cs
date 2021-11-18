@@ -30,12 +30,9 @@ public class UnitDataLoader
     public static void LoadDataMap()
     {
         dataMap = new Dictionary<UnitType, UnitData>();
-        IEnumerable<string> files = Directory.GetFiles("Assets/Resources/" + UNIT_DATA_PATH)
-            .Where(f => !f.Contains(".meta"))
-            .Select(f => Path.GetFileNameWithoutExtension(f));
-        foreach(string file in files)
+        UnitData[] datas = Resources.LoadAll<UnitData>(UNIT_DATA_PATH);
+        foreach(UnitData data in datas)
         {
-            UnitData data = Resources.Load<UnitData>(UNIT_DATA_PATH + file);
             dataMap[data.type] = data;
         }
     }

@@ -11,7 +11,7 @@ public class Clock : MonoBehaviour
     public float startTime;
     float time;
     Text text;
-    bool finished;
+    public bool finished;
 
     public event Action clockFinished;
 

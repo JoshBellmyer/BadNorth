@@ -115,6 +115,12 @@ public class Boat : MonoBehaviour {
 		return true;
 	}
 
+	public void CancelDeploy()
+	{
+		laser.SetActive(false);
+		selector.SetActive(false);
+	}
+
 	public void MountUnits (List<Unit> unitList) {
 		int index = 0;
 

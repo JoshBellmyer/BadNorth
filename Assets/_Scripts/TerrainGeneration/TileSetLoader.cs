@@ -25,12 +25,9 @@ public class TileSetLoader {
 	public static void LoadTileSetMap()
 	{
 		tileSetMap = new Dictionary<TileSetType, TileSet>();
-		IEnumerable<string> files = Directory.GetFiles("Assets/Resources/" + TILESET_DATA_PATH)
-			.Where(f => !f.Contains(".meta"))
-			.Select(f => Path.GetFileNameWithoutExtension(f));
-		foreach (string file in files)
+		TileSet[] tileSets = Resources.LoadAll<TileSet>(TILESET_DATA_PATH);
+		foreach (TileSet tileSet in tileSets)
 		{
-			TileSet tileSet = Resources.Load<TileSet>(TILESET_DATA_PATH + file);
 			tileSetMap[tileSet.type] = tileSet;
 		}
 	}

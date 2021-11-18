@@ -140,6 +140,8 @@ public abstract class Unit : MonoBehaviour
 
     private void Update()
     {
+        if (InBoat) return;
+
         // There has got to be a better way to implement this.
         float dist = Vector3.Distance(transform.position, _destination);
 
