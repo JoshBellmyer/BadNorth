@@ -37,7 +37,7 @@ public class TitleScreen : UIScreen
         }
         else
         {
-            playerStatus1.text = "Not connected";
+            playerStatus1.text = "Not Connected";
             playerConnected1 = false;
         }
 
@@ -48,7 +48,7 @@ public class TitleScreen : UIScreen
         }
         else
         {
-            playerStatus2.text = "Not connected";
+            playerStatus2.text = "Not Connected";
             playerConnected2 = false;
         }
     }
