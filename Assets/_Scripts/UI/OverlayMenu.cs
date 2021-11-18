@@ -79,6 +79,7 @@ public class OverlayMenu : PlayerMenu
         selectionImage.color = Color.white;
         AddImageToCanvas(selectionImage);
         selectionImage.rectTransform.anchoredPosition = new Vector2(0, 0);
+        selectionImage.transform.localScale = new Vector3(1.1f, 1.1f, 1);
 
         SetSelectedUnitIndex(0);
     }

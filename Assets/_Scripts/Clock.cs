@@ -33,6 +33,10 @@ public class Clock : MonoBehaviour
 
     private void Update()
     {
+        if (Game.instance.isPaused) {
+            return;
+        }
+
         if (!finished)
         {
             time -= Time.deltaTime;
