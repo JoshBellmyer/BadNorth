@@ -102,6 +102,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (Game.instance.isPaused) {
+            return;
+        }
+
         if(DeployCooldown > 0)
         {
             DeployCooldown -= Time.deltaTime;        
