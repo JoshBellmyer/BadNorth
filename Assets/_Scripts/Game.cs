@@ -35,6 +35,7 @@ public class Game : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 
 		PrefabFactory.Initialize();
+		ParticleSpawner.LoadParticles();
 
 		SetUpSceneManagement();
 	}

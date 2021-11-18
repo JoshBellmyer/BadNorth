@@ -36,6 +36,7 @@ public class DamageHelper : MonoBehaviour
         }
 
         SetRed(0.2f);
+        ParticleSpawner.SpawnParticle(transform.position + new Vector3(0, 0.5f, 0), 0, 0.3f);
     }
 
     private void SetRed (float redTime) {

@@ -38,6 +38,8 @@ public abstract class Unit : MonoBehaviour
     private bool _inBoat;
     public int groupAmount;
 
+    public bool onNavMesh;
+
     public static readonly float MAX_PROXIMITY = 5.0f;
 
     internal NavMeshAgent NavMeshAgent {
@@ -154,6 +156,8 @@ public abstract class Unit : MonoBehaviour
             UnPause();
         }
 
+        onNavMesh = _navMeshAgent.isOnNavMesh;
+
         // There has got to be a better way to implement this.
         float dist = Vector3.Distance(transform.position, _destination);
 
@@ -215,6 +219,12 @@ public abstract class Unit : MonoBehaviour
             _navMeshAgent.SetDestination(_targetEnemy.transform.position);
         }
 
+        if (dist > _attackRange) {
+            return;
+        }
+
+        LookAt(_targetEnemy.transform.position);
+
         if (_currentCooldown > 0) {
             _currentCooldown -= Time.deltaTime;
 
@@ -225,12 +235,6 @@ public abstract class Unit : MonoBehaviour
                 return;
             }
         }
-
-        if (dist > _attackRange) {
-            return;
-        }
-
-        LookAt(_targetEnemy.transform.position);
 
         _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
         _currentCooldown = _attackCooldown;

@@ -63,7 +63,7 @@ NavMeshAgent:
   m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 520
+  m_AngularSpeed: 1040
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -112,6 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8e442de225e0b64dbbf8a7fb212c912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _directive: 0
+  _targetEnemy: {fileID: 0}
   _unitType: 2
   _health: 100
   _attackRange: 10
