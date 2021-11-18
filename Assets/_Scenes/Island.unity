@@ -694,7 +694,7 @@ MonoBehaviour:
     lacunarity: 2
     seed: 2369
     offset: {x: 0, y: 0, z: 0}
-  scaleHeight: 1.36
+  scaleHeight: 1
   applyCornerFallOff: 0
   cornerFallOffDistance: 8
   applyTerraces: 1

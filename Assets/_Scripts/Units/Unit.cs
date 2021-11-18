@@ -475,6 +475,10 @@ public abstract class Unit : MonoBehaviour
         Dictionary<NavMeshAgent, LadderUnit> ladders = new Dictionary<NavMeshAgent, LadderUnit>();
 
         foreach (Unit u in units) {
+            if (u == null) {
+                continue;
+            }
+
             if (u is LadderUnit && u != this) {
                 float heightDiff = Mathf.Abs(u.transform.position.y - transform.position.y);
                 float dist = Vector3.Distance(transform.position, u.transform.position);
@@ -548,10 +552,16 @@ public abstract class Unit : MonoBehaviour
             _navMeshAgent.SetDestination(dest1);
         }
 
-        _navMeshAgent.isStopped = false;
+        if (_navMeshAgent.isOnNavMesh) {
+            _navMeshAgent.isStopped = false;
+        }
     }
 
     internal Tuple<NavMeshAgent, NavMeshAgent> SetDummyPath (LadderUnit ladderUnit, Vector3 destination) {
+        if (ladderUnit == null) {
+            return null;
+        }
+
         NavMeshAgent agent1 = UnitManager.instance.GetDummyAgent(transform.position);
         NavMeshAgent agent2 = UnitManager.instance.GetDummyAgent(ladderUnit.GetEdgePos());
 

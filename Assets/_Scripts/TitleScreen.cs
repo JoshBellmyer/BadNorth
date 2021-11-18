@@ -74,4 +74,8 @@ public class TitleScreen : UIScreen
     {
         Game.instance.ExitGame();
     }
+
+    public void OnDestroy () {
+        InputSystem.onDeviceChange -= OnDeviceChange;
+    }
 }

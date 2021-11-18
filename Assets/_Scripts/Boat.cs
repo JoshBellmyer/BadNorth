@@ -137,6 +137,10 @@ public class Boat : MonoBehaviour {
 		following = false;
 
 		foreach (Unit u in mountedUnits) {
+			if (u == null) {
+				return;
+			}
+
 			u.transform.SetParent(null);
 		}
 
