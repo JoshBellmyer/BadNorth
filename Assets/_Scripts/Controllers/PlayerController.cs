@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public Player player;
 
 
-    private void Start()
+    private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         player = GetComponent<Player>();
@@ -35,6 +35,19 @@ public class PlayerController : MonoBehaviour
     public void SetActionMap(string name)
     {
         playerInput.SwitchCurrentActionMap(name);
+    }
+
+    public void SetDevice(InputDevice device)
+    {
+        Debug.Log("Setting player (" + player.playerId + ") to device: " + device);
+        if(device is Keyboard)
+        {
+            playerInput.SwitchCurrentControlScheme(device, DeviceManager.Instance.mouse);
+        }
+        else
+        {
+            playerInput.SwitchCurrentControlScheme(device);
+        }
     }
 
     //This is automatically called from PlayerInput, when the input device has changed

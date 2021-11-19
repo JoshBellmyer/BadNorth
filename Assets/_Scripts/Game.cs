@@ -69,6 +69,9 @@ public class Game : MonoBehaviour {
 		players = new List<PlayerController>();
 		players.Add(PrefabFactory.CreatePlayerController());
 		players.Add(PrefabFactory.CreatePlayerController());
+		Debug.Log(players[0] == players[1]);
+		players[0].SetDevice(DeviceManager.Instance.playerDevices[0]);
+		players[1].SetDevice(DeviceManager.Instance.playerDevices[1]);
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
