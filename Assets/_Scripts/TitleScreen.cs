@@ -82,7 +82,8 @@ public class TitleScreen : UIScreen
     {
         DeviceManager.Instance.SetPlayerDevice(0, player1DeviceSelection.value);
         DeviceManager.Instance.SetPlayerDevice(1, player2DeviceSelection.value);
-        if (DeviceManager.Instance.HasValidDevices)
+
+        if (DeviceManager.Instance.HasValidDevices && player2DeviceSelection.captionText.text != "Missing")
         {
             SceneManager.LoadScene("Island");
         }
