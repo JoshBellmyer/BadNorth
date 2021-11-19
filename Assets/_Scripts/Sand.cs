@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Sand : MonoBehaviour
 {
-    [SerializeField] float risingSpeed;
+    [SerializeField] private float risingSpeed;
+    [SerializeField] private float scrollSpeed;
+    [SerializeField] private Material waveMaterial;
 
     public static float height;
+    private float textureOffset;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +19,18 @@ public class Sand : MonoBehaviour
 
     private void Update () {
         height = transform.position.y - 0.5f;
+
+        if (Game.instance.isPaused) {
+            return;
+        }
+
+        textureOffset += (Time.deltaTime * scrollSpeed);
+
+        if (textureOffset > 1) {
+            textureOffset -= 1;
+        }
+
+        waveMaterial.SetTextureOffset("_MainTex", new Vector2(0, textureOffset));
     }
 
     private void OnClockFinished()

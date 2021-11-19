@@ -23,6 +23,7 @@ public abstract class Unit : MonoBehaviour
     private bool resumeMovement;
     private Vector3 knockDestination;
     private bool paused;
+    public float lastAttacked;
 
     [SerializeField] protected Unit _targetEnemy;
     private float _currentCooldown;
@@ -38,7 +39,7 @@ public abstract class Unit : MonoBehaviour
     private bool _inBoat;
     public int groupAmount;
 
-    public bool onNavMesh;
+     public bool tempBool;
 
     public static readonly float MAX_PROXIMITY = 5.0f;
 
@@ -156,7 +157,12 @@ public abstract class Unit : MonoBehaviour
             UnPause();
         }
 
-        onNavMesh = _navMeshAgent.isOnNavMesh;
+        if (_navMeshAgent.isOnNavMesh) {
+            tempBool = _navMeshAgent.isStopped;
+        }
+        else {
+            tempBool = false;
+        }
 
         // There has got to be a better way to implement this.
         float dist = Vector3.Distance(transform.position, _destination);
@@ -165,9 +171,17 @@ public abstract class Unit : MonoBehaviour
         {
             _directive = Directive.NONE;
         }
-        if (_navMeshAgent.isOnNavMesh && _canAttack && (_directive == Directive.NONE) && FindAttack() && !_navMeshAgent.isStopped)
+        if (_navMeshAgent.isOnNavMesh && _canAttack && (_directive == Directive.NONE || lastAttacked > 0) && FindAttack() && !_navMeshAgent.isStopped)
         {
             _directive = Directive.ATTACK;
+        }
+
+        if (lastAttacked > 0) {
+            lastAttacked -= Time.deltaTime;
+
+            if (lastAttacked <= 0) {
+                lastAttacked = 0;
+            }
         }
 
         if (!climbing) {
