@@ -10,52 +10,79 @@ public class TitleScreen : UIScreen
 {
     [SerializeField] Text missingPlayerText;
 
-    [SerializeField] Text playerStatus1;
-    [SerializeField] Text playerStatus2;
-
-    bool playerConnected1;
-    bool playerConnected2;
+    [SerializeField] Dropdown player1DeviceSelection;
+    [SerializeField] Dropdown player2DeviceSelection;
 
     private void Start()
     {
         InputSystem.onDeviceChange += OnDeviceChange;
-        UpdateDevices();
+        player1DeviceSelection.onValueChanged.AddListener(OnDevice1SelectionChange);
+        player2DeviceSelection.onValueChanged.AddListener(OnDevice2SelectionChange);
+        SetUpDeviceSelection();
     }
 
     private void OnDeviceChange(InputDevice arg1, InputDeviceChange arg2)
     {
-        UpdateDevices();
+        SetUpDeviceSelection();
     }
 
-    private void UpdateDevices()
+    private void SetUpDeviceSelection()
     {
-        missingPlayerText.gameObject.SetActive(false);
-        if(InputSystem.GetDevice<Keyboard>() != null)
+        player1DeviceSelection.options.Clear();
+        player2DeviceSelection.options.Clear();
+        foreach (InputDevice device in DeviceManager.Instance.supportedDevices)
         {
-            playerStatus1.text = "Keyboard";
-            playerConnected1 = true;
+            Dropdown.OptionData data = new Dropdown.OptionData(device.name);
+            player1DeviceSelection.options.Add(data);
+            player2DeviceSelection.options.Add(data);
         }
-        else
-        {
-            playerStatus1.text = "Not Connected";
-            playerConnected1 = false;
-        }
+        SetInitialDeviceSelections();
 
-        if (InputSystem.GetDevice<Gamepad>() != null)
+        missingPlayerText.gameObject.SetActive(false);
+    }
+
+    private void SetInitialDeviceSelections() // TODO: load previous selections
+    {
+        player1DeviceSelection.value = 1; // set twice to get the correct text
+        player1DeviceSelection.value = 0;
+
+        if (player1DeviceSelection.options.Count > 1)
         {
-            playerStatus2.text = "Gamepad";
-            playerConnected2 = true;
+            player2DeviceSelection.value = 1;
+            player2DeviceSelection.enabled = true;
         }
         else
         {
-            playerStatus2.text = "Not Connected";
-            playerConnected2 = false;
+            player2DeviceSelection.captionText.text = "Missing";
+            player2DeviceSelection.enabled = false;
+            if (player2DeviceSelection.gameObject == TitleUIManager.instance.GetSelected())
+                TitleUIManager.instance.SetSelected(firstSelected);
         }
+    }
+
+    private void OnDevice1SelectionChange(int value)
+    {
+        if(value == player2DeviceSelection.value)
+        {
+            player2DeviceSelection.value = (player2DeviceSelection.value + 1) % player2DeviceSelection.options.Count;
+        }
+        missingPlayerText.gameObject.SetActive(false);
+    }
+
+    private void OnDevice2SelectionChange(int value)
+    {
+        if (value == player1DeviceSelection.value)
+        {
+            player1DeviceSelection.value = (player1DeviceSelection.value + 1) % player1DeviceSelection.options.Count;
+        }
+        missingPlayerText.gameObject.SetActive(false);
     }
 
     public void OnPlay()
     {
-        if(playerConnected1 && playerConnected2)
+        DeviceManager.Instance.SetPlayerDevice(0, player1DeviceSelection.value);
+        DeviceManager.Instance.SetPlayerDevice(1, player2DeviceSelection.value);
+        if (DeviceManager.Instance.HasValidDevices)
         {
             SceneManager.LoadScene("Island");
         }

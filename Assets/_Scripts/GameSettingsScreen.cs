@@ -39,7 +39,6 @@ public class GameSettingsScreen : UIScreen
     public void OnBack()
     {
         Game.instance.selectedTileSetType = valueTypeMap[tileSetSelection.value];
-        Debug.Log("Set TileSet to be " + Game.instance.selectedTileSetType);
         manager.SetUIScreen("Title Screen");
     }
 }
