@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
 
     public void SetDevice(InputDevice device)
     {
-        Debug.Log("Setting player (" + player.playerId + ") to device: " + device);
         if(device is Keyboard)
         {
             playerInput.SwitchCurrentControlScheme(device, DeviceManager.Instance.mouse);
@@ -59,7 +58,6 @@ public class PlayerController : MonoBehaviour
         {
             currentControlScheme = playerInput.currentControlScheme;
 
-            Debug.Log("OnControlsChanged");
             RemoveAllBindingOverrides();
         }
     }

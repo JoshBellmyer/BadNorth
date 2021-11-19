@@ -24,10 +24,18 @@ public class DeviceManager : Singleton<DeviceManager>
         }
 	}
 
-	private void Start()
-	{
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+			Destroy(gameObject);
+			return;
+        }
 		DontDestroyOnLoad(gameObject);
+	}
 
+    private void Start()
+	{
 		InputSystem.onDeviceChange += OnDeviceChange;
 		SceneManager.sceneLoaded += HandleSceneChange;
 
@@ -49,7 +57,6 @@ public class DeviceManager : Singleton<DeviceManager>
 
 	private void FinalizeDevices()
 	{
-		Debug.Log("Finalizing Devices...");
 		foreach (InputDevice device in InputSystem.devices)
 		{
 			InputSystem.DisableDevice(device);
@@ -67,8 +74,14 @@ public class DeviceManager : Singleton<DeviceManager>
 
 	public void SetPlayerDevice(int player, int deviceNum)
     {
-		Debug.Log("Setting player " + player + " to device: " + supportedDevices[deviceNum]);
-		playerDevices[player] = supportedDevices[deviceNum];
+        try
+		{
+			playerDevices[player] = supportedDevices[deviceNum];
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+			playerDevices[player] = null;
+		}
 	}
 
 	private void OnDeviceChange(InputDevice arg1, InputDeviceChange arg2)

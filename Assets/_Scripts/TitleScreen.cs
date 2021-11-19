@@ -21,6 +21,11 @@ public class TitleScreen : UIScreen
         SetUpDeviceSelection();
     }
 
+    private void OnDeviceChange(InputDevice arg1, InputDeviceChange arg2)
+    {
+        SetUpDeviceSelection();
+    }
+
     private void SetUpDeviceSelection()
     {
         player1DeviceSelection.options.Clear();
@@ -31,9 +36,28 @@ public class TitleScreen : UIScreen
             player1DeviceSelection.options.Add(data);
             player2DeviceSelection.options.Add(data);
         }
+        SetInitialDeviceSelections();
+
+        missingPlayerText.gameObject.SetActive(false);
+    }
+
+    private void SetInitialDeviceSelections() // TODO: load previous selections
+    {
         player1DeviceSelection.value = 1; // set twice to get the correct text
         player1DeviceSelection.value = 0;
-        player2DeviceSelection.value = 1;
+
+        if (player1DeviceSelection.options.Count > 1)
+        {
+            player2DeviceSelection.value = 1;
+            player2DeviceSelection.enabled = true;
+        }
+        else
+        {
+            player2DeviceSelection.captionText.text = "Missing";
+            player2DeviceSelection.enabled = false;
+            if (player2DeviceSelection.gameObject == TitleUIManager.instance.GetSelected())
+                TitleUIManager.instance.SetSelected(firstSelected);
+        }
     }
 
     private void OnDevice1SelectionChange(int value)
@@ -42,6 +66,7 @@ public class TitleScreen : UIScreen
         {
             player2DeviceSelection.value = (player2DeviceSelection.value + 1) % player2DeviceSelection.options.Count;
         }
+        missingPlayerText.gameObject.SetActive(false);
     }
 
     private void OnDevice2SelectionChange(int value)
@@ -50,18 +75,21 @@ public class TitleScreen : UIScreen
         {
             player1DeviceSelection.value = (player1DeviceSelection.value + 1) % player1DeviceSelection.options.Count;
         }
-    }
-
-    private void OnDeviceChange(InputDevice arg1, InputDeviceChange arg2)
-    {
-        SetUpDeviceSelection();
+        missingPlayerText.gameObject.SetActive(false);
     }
 
     public void OnPlay()
     {
         DeviceManager.Instance.SetPlayerDevice(0, player1DeviceSelection.value);
         DeviceManager.Instance.SetPlayerDevice(1, player2DeviceSelection.value);
-        SceneManager.LoadScene("Island");
+        if (DeviceManager.Instance.HasValidDevices)
+        {
+            SceneManager.LoadScene("Island");
+        }
+        else
+        {
+            missingPlayerText.gameObject.SetActive(true);
+        }
     }
 
     public void OnGameSettings()

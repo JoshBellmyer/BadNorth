@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class TitleUIManager : MonoBehaviour
 {
-    TitleUIManager instance;
+    public static TitleUIManager instance;
     [SerializeField] List<UIScreen> uiScreens;
 	EventSystem eventSystem;
 
@@ -34,12 +34,22 @@ public class TitleUIManager : MonoBehaviour
 			if(go.name == uiName)
             {
 				go.SetActive(true);
-				eventSystem.SetSelectedGameObject(screen.firstSelected, new BaseEventData(eventSystem));
+				SetSelected(screen.firstSelected);
             }
             else
             {
 				go.SetActive(false);
             }
         }
+    }
+
+	public void SetSelected(GameObject selected)
+    {
+		eventSystem.SetSelectedGameObject(selected, new BaseEventData(eventSystem));
+	}
+
+	public GameObject GetSelected()
+    {
+		return eventSystem.currentSelectedGameObject;
     }
 }
