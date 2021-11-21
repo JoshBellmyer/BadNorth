@@ -9,11 +9,6 @@ public class ArcherUnit : Unit
     public static readonly float LAUNCH_SPEED = 5.0F;
     public static readonly int HEALTH = 100;
 
-    internal ArcherUnit() : base(HEALTH)
-    {
-
-    }
-
     protected override bool FindAttack()
     {
         throw new System.NotImplementedException();

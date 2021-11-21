@@ -9,9 +9,4 @@ public class DefaultUnit : Unit
     {
         get => 100;
     }
-
-    internal DefaultUnit() : base(HEALTH)
-    {
-        
-    }
 }

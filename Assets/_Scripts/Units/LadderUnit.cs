@@ -26,12 +26,6 @@ public class LadderUnit : Unit
         set { _occupied = value; }
     }
 
-
-    internal LadderUnit() : base(HEALTH)
-    {
-
-    }
-
     protected override void UnitUpdate () {
         if (attaching) {
             if (Vector3.Distance(transform.position, _destination) < 0.1f) {

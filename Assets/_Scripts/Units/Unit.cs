@@ -47,11 +47,6 @@ public abstract class Unit : MonoBehaviour
         get => _navMeshAgent;
     }
 
-    protected Unit(int health)
-    {
-        _health = health;
-    }
-
     internal bool CanMove
     {
         get => _canMove;
