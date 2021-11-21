@@ -43,7 +43,10 @@ public class Sand : MonoBehaviour
     {
         while (true)
         {
-            transform.position += new Vector3(0, risingSpeed * Time.deltaTime, 0);
+            if (!Game.instance.isPaused) {
+                transform.position += new Vector3(0, risingSpeed * Time.deltaTime, 0);
+            }
+            
             yield return null;
         }
     }

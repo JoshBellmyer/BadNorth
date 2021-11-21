@@ -16,7 +16,7 @@ public class ArcherUnit : Unit
 
     protected override bool FindAttack()
     {
-        throw new System.NotImplementedException();
+        // throw new System.NotImplementedException();
 
         IOrderedEnumerable<Unit> t = GetOrderedEnemiesWithin(MAX_SIGHT_RANGE);
         foreach (Unit u in t)

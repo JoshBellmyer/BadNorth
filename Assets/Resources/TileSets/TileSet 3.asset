@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e4e05b0f6f2f4831a68d3b728eb4b17, type: 3}
+  m_Name: TileSet 3
+  m_EditorClassIdentifier: 
+  type: 3
+  tileSetName: 3
+  topType: 1
+  topLayers: 3
+  topMinLayer: 1
+  models:
+  - variations:
+    - {fileID: 1092448020752765243, guid: 28734358e222d4f15ab1753a926bf3cb, type: 3}
+    tVariations:
+    - {fileID: 6018597668278051846, guid: 3ca8be1365fdc41c9bba0a34d6cc07f4, type: 3}
+  - variations:
+    - {fileID: 4338545112719590274, guid: 4877e81b520a349e3aca94036835c5ea, type: 3}
+    tVariations:
+    - {fileID: 1818345570937006752, guid: 07e75d714a9c64dbbb7a9dec42fc55c1, type: 3}
+  - variations:
+    - {fileID: 1496210871532096154, guid: df55971a4a64e4d1f8557e10e85ba906, type: 3}
+    tVariations:
+    - {fileID: 3069246000019105348, guid: b28eede59f969466c969b4227accfeaa, type: 3}
+  - variations:
+    - {fileID: 3818747448773670560, guid: 8929aa626261446399e2638dcb3a86ab, type: 3}
+    tVariations:
+    - {fileID: 1692396997252679718, guid: b520573c79db04bd79215ba4920044ea, type: 3}
+  - variations:
+    - {fileID: 4092004007650504485, guid: 3ec3c54fb92a64e9b9427b10d4fc231e, type: 3}
+    tVariations:
+    - {fileID: 2543502816956172856, guid: 12b54329273cb424abf5bc49fe7bd8a5, type: 3}
+  - variations:
+    - {fileID: 8310039109505940210, guid: a7a59d47791144f9193c9fc30f6a2583, type: 3}
+    tVariations:
+    - {fileID: 4653400254681250003, guid: 1d39b6b2adc904bf3b56000c008f1fb1, type: 3}
+  - variations:
+    - {fileID: 6248155194061553519, guid: ce6999c2738cb416f9654b428204e8d8, type: 3}
+    tVariations:
+    - {fileID: 860094849356568587, guid: 8fdafca2c9d7941e5a6a7589a454986a, type: 3}
+  - variations:
+    - {fileID: 8277983113027173351, guid: 24a422546213e47a7a4ecf678b48be2c, type: 3}
+    tVariations:
+    - {fileID: 3707483007827249020, guid: aad8711340ded4d7faaf33473eb12400, type: 3}
+  - variations:
+    - {fileID: 8250113590407786055, guid: 7ef23360388434238a158170da5959c9, type: 3}
+    tVariations:
+    - {fileID: 4148970418846131111, guid: 4638db2a69e1c4abc98eb795ea0e8d29, type: 3}
+  - variations:
+    - {fileID: 8798719933957275119, guid: 74ccad3e7c0ec4881a4076a6cf15ce85, type: 3}
+    tVariations:
+    - {fileID: 7267051516613724300, guid: b97c5913d378e4046a49a2d9c1c12681, type: 3}
+  - variations:
+    - {fileID: 4514610926570007663, guid: 72653c9519b3e400fa7a2dbaea6d63e8, type: 3}
+    tVariations:
+    - {fileID: 4771592034895660498, guid: 5d47f01b1180349c990475d330091884, type: 3}
+  - variations:
+    - {fileID: 5611143830957425111, guid: 1f6e50c793d384e94ab89ef751b73553, type: 3}
+    tVariations:
+    - {fileID: 7745620259678173672, guid: d091bf580ef0445a0bbc61b81cb5625e, type: 3}
+  - variations:
+    - {fileID: 68405005811737081, guid: 6c93b9e69e2a34790a956732b2c5effd, type: 3}
+    tVariations:
+    - {fileID: 7614323285416678494, guid: 92bb877d75e4c4d75a4502c9a899d464, type: 3}
+  - variations:
+    - {fileID: 6644360087443387089, guid: e14267aa2e3fc498a923b71f47848329, type: 3}
+    tVariations:
+    - {fileID: 3723191504418209669, guid: 99165bf67d4c14f739ce613486e4301b, type: 3}
+  - variations:
+    - {fileID: 1689089498789175252, guid: 03a5893c7b31d4f079d96f29f6ec5c1a, type: 3}
+    tVariations:
+    - {fileID: 8031050684269335780, guid: 7ee0b3e3c6e2e44718844115e28a4b3a, type: 3}
+  - variations:
+    - {fileID: 1856967216519920619, guid: b253c6a218bfe40b3b72a43e8673c74a, type: 3}
+    tVariations:
+    - {fileID: 3477431623881053000, guid: ad571d5b665b54e96ab160f834a0b267, type: 3}
+  - variations:
+    - {fileID: 277861799475857596, guid: 3b8bd6bc16ebf4032af78301eb6fac7b, type: 3}
+    tVariations:
+    - {fileID: 1589656859669410357, guid: 0d480f965d16c4eeb8b2b389b6062909, type: 3}
+  - variations:
+    - {fileID: 4938162317479173483, guid: 37b1293ee7f6940bf92864a8544f39bd, type: 3}
+    tVariations:
+    - {fileID: 319447543699358733, guid: 17304d18b18504620a8a96fd9cd669b7, type: 3}
+  material: {fileID: 2100000, guid: a12cbda2a7a624e9fbfb58e5e95b0df7, type: 2}
