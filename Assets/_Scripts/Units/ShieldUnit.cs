@@ -5,8 +5,4 @@ using UnityEngine;
 public class ShieldUnit : Unit
 {
     public static readonly int HEALTH = 100;
-    internal ShieldUnit() : base(HEALTH)
-    {
-
-    }
 }

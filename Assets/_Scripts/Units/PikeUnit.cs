@@ -5,9 +5,4 @@ using UnityEngine;
 public class PikeUnit : Unit
 {
     public static readonly int HEALTH = 100;
-
-    internal PikeUnit() : base(HEALTH)
-    {
-
-    }
 }
