@@ -18,6 +18,8 @@ public class Game : MonoBehaviour {
 
 	public TileSetType selectedTileSetType;
 
+	public Action<string> OnDeclareWinner;
+
 
 	private void Start()
 	{
@@ -50,9 +52,12 @@ public class Game : MonoBehaviour {
         }
     }
 
-	private void OnGameOver()
+	private void OnTeamUnitRemoved(string team, int count)
     {
-		throw new NotImplementedException();
+		if (count == 0)
+        {
+			OnDeclareWinner?.Invoke(TeamManager.OtherTeam(team));
+        }
     }
 
     public void HandleSceneChange(Scene scene, LoadSceneMode mode)
@@ -76,6 +81,8 @@ public class Game : MonoBehaviour {
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
+		TeamManager.instance.OnTeamUnitRemoved += OnTeamUnitRemoved;
 	}
 
 	public bool IsPlayerRegistered(PlayerController player)
@@ -93,6 +100,7 @@ public class Game : MonoBehaviour {
 
 	public void SwitchToMainMenu()
     {
+		TeamManager.instance.OnTeamUnitRemoved -= OnTeamUnitRemoved;
 		SceneManager.LoadScene("Title");
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class TeamManager : MonoBehaviour
 {
     public static TeamManager instance;
 
+    public Action<string, int> OnTeamUnitRemoved;
 
     private Dictionary<string, HashSet<Unit>> dictionary = new Dictionary<string, HashSet<Unit>>();
 
@@ -21,6 +23,11 @@ public class TeamManager : MonoBehaviour
         }
     }
 
+    public static string OtherTeam(string team)
+    {
+        return team == "1" ? "2" : "1";
+    }
+
     public void Add(string team, Unit unit)
     {
         if (!dictionary.ContainsKey(team))
@@ -32,6 +39,8 @@ public class TeamManager : MonoBehaviour
     public void Remove(string team, Unit unit)
     {
         dictionary[team].Remove(unit);
+
+        OnTeamUnitRemoved?.Invoke(team, dictionary[team].Count);
     }
 
     public HashSet<Unit> GetOnTeam(string team)
