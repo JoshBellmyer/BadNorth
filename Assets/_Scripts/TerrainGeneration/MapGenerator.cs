@@ -28,7 +28,7 @@ public class MapGenerator : MonoBehaviour {
 		terrainGenerator.GenerateMap();
 		float[,] noise = terrainGenerator.GenerateMapNoise();
 		TileData tileData = new TileData(noise, meshScale);
-		TileSet tileSet = TileSetLoader.GetTileSet(Game.instance.selectedTileSetType);
+		TileSet tileSet = Game.instance.selectedTileSet;
 
 		filter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, terrainGenerator.meshFilter);
 		renderer.material = tileSet.material;

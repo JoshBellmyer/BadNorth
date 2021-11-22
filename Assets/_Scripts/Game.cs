@@ -18,6 +18,7 @@ public class Game : MonoBehaviour {
 	public const int everythingMask = 0x7FFFFFFF;
 
 	public TileSetType selectedTileSetType;
+	public TileSet selectedTileSet;
 
 
 	private void Start()
@@ -66,7 +67,8 @@ public class Game : MonoBehaviour {
     public void HandleSceneChange(Scene scene, LoadSceneMode mode)
     {
 		if(scene.name != "Title")
-        {
+		{
+			Game.instance.selectedTileSet = TileSetLoader.GetTileSet(Game.instance.selectedTileSetType);
 			SetupGame();
         }
     }
