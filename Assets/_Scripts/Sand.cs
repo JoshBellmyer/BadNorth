@@ -15,6 +15,9 @@ public class Sand : MonoBehaviour
     void Start()
     {
         Clock.instance.clockFinished += OnClockFinished;
+
+        TileSet tileSet = TileSetLoader.GetTileSet(Game.instance.selectedTileSetType);
+        waveMaterial.color = tileSet.sandColor;
     }
 
     private void Update () {

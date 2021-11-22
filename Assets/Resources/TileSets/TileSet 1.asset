@@ -79,3 +79,4 @@ MonoBehaviour:
     - {fileID: 4938162317479173483, guid: 37b1293ee7f6940bf92864a8544f39bd, type: 3}
     tVariations: []
   material: {fileID: 2100000, guid: a12cbda2a7a624e9fbfb58e5e95b0df7, type: 2}
+  sandColor: {r: 1, g: 0.8627451, b: 0.5803922, a: 1}

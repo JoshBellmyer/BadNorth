@@ -13,6 +13,7 @@ public class TileSet : ScriptableObject {
 	public int topMinLayer;
 	public TileGroup[] models;
 	public Material material;
+	public Color sandColor;
 
 
 	public enum TopType {
