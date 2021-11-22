@@ -1541,7 +1541,7 @@ MonoBehaviour:
   winTexts:
   - {fileID: 306157001}
   - {fileID: 309850534}
-  startTime: 150
+  startTime: 210
   time: 0
   finished: 0
 --- !u!1 &2127228804
