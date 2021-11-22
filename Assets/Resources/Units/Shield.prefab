@@ -333,7 +333,7 @@ MonoBehaviour:
   lastAttacked: 0
   _targetEnemy: {fileID: 0}
   _unitType: 4
-  _health: 40
+  _health: 20
   _attackRange: 0.5
   _attackDistance: 2
   _attackCooldown: 2
