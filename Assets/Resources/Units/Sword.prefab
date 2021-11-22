@@ -403,9 +403,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _directive: 0
+  lastAttacked: 0
   _targetEnemy: {fileID: 0}
   _unitType: 0
-  _health: 15
+  _health: 8
   _attackRange: 0.5
   _attackDistance: 2
   _attackCooldown: 1
