@@ -13,11 +13,6 @@ public class ArcherUnit : Unit
     private int teamIndex;
     private bool currentUseB = false;
 
-    internal ArcherUnit() : base(HEALTH)
-    {
-
-    }
-
     protected override void UnitStart () {
         teamIndex = int.Parse(Team) - 1;
     }
