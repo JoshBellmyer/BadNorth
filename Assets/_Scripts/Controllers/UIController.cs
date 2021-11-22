@@ -25,16 +25,6 @@ public class UIController : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         player.SelectedUnitIndex = 0;
         playerUIManager.switchMenuEvent += OnSwitchMenu;
-        Game.instance.OnDeclareWinner += OnDeclareWinner;
-    }
-
-    private void OnDeclareWinner(string team)
-    {
-        Game.instance.Pause();
-
-        playerController.SetControlsActivated(true);
-        playerController.SetActionMap("UI");
-        playerUIManager.SwitchMenu(typeof(GameOverMenu));
     }
 
     public void OnSwitchMenu()

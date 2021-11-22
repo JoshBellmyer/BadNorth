@@ -11,26 +11,18 @@ public class Sand : MonoBehaviour
     public static float height;
     private float textureOffset;
 
-    private bool stopRising;
-
     // Start is called before the first frame update
     void Start()
     {
         Clock.instance.clockFinished += OnClockFinished;
-        Game.instance.OnDeclareWinner += OnDeclareWinner;
-    }
-
-    private void OnDeclareWinner(string team)
-    {
-        stopRising = true;
     }
 
     private void Update () {
+        height = transform.position.y - 0.5f;
+
         if (Game.instance.isPaused) {
             return;
         }
-
-        height = transform.position.y - 0.5f;
 
         textureOffset += (Time.deltaTime * scrollSpeed);
 
@@ -51,10 +43,6 @@ public class Sand : MonoBehaviour
     {
         while (true)
         {
-            if (Game.instance.isPaused)
-            {
-                yield return null;
-            }
             transform.position += new Vector3(0, risingSpeed * Time.deltaTime, 0);
             yield return null;
         }
