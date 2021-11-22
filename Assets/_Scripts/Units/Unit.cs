@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public abstract class Unit : MonoBehaviour
 {
     private NavMeshAgent _navMeshAgent;
-    [SerializeField] private Directive _directive;
+    [SerializeField] protected Directive _directive;
     private string _team;
     private Group _group;
     protected Vector3 _destination;
@@ -26,20 +26,20 @@ public abstract class Unit : MonoBehaviour
     public float lastAttacked;
 
     [SerializeField] protected Unit _targetEnemy;
-    private float _currentCooldown;
+    protected float _currentCooldown;
 
     [SerializeField] private UnitType _unitType;
     [SerializeField] private int _health;
     [SerializeField] private float _attackRange;
     [SerializeField] private float _attackDistance;
-    [SerializeField] private float _attackCooldown;
+    [SerializeField] protected float _attackCooldown;
     [SerializeField] private DamageType _damageType;
     private bool _canMove;
     private bool _canAttack;
     private bool _inBoat;
     public int groupAmount;
 
-     public bool tempBool;
+     // public bool tempBool;
 
     public static readonly float MAX_PROXIMITY = 5.0f;
 
@@ -116,7 +116,7 @@ public abstract class Unit : MonoBehaviour
         get => _unitType;
     }
 
-    enum Directive
+    protected enum Directive
     {
         MOVE, ATTACK, NONE
     }
@@ -135,7 +135,11 @@ public abstract class Unit : MonoBehaviour
         teamColor = GetComponent<TeamColor>();
         teamColor.SetColor(int.Parse(_team));
         renderers = GetComponentsInChildren<MeshRenderer>();
+
+        UnitStart();
     }
+
+    protected virtual void UnitStart () {}
 
     private void Update()
     {
@@ -152,12 +156,12 @@ public abstract class Unit : MonoBehaviour
             UnPause();
         }
 
-        if (_navMeshAgent.isOnNavMesh) {
-            tempBool = _navMeshAgent.isStopped;
-        }
-        else {
-            tempBool = false;
-        }
+        // if (_navMeshAgent.isOnNavMesh) {
+        //     tempBool = _navMeshAgent.isStopped;
+        // }
+        // else {
+        //     tempBool = false;
+        // }
 
         // There has got to be a better way to implement this.
         float dist = Vector3.Distance(transform.position, _destination);

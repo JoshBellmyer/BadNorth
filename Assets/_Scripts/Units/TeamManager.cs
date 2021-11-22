@@ -32,6 +32,10 @@ public class TeamManager : MonoBehaviour
     public void Remove(string team, Unit unit)
     {
         dictionary[team].Remove(unit);
+
+        if (Clock.instance.time < 60 && dictionary[team].Count < 1) {
+            Game.OnGameOver(team);
+        }
     }
 
     public HashSet<Unit> GetOnTeam(string team)

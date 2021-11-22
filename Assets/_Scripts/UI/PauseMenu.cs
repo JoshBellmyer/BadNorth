@@ -6,6 +6,7 @@ public class PauseMenu : PlayerMenu
 {
     public void OnMainMenuButton()
     {
+        Game.instance.Unpause();
         Game.instance.SwitchToMainMenu();
     }
 

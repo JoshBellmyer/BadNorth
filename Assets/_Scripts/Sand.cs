@@ -15,6 +15,9 @@ public class Sand : MonoBehaviour
     void Start()
     {
         Clock.instance.clockFinished += OnClockFinished;
+
+        TileSet tileSet = Game.instance.selectedTileSet;
+        waveMaterial.color = tileSet.sandColor;
     }
 
     private void Update () {
@@ -43,7 +46,10 @@ public class Sand : MonoBehaviour
     {
         while (true)
         {
-            transform.position += new Vector3(0, risingSpeed * Time.deltaTime, 0);
+            if (!Game.instance.isPaused) {
+                transform.position += new Vector3(0, risingSpeed * Time.deltaTime, 0);
+            }
+            
             yield return null;
         }
     }

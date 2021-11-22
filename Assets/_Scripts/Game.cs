@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour {
 
@@ -17,6 +18,7 @@ public class Game : MonoBehaviour {
 	public const int everythingMask = 0x7FFFFFFF;
 
 	public TileSetType selectedTileSetType;
+	public TileSet selectedTileSet;
 
 
 	private void Start()
@@ -50,15 +52,23 @@ public class Game : MonoBehaviour {
         }
     }
 
-	private void OnGameOver()
+	public static void OnGameOver(string losingTeam)
     {
-		throw new NotImplementedException();
+		string winningColor = losingTeam == "1" ? "yellow" : "blue";
+
+		// Debug.Log($"The {winningColor} team wins!");
+		foreach (Text text in Clock.instance.winTexts) {
+			text.text = $"The {winningColor} team wins!";
+		}
+
+		instance.Pause();
     }
 
     public void HandleSceneChange(Scene scene, LoadSceneMode mode)
     {
 		if(scene.name != "Title")
-        {
+		{
+			Game.instance.selectedTileSet = TileSetLoader.GetTileSet(Game.instance.selectedTileSetType);
 			SetupGame();
         }
     }

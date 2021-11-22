@@ -8,8 +8,10 @@ public class Clock : MonoBehaviour
 {
     public static Clock instance;
 
+    public Text[] winTexts;
+
     public float startTime;
-    float time;
+    public float time;
     Text text;
     public bool finished;
 

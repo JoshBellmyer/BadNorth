@@ -13,6 +13,7 @@ public class TileSet : ScriptableObject {
 	public int topMinLayer;
 	public TileGroup[] models;
 	public Material material;
+	public Color sandColor;
 
 
 	public enum TopType {
@@ -63,4 +64,5 @@ public enum TileSetType
 	Random = 0,
 	A = 1,
 	B = 2,
+	C = 3,
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TileSet 2
   m_EditorClassIdentifier: 
   type: 2
-  tileSetName: 2
+  tileSetName: Mesa
   topType: 0
   topLayers: 0
   topMinLayer: 0
@@ -75,4 +75,5 @@ MonoBehaviour:
   - variations:
     - {fileID: 9125519834963768401, guid: 1756bee334f4f42348123aec07d04bdc, type: 3}
     tVariations: []
-  material: {fileID: 2100000, guid: c1f616af258f24ff0a6ea79a043caef7, type: 2}
+  material: {fileID: 2100000, guid: fb4a555f7cc184cdda5254e55b6d2461, type: 2}
+  sandColor: {r: 1, g: 0.6787274, b: 0.21226418, a: 1}
