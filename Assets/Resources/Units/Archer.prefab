@@ -116,7 +116,7 @@ MonoBehaviour:
   lastAttacked: 0
   _targetEnemy: {fileID: 0}
   _unitType: 2
-  _health: 100
+  _health: 20
   _attackRange: 10
   _attackDistance: 10
   _attackCooldown: 5

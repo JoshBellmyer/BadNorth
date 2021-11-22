@@ -597,6 +597,10 @@ public abstract class Unit : MonoBehaviour
         }
 
         if (pathAgent != _navMeshAgent) {
+            if (_navMeshAgent.isOnNavMesh) {
+                pathAgent = _navMeshAgent;
+            }
+
             _navMeshAgent.ResetPath();
             _destination = dest1;
             secondDestination = dest2;

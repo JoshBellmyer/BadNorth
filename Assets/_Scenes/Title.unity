@@ -2142,6 +2142,7 @@ MonoBehaviour:
   isPaused: 0
   players: []
   selectedTileSetType: 0
+  selectedTileSet: {fileID: 0}
 --- !u!4 &695625020
 Transform:
   m_ObjectHideFlags: 0

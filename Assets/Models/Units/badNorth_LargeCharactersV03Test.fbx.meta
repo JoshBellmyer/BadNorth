@@ -2,7 +2,13 @@ fileFormatVersion: 2
 guid: 0299cf3152bbc450aa4eeb4e1b8225ec
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: 3384526386783161640
+    second: rig|idleLoop
+  - first:
+      74: 2982955500637902885
+    second: rig|walk
   externalObjects:
   - first:
       type: UnityEngine:Texture2D
