@@ -46,6 +46,6 @@ public class TeamColor : MonoBehaviour {
 [System.Serializable]
 public class MaterialGroup {
 
-	public MeshRenderer meshRenderer;
+	public Renderer meshRenderer;
 	public int materialIndex;
 }
