@@ -39,14 +39,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetDevice(InputDevice device)
     {
-        if(device is Keyboard)
-        {
-            playerInput.SwitchCurrentControlScheme(device, DeviceManager.Instance.mouse);
-        }
-        else
-        {
-            playerInput.SwitchCurrentControlScheme(device);
-        }
+        playerInput.SwitchCurrentControlScheme(device);
     }
 
     //This is automatically called from PlayerInput, when the input device has changed

@@ -64,10 +64,6 @@ public class DeviceManager : Singleton<DeviceManager>
 
 		foreach(InputDevice device in playerDevices)
         {
-			if(device is Keyboard) // Keyboard and mouse go together
-            {
-				InputSystem.EnableDevice(mouse);
-            }
 			InputSystem.EnableDevice(device);
 		}
 	}
@@ -94,10 +90,6 @@ public class DeviceManager : Singleton<DeviceManager>
 		supportedDevices.Clear();
 		foreach (InputDevice device in InputSystem.devices)
 		{
-			if(device is Mouse)
-            {
-				mouse = device;
-            }
 			if (IsDeviceSupported(device))
 			{
 				supportedDevices.Add(device);
@@ -107,7 +99,7 @@ public class DeviceManager : Singleton<DeviceManager>
 
 	private bool IsDeviceSupported(InputDevice device)
 	{
-		if (device is Gamepad || device is Keyboard)
+		if (device is Gamepad || device is Keyboard || device is Mouse)
 		{
 			return true;
 		}

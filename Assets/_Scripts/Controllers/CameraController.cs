@@ -11,9 +11,11 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] float rotateMin;
     [SerializeField] float rotateMax;
+    bool canRotate;
 
     [SerializeField] float zoomMin;
     [SerializeField] float zoomMax;
+    bool canZoom;
 
     private Vector2 rawInputRotation;
     private float rawInputZoom;
@@ -21,10 +23,28 @@ public class CameraController : MonoBehaviour
     private new Camera camera;
     private Player player;
 
+    bool isMouse;
+
     private void Start()
     {
         camera = playerInput.camera;
         player = GetComponent<Player>();
+        if(playerInput.devices[0] is Mouse)
+        {
+            canRotate = false;
+            InputAction enableRotateAction = playerInput.currentActionMap.FindAction("Enable Rotate");
+            enableRotateAction.performed += ctx => canRotate = true;
+            enableRotateAction.canceled += ctx => canRotate = false;
+            InputAction enableZoomAction = playerInput.currentActionMap.FindAction("Enable Zoom");
+            enableZoomAction.performed += ctx => canZoom = true;
+            enableZoomAction.canceled += ctx => canZoom = false;
+            isMouse = true;
+        }
+        else
+        {
+            canRotate = true;
+            canZoom = true;
+        }
 
         SetCullingMask(player.playerId);
     }
@@ -32,17 +52,24 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         // Rotation
-        Vector2 rotation = -rawInputRotation * player.settings.rotateSensitivity;
-        camera.transform.RotateAround(rotationPoint, Vector3.up, rotation.x * Time.deltaTime);
-        if ((camera.transform.rotation.eulerAngles.x < rotateMax && rotation.y < 0) || (camera.transform.rotation.eulerAngles.x > rotateMin && rotation.y > 0))
+        if (canRotate)
         {
-            camera.transform.RotateAround(rotationPoint, -camera.transform.right, rotation.y * Time.deltaTime);
+            if (isMouse) rawInputRotation = -rawInputRotation;
+            Vector2 rotation = -rawInputRotation * player.settings.rotateSensitivity;
+            camera.transform.RotateAround(rotationPoint, Vector3.up, rotation.x * Time.deltaTime);
+            if ((camera.transform.rotation.eulerAngles.x < rotateMax && rotation.y < 0) || (camera.transform.rotation.eulerAngles.x > rotateMin && rotation.y > 0))
+            {
+                camera.transform.RotateAround(rotationPoint, -camera.transform.right, rotation.y * Time.deltaTime);
+            }
         }
 
         // Zoom
-        float zoom = -rawInputZoom * player.settings.zoomSensitivity;
-        camera.orthographicSize += zoom;
-        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, zoomMin, zoomMax);
+        if (canZoom)
+        {
+            float zoom = -rawInputZoom * player.settings.zoomSensitivity;
+            camera.orthographicSize += zoom;
+            camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, zoomMin, zoomMax);
+        }
     }
 
     public void ZoomOut () {
