@@ -113,6 +113,7 @@ MonoBehaviour:
   _attackDistance: 2
   _attackCooldown: 2
   _damageType: 201
+  attackSound: Thud
   groupAmount: 4
 --- !u!114 &9210497780530537670
 MonoBehaviour:

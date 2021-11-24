@@ -34,6 +34,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private float _attackDistance;
     [SerializeField] protected float _attackCooldown;
     [SerializeField] private DamageType _damageType;
+    [SerializeField] protected string attackSound;
     private bool _canMove;
     private bool _canAttack;
     private bool _inBoat;
@@ -275,7 +276,8 @@ public abstract class Unit : MonoBehaviour
                 return;
             }
         }
- 
+    
+        SoundPlayer.PlaySound(attackSound, 0.7f);
         SetAnimation("Attack");
 
         _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
@@ -314,6 +316,8 @@ public abstract class Unit : MonoBehaviour
     }
 
     internal void Die () {
+        SoundPlayer.PlaySound("Unit Death", 1.0f);
+
         if (climbing && targetLadder != null) {
             targetLadder.Occupied = false;
         }

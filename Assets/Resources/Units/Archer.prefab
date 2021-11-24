@@ -121,6 +121,7 @@ MonoBehaviour:
   _attackDistance: 10
   _attackCooldown: 5
   _damageType: 202
+  attackSound: Bow Shoot
   groupAmount: 4
   arrowPrefabs:
   - {fileID: 4161400597045719516, guid: 38960109a1990402bbd51548e67b9122, type: 3}
