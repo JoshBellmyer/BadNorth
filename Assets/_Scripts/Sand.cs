@@ -6,7 +6,8 @@ public class Sand : MonoBehaviour
 {
     [SerializeField] private float risingSpeed;
     [SerializeField] private float scrollSpeed;
-    [SerializeField] private Material waveMaterial;
+    [SerializeField] private MeshRenderer waveRenderer;
+    private Material waveMaterial;
 
     public static float height;
     private float textureOffset;
@@ -15,8 +16,9 @@ public class Sand : MonoBehaviour
     void Start()
     {
         Clock.instance.clockFinished += OnClockFinished;
-
         TileSet tileSet = Game.instance.selectedTileSet;
+        waveMaterial = waveRenderer.material;
+
         waveMaterial.color = tileSet.sandColor;
     }
 

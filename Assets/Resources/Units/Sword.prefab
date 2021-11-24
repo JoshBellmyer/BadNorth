@@ -411,6 +411,7 @@ MonoBehaviour:
   _attackDistance: 2
   _attackCooldown: 1
   _damageType: 203
+  attackSound: Slice
   groupAmount: 4
 --- !u!1 &7682005199596819371
 GameObject:

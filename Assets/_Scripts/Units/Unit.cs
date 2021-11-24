@@ -15,7 +15,7 @@ public abstract class Unit : MonoBehaviour
     private Vector3 secondDestination;
 
     private TeamColor teamColor;
-    private MeshRenderer[] renderers;
+    private Renderer[] renderers;
 
     private bool climbing;
     private bool falling;
@@ -34,10 +34,15 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private float _attackDistance;
     [SerializeField] protected float _attackCooldown;
     [SerializeField] private DamageType _damageType;
+    [SerializeField] protected string attackSound;
     private bool _canMove;
     private bool _canAttack;
     private bool _inBoat;
     public int groupAmount;
+
+    private Animator animator;
+    private string[] animationNames;
+    private string currentAnimation = "";
 
      // public bool tempBool;
 
@@ -134,7 +139,12 @@ public abstract class Unit : MonoBehaviour
     {   
         teamColor = GetComponent<TeamColor>();
         teamColor.SetColor(int.Parse(_team));
-        renderers = GetComponentsInChildren<MeshRenderer>();
+        renderers = GetComponentsInChildren<Renderer>();
+        animator = GetComponentInChildren<Animator>();
+
+        if (animator != null) {
+            InitializeAnimations();
+        }
 
         UnitStart();
     }
@@ -156,6 +166,24 @@ public abstract class Unit : MonoBehaviour
             UnPause();
         }
 
+        if (!climbing) {
+            CheckForGround();
+        }
+
+        if (knockback) {
+            KnockbackUpdate();
+
+            return;
+        }
+        else if (falling) {
+            FallUpdate();
+
+            return;
+        }
+        else if (targetLadder != null) {
+            UpdateLadderMovement();
+        }
+
         // if (_navMeshAgent.isOnNavMesh) {
         //     tempBool = _navMeshAgent.isStopped;
         // }
@@ -166,11 +194,21 @@ public abstract class Unit : MonoBehaviour
         // There has got to be a better way to implement this.
         float dist = Vector3.Distance(transform.position, _destination);
 
-        if (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 1f) && _directive == Directive.MOVE)
-        {
+        // if (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 1f) && _directive == Directive.MOVE) {
+        //     _directive = Directive.NONE;
+        // }
+
+        CanAttack = (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 1f || lastAttacked > 0) && _directive != Directive.ATTACK);
+
+        if (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 0.1f) && _directive == Directive.MOVE) {
+            SetAnimation("Idle");
             _directive = Directive.NONE;
         }
-        if (_navMeshAgent.isOnNavMesh && _canAttack && (_directive == Directive.NONE || lastAttacked > 0) && FindAttack() && !_navMeshAgent.isStopped)
+        // if (dist < 0.1f && _directive == Directive.NONE) {
+            
+        // }
+
+        if (_navMeshAgent.isOnNavMesh && _canAttack && FindAttack() && !_navMeshAgent.isStopped)
         {
             _directive = Directive.ATTACK;
         }
@@ -183,21 +221,7 @@ public abstract class Unit : MonoBehaviour
             }
         }
 
-        if (!climbing) {
-            CheckForGround();
-        }
-
-        if (falling) {
-            FallUpdate();
-        }
-        else if (knockback) {
-            KnockbackUpdate();
-        }
-        else if (targetLadder != null) {
-            UpdateLadderMovement();
-        }
-
-        if (_directive == Directive.MOVE && !climbing) {
+        if (_directive != Directive.NONE && !climbing) {
             UpdateEdgeJumping();
         }
 
@@ -228,11 +252,13 @@ public abstract class Unit : MonoBehaviour
             return;
         }
 
-        if (_navMeshAgent.isOnNavMesh) {
-            _navMeshAgent.SetDestination(_targetEnemy.transform.position);
-        }
-
         if (dist > _attackRange) {
+            if (_navMeshAgent.isOnNavMesh) {
+                _navMeshAgent.SetDestination(_targetEnemy.transform.position);
+            }
+
+            SetAnimation("Walk");
+
             return;
         }
 
@@ -245,9 +271,14 @@ public abstract class Unit : MonoBehaviour
                 _currentCooldown = 0;
             }
             else {
+                SetAnimation("Idle");
+
                 return;
             }
         }
+    
+        SoundPlayer.PlaySound(attackSound, 0.7f);
+        SetAnimation("Attack");
 
         _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
         _currentCooldown = _attackCooldown;
@@ -278,16 +309,19 @@ public abstract class Unit : MonoBehaviour
         return true;
     }
 
-    private void LateUpdate()
-    {
-        if (_health <= 0 || transform.position.y < Sand.height)
-        {
+    private void LateUpdate () {
+        if (_health <= 0 || transform.position.y < Sand.height) {
             Die();
         }
     }
 
-    internal void Die()
-    {
+    internal void Die () {
+        SoundPlayer.PlaySound("Unit Death", 1.0f);
+
+        if (climbing && targetLadder != null) {
+            targetLadder.Occupied = false;
+        }
+
         _group.RemoveUnit(this);
         TeamManager.instance.Remove(_team, this);
 
@@ -387,6 +421,8 @@ public abstract class Unit : MonoBehaviour
         if (transform.position == knockDestination) {
             knockback = false;
             _navMeshAgent.enabled = true;
+
+            CheckForGround();
         }
     }
 
@@ -415,7 +451,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void SetColor (Color color) {
-        foreach (MeshRenderer r in renderers) {
+        foreach (Renderer r in renderers) {
             if (r == null) {
                 continue;
             }
@@ -439,7 +475,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     private void DestroyMaterialInstances () {
-        foreach (MeshRenderer r in renderers) {
+        foreach (Renderer r in renderers) {
             if (r == null) {
                 continue;
             }
@@ -471,6 +507,11 @@ public abstract class Unit : MonoBehaviour
         }
         else if (!falling && !didHit) {
             falling = true;
+
+            if (_navMeshAgent.isOnNavMesh) {
+                _navMeshAgent.ResetPath();
+            }
+            
             _navMeshAgent.enabled = false;
         }
     }
@@ -488,6 +529,9 @@ public abstract class Unit : MonoBehaviour
         if (_navMeshAgent.isOnNavMesh) {
             _navMeshAgent.ResetPath();
         }
+        if (animator != null) {
+            animator.enabled = false;
+        }
 
         paused = true;
     }
@@ -495,6 +539,9 @@ public abstract class Unit : MonoBehaviour
     internal void UnPause () {
         if (_directive == Directive.MOVE) {
             IssueDestination(_destination);
+        }
+        if (animator != null) {
+            animator.enabled = true;
         }
 
         paused = false;
@@ -508,6 +555,8 @@ public abstract class Unit : MonoBehaviour
         if (!_navMeshAgent.isOnNavMesh) {
             return;
         }
+
+        SetAnimation("Walk");
 
         // TODO: Transform destination before setting.
 
@@ -592,11 +641,16 @@ public abstract class Unit : MonoBehaviour
         }
 
         if (pathAgent != _navMeshAgent) {
-            _navMeshAgent.ResetPath();
-            _destination = dest1;
-            secondDestination = dest2;
-            targetLadder = ladders[pathAgent];
-            _navMeshAgent.SetDestination(dest1);
+            if (_navMeshAgent.isOnNavMesh) {
+                _navMeshAgent.ResetPath();
+                _destination = dest1;
+                secondDestination = dest2;
+                targetLadder = ladders[pathAgent];
+                _navMeshAgent.SetDestination(dest1);
+            }
+            else {
+                pathAgent = _navMeshAgent;
+            } 
         }
 
         if (_navMeshAgent.isOnNavMesh) {
@@ -655,6 +709,34 @@ public abstract class Unit : MonoBehaviour
                               select enemy;
         IOrderedEnumerable<Unit> t = e.OrderBy(v => Vector3.Distance(this.transform.position, v.transform.position));
         return t;
+    }
+
+    protected void SetAnimation (string animation) {
+        if (animator == null) {
+            return;
+        }
+        if (currentAnimation == animation) {
+            return;
+        }
+
+        foreach (string str in animationNames) {
+            bool newValue = (str == animation);
+
+            animator.SetBool(str, newValue);
+        }
+
+        currentAnimation = animation;
+    }
+
+    protected void InitializeAnimations () {
+        AnimatorControllerParameter[] parameters = animator.parameters;
+        animationNames = new string[parameters.Length];
+        int index = 0;
+
+        foreach (AnimatorControllerParameter acp in parameters) {
+            animationNames[index] = parameters[index].name;
+            index++;
+        }
     }
 }
 

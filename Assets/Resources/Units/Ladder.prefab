@@ -176,6 +176,7 @@ MonoBehaviour:
   _attackDistance: 0
   _attackCooldown: 0
   _damageType: 0
+  attackSound: Grunt
   groupAmount: 1
   ladder: {fileID: 278406746766360649}
 --- !u!114 &5433238717330562047
