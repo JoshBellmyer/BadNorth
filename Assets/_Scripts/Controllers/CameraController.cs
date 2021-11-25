@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float rotateMin;
     [SerializeField] float rotateMax;
     bool canRotate;
+    float currentRotation; // need to keep track of this because rotation.eulerAngles is inconsistant
 
     [SerializeField] float zoomMin;
     [SerializeField] float zoomMax;
@@ -28,6 +29,7 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         camera = playerInput.camera;
+        currentRotation = camera.transform.rotation.eulerAngles.x;
         player = GetComponent<Player>();
         if(playerInput.devices[0] is Mouse)
         {
@@ -55,11 +57,12 @@ public class CameraController : MonoBehaviour
         if (canRotate)
         {
             if (isMouse) rawInputRotation = -rawInputRotation;
-            Vector2 rotation = -rawInputRotation * player.settings.rotateSensitivity;
-            camera.transform.RotateAround(rotationPoint, Vector3.up, rotation.x * Time.deltaTime);
-            if ((camera.transform.rotation.eulerAngles.x < rotateMax && rotation.y < 0) || (camera.transform.rotation.eulerAngles.x > rotateMin && rotation.y > 0))
+            Vector2 rotation = -rawInputRotation * player.settings.rotateSensitivity * Time.deltaTime;
+            camera.transform.RotateAround(rotationPoint, Vector3.up, rotation.x);
+            if ((currentRotation < rotateMax && rotation.y < 0) || (currentRotation > rotateMin && rotation.y > 0))
             {
-                camera.transform.RotateAround(rotationPoint, -camera.transform.right, rotation.y * Time.deltaTime);
+                camera.transform.RotateAround(rotationPoint, -camera.transform.right, rotation.y);
+                currentRotation += -rotation.y;
             }
         }
 
