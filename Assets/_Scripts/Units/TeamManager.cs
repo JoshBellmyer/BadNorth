@@ -33,8 +33,8 @@ public class TeamManager : MonoBehaviour
     {
         dictionary[team].Remove(unit);
 
-        if (Clock.instance.time < 60 && dictionary[team].Count < 1) {
-            Game.OnGameOver(team);
+        if (dictionary[team].Count < 1) {
+            Game.instance.OnGameOver(team);
         }
     }
 

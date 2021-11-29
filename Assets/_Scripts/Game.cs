@@ -52,16 +52,24 @@ public class Game : MonoBehaviour {
         }
     }
 
-	public static void OnGameOver(string losingTeam)
+	public void OnGameOver(string losingTeam)
     {
 		string winningColor = losingTeam == "1" ? "yellow" : "blue";
 
-		// Debug.Log($"The {winningColor} team wins!");
-		foreach (Text text in Clock.instance.winTexts) {
-			text.text = $"The {winningColor} team wins!";
-		}
+		UIManager.Instance.DisplayWinner(winningColor);
 
-		instance.Pause();
+		Pause(null);
+		StartCoroutine(SwitchToMainMenuCoroutine(10));
+	}
+
+	private IEnumerator SwitchToMainMenuCoroutine(int delay)
+    {
+		for(float i = delay; i>0; i -= Time.deltaTime)
+        {
+			UIManager.Instance.UpdateCountdown(Mathf.CeilToInt(i));
+			yield return null;
+        }
+		SwitchToMainMenu();
     }
 
     public void HandleSceneChange(Scene scene, LoadSceneMode mode)
@@ -102,7 +110,8 @@ public class Game : MonoBehaviour {
 	}
 
 	public void SwitchToMainMenu()
-    {
+	{
+		Unpause();
 		SceneManager.LoadScene("Title");
     }
 
@@ -111,14 +120,17 @@ public class Game : MonoBehaviour {
 		players.Add(playerControl);
     }
 
-	public void Pause()
+	public void Pause(PlayerController playerController)
     {
 		isPaused = true;
 		foreach(PlayerController player in players)
         {
 			player.SetControlsActivated(false);
-        }
-    }
+		}
+
+		playerController?.SetControlsActivated(true);
+		playerController?.SetActionMap("UI");
+	}
 
 	public void Unpause()
     {

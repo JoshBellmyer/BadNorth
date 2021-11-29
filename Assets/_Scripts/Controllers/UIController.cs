@@ -73,10 +73,7 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
-                Game.instance.Pause();
-
-                playerController.SetControlsActivated(true);
-                playerController.SetActionMap("UI");
+                Game.instance.Pause(playerController);
                 playerUIManager.SwitchMenu(typeof(PauseMenu));
             }
         }
