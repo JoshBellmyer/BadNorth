@@ -62,7 +62,10 @@ public class UIController : MonoBehaviour
                     player.CancelBoat();
                     isDeploying = false;
                 }
-                player.SelectedUnitIndex += (int)context.ReadValue<float>();
+                else // This else has to be here due to Unity bug, see https://issuetracker.unity3d.com/issues/input-system-control-index-is-out-of-range-exception-is-thrown-when-pressing-buttons
+                {
+                    player.SelectedUnitIndex += (int)context.ReadValue<float>();
+                }
             }
         }
     }

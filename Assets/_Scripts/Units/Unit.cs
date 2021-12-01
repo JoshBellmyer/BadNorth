@@ -291,6 +291,7 @@ public abstract class Unit : MonoBehaviour
         Unit target = null;
 
         foreach (Unit u in units) {
+            if (u == null) continue;
             float dist = Vector3.Distance(transform.position, u.transform.position);
 
             if (dist <= minDist) {
