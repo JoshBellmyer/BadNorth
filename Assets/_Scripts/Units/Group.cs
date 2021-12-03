@@ -38,7 +38,6 @@ public class Group<T> : Group where T : Unit {
             _units.Add(unit);
             unit.Team = team;
             unit.Group = this;
-            TeamManager.instance.Add(team, unit);
         }
 
         this.CanMove = true;

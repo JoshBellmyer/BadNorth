@@ -10,7 +10,6 @@ public class DeviceManager : Singleton<DeviceManager>
 	public List<InputDevice> supportedDevices = new List<InputDevice>();
 
 	public InputDevice[] playerDevices = new InputDevice[2];
-	public InputDevice mouse;
 
 	public bool HasValidDevices
     {

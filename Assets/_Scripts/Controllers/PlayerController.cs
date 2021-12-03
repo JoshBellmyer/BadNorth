@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         player = GetComponent<Player>();
+        SetDevice(DeviceManager.Instance.playerDevices[player.playerId - 1]);
         currentControlScheme = playerInput.currentControlScheme;
 
         Game.instance.RegisterPlayer(this);

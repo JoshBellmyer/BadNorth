@@ -124,10 +124,6 @@ public class Boat : MonoBehaviour {
 		laser.SetActive(false);
 		selector.SetActive(false);
 
-		foreach (Unit u in mountedUnits) {
-			TeamManager.instance.Remove(u.Team, u);
-		}
-
 		player.Boat = null;
 	}
 
@@ -158,6 +154,7 @@ public class Boat : MonoBehaviour {
 			}
 
 			u.transform.SetParent(null);
+			TeamManager.instance.Add(u.Team, u);
 		}
 
 		mountedGroup.TeleportTo(dismountPos);
