@@ -40,19 +40,27 @@ public class TeamManager : MonoBehaviour
 
     public HashSet<Unit> GetOnTeam(string team)
     {
+        Debug.Log(team);
         HashSet<Unit> set = new HashSet<Unit>();
+
+        if (!dictionary.ContainsKey(team)) {
+            return set;
+        }
+
         set.UnionWith(dictionary[team]);
         return set;
     }
     public HashSet<Unit> GetNotOnTeam(string team)
     {
         HashSet<Unit> set = new HashSet<Unit>();
+
         foreach (var v in dictionary.Keys) {
             if (!v.Equals(team))
             {
                 set.UnionWith(dictionary[v]);
             }
         }
+        
         return set;
     }
     public void Reset()
