@@ -90,7 +90,10 @@ public class CursorController : MonoBehaviour
 
             switch (hitData.Item2.collider.tag) {
                 case "Terrain":
-                    if (hitData.Item2.normal.y > 0 && player.SelectedGroup != null) {
+                    if (player.SelectedGroup == null) {
+                        SelectUnitsInSquare();
+                    }
+                    else if (hitData.Item2.normal.y > 0) {
                         MoveUnitGroup(hitData.Item2);
                     }
                     else if (hitData.Item2.normal.y == 0 && player.Ladder.activeSelf) {
@@ -102,6 +105,43 @@ public class CursorController : MonoBehaviour
                     TrySelectUnit(hitData.Item2.collider.GetComponent<Unit>());
                 break;
             }
+        }
+    }
+
+    private void SelectUnitsInSquare () {
+        if (!player.GridSelection.activeSelf) {
+            return;
+        }
+
+        Vector3 pos = player.GridSelection.transform.position;
+
+        HashSet<Unit> units = TeamManager.instance.GetOnTeam($"{player.playerId}");
+        Dictionary<Group, int> closeCount = new Dictionary<Group, int>();
+        Group maxGroup = null;
+        Unit maxUnit = null;
+        int maxCount = 0;
+
+        foreach (Unit u in units) {
+            float dist = Vector3.Distance(u.transform.position, pos);
+
+            if (dist < 0.6f) {
+                if (!closeCount.ContainsKey(u.Group)) {
+                    closeCount.Add(u.Group, 1);
+                }
+                else {
+                    closeCount[u.Group]++;
+                }
+
+                if (closeCount[u.Group] > maxCount) {
+                    maxGroup = u.Group;
+                    maxUnit = u;
+                    maxCount = closeCount[u.Group];
+                }
+            }
+        }
+
+        if (maxGroup != null) {
+            TrySelectUnit(maxUnit);
         }
     }
 
