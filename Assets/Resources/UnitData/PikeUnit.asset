@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 3
   sprite: {fileID: 21300000, guid: ac56f413fa4ed4fa2a110b1e223bc674, type: 3}
-  cooldown: 10
+  cooldown: 15
