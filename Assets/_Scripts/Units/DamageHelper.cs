@@ -65,6 +65,7 @@ public class DamageHelper : MonoBehaviour
         knockback.Add(DamageType.Blunt, 0.8f);
         knockback.Add(DamageType.Slashing, 0.2f);
         knockback.Add(DamageType.HeavySlashing, 0.2f);
+        knockback.Add(DamageType.Stabbing, 0.3f);
 
         convertDamage = new Dictionary<string, int>();
         convertDamage.Add($"{DamageType.Piercing}{UnitType.Axe}", 2);

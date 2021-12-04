@@ -205,13 +205,13 @@ MonoBehaviour:
   lastAttacked: 0
   _targetEnemy: {fileID: 0}
   _unitType: 1
-  _health: 10
+  _health: 15
   _attackRange: 0.5
   _attackDistance: 2
   _attackCooldown: 2
   _damageType: 204
   attackSound: Thud
-  groupAmount: 4
+  groupAmount: 3
 --- !u!1 &5719972224389656206
 GameObject:
   m_ObjectHideFlags: 0

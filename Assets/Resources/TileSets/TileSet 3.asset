@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TileSet 3
   m_EditorClassIdentifier: 
   type: 3
-  tileSetName: 3
+  tileSetName: Night
   topType: 1
   topLayers: 2
   topMinLayer: 1

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TileSet 1
   m_EditorClassIdentifier: 
   type: 1
-  tileSetName: 1
+  tileSetName: Fort
   topType: 1
   topLayers: 2
   topMinLayer: 1
