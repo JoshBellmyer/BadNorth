@@ -59,19 +59,25 @@ public static class PrefabFactory
         return sprite.gameObject;
     }
 
-    public static Boat CreateBoat(Player player, UnitType unitType)
-    {
+    public static Boat CreateBoat(Player player, UnitType unitType) {
         Boat boat = Object.Instantiate<Boat>(boatPrefab);
         boat.SetPlayer(player);
 
-        System.Type type = UnitManager.UnitEnumToType(unitType);
-        var typeG = typeof(Group<>).MakeGenericType(type);
+        Group unitGroup = new Group($"{player.playerId}", unitType);
 
-        dynamic unitGroup = System.Activator.CreateInstance(typeG);
-        unitGroup.Initialize($"{player.playerId}");
         unitGroup.CanMove = true;
         unitGroup.CanAttack = true;
-        boat.MountUnits(unitGroup.GetUnitsBase());
+        boat.MountUnits(unitGroup.GetUnits());
         return boat;
     }
 }
+
+
+
+
+
+
+
+
+
+

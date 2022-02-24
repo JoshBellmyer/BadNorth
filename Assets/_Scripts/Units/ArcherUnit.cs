@@ -17,9 +17,7 @@ public class ArcherUnit : Unit
         teamIndex = int.Parse(Team) - 1;
     }
 
-    protected override bool FindAttack()
-    {
-        // throw new System.NotImplementedException();
+    protected override bool FindAttack () {
         if (_currentCooldown > 0) {
             _currentCooldown -= Time.deltaTime;
 
@@ -32,43 +30,34 @@ public class ArcherUnit : Unit
         }
 
         IOrderedEnumerable<Unit> t = GetOrderedEnemiesWithin(MAX_SIGHT_RANGE);
-        foreach (Unit u in t)
-        {
+
+        foreach (Unit u in t) {
             Vector3 displacement = u.transform.position - this.transform.position;
             Vector3? a = ArrowCalc(displacement, false);
             Vector3? b = ArrowCalc(displacement, true);
-            if (a != null || b != null)
-            {
-                // Debug.Log($"{a}   {b}");
 
-                Vector3 launchVector;
-                bool useB = false;
-
-                if (a == null)
-                {
-                    launchVector = (Vector3)b;
-                    useB = true;
-                } else if (b == null)
-                {
-                    launchVector = (Vector3)a;
-                    useB = false;
-                } else
-                {
-                    // launchVector = (Vector3)(Vector3.Dot(displacement, (Vector3)a) > Vector3.Dot(displacement, (Vector3)b) ? a : b);
-                    
-                    // launchVector = (Vector3)(currentUseB ? b : a);
-                    // useB = currentUseB;
-
-                    launchVector = (Vector3)a;
-                    useB = false;
-                }
-
-                LaunchArrow(launchVector, useB);
-                _currentCooldown = _attackCooldown;
-                // TODO: Insert code here for actually launching based on launchVector.
-                //                                 TODO: Collisions
-                return true;
+            if (a == null && b == null) {
+                continue;
             }
+
+            Vector3 launchVector;
+            bool useB = false;
+
+            if (a == null) {
+                launchVector = (Vector3)b;
+                useB = true;
+            } 
+            else {
+                launchVector = (Vector3)a;
+                useB = false;
+            }
+
+            LaunchArrow(launchVector, useB);
+            _currentCooldown = _attackCooldown;
+
+            // TODO: handle arrow collisions
+
+            return true;
         }
 
         return false;

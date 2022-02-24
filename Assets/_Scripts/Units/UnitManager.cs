@@ -5,21 +5,19 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class UnitManager : MonoBehaviour
-{
+public class UnitManager : MonoBehaviour {
+
     public static UnitManager instance;
     private Dictionary<UnitType, GameObject> prefabMap = new Dictionary<UnitType, GameObject>();
     private List<NavMeshAgent> dummyActive = new List<NavMeshAgent>();
     private List<NavMeshAgent> dummyInactive = new List<NavMeshAgent>();
 
-    private void Awake()
-    {
-        if (instance != null)
-        {
+
+    private void Awake () {
+        if (instance != null && instance != this) {
             Destroy(gameObject);
         }
-        else
-        {
+        else {
             instance = this;
         }
 

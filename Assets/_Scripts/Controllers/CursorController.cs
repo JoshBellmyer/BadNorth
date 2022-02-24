@@ -50,7 +50,7 @@ public class CursorController : MonoBehaviour
                 SetSelectionActive(false);
 
                 if (hitData.Item2.normal.y == 0 && player.SelectedGroup != null) {
-                    Unit testUnit = player.SelectedGroup.GetUnitsBase()[0];
+                    Unit testUnit = player.SelectedGroup.GetUnits()[0];
 
                     if (testUnit is LadderUnit) {
                         MoveLadder(hitData.Item2.point, hitData.Item2.normal);
@@ -165,7 +165,7 @@ public class CursorController : MonoBehaviour
         DeselectUnits();
 
         player.SelectedGroup = unit.Group;
-        List<Unit> unitList = unit.Group.GetUnitsBase();
+        List<Unit> unitList = unit.Group.GetUnits();
 
         foreach (Unit u in unitList) {
             GameObject sprite = PrefabFactory.CreateUnitSelectSprite(player, u);
@@ -203,7 +203,7 @@ public class CursorController : MonoBehaviour
 
         player.SelectedGroup.SetAgentEnabled(true);
         player.SelectedGroup.MoveTo(ladderFloorPos);
-        LadderUnit ladderUnit = (LadderUnit)player.SelectedGroup.GetUnitsBase()[0];
+        LadderUnit ladderUnit = (LadderUnit)player.SelectedGroup.GetUnits()[0];
 
         ladderUnit.AttachToWall(player.Ladder.transform.position, player.Ladder.transform.forward);
 

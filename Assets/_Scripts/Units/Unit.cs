@@ -4,29 +4,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class Unit : MonoBehaviour
-{
-    private NavMeshAgent _navMeshAgent;
-    [SerializeField] protected Directive _directive;
-    private string _team;
-    private Group _group;
-    protected Vector3 _destination;
-    private LadderUnit targetLadder;
-    private Vector3 secondDestination;
+public abstract class Unit : MonoBehaviour {
 
-    private TeamColor teamColor;
-    private Renderer[] renderers;
-
-    private bool climbing;
-    private bool falling;
-    private bool knockback;
-    private bool resumeMovement;
-    private Vector3 knockDestination;
-    private bool paused;
     public float lastAttacked;
-
-    [SerializeField] protected Unit _targetEnemy;
-    protected float _currentCooldown;
+    public int groupAmount;
 
     [SerializeField] private UnitType _unitType;
     [SerializeField] private int _health;
@@ -35,66 +16,64 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected float _attackCooldown;
     [SerializeField] private DamageType _damageType;
     [SerializeField] protected string attackSound;
-    private bool _canMove;
-    private bool _canAttack;
-    private bool _inBoat;
-    public int groupAmount;
+    [SerializeField] protected Directive _directive;
+    [SerializeField] protected Unit _targetEnemy;
+
+    private LadderUnit targetLadder;
+    private Vector3 secondDestination;
+
+    private TeamColor teamColor;
+    private Renderer[] renderers;
 
     private Animator animator;
     private string[] animationNames;
     private string currentAnimation = "";
 
-     // public bool tempBool;
+    private bool climbing;
+    private bool falling;
+    private bool knockback;
+    private bool resumeMovement;
+    private Vector3 knockDestination;
+    private bool paused;
+
+    private NavMeshAgent _navMeshAgent;
+    private string _team;
+    private Group _group;
+    private bool _canMove;
+    private bool _canAttack;
+    private bool _inBoat;
+    protected Vector3 _destination;
+    protected float _currentCooldown;
 
     public static readonly float MAX_PROXIMITY = 5.0f;
+
 
     internal NavMeshAgent NavMeshAgent {
         get => _navMeshAgent;
     }
 
-    internal bool CanMove
-    {
+    internal bool CanMove {
         get => _canMove;
-        set
-        {
+        set {
             _canMove = value;
             
             if (_navMeshAgent.isOnNavMesh) {
                 _navMeshAgent.isStopped = !value;
             }
 
-            if (value == true)
-            {
-                if (_navMeshAgent.isOnNavMesh) {
-                    // _navMeshAgent.SetDestination(_destination);
-                }
-                
-                // _directive = Directive.MOVE;
-            }
-            else if (_directive != Directive.NONE)
-            {
+            if (_directive != Directive.NONE && !value) {
                 if (_navMeshAgent.isOnNavMesh) {
                     _navMeshAgent.ResetPath();
                 }
                 
                 _directive = Directive.NONE;
             }
-
         }
     }
 
-    internal bool CanAttack
-    {
+    internal bool CanAttack {
         get => _canAttack;
-        set
-        {
-            _canAttack = value;
-            if (value == false && _directive == Directive.ATTACK)
-            {
-                // _navMeshAgent.SetDestination(_destination);
-                // _directive = Directive.MOVE;
-            }
-        }
+        set { _canAttack = value; }
     }
 
     public bool InBoat {
@@ -121,13 +100,13 @@ public abstract class Unit : MonoBehaviour
         get => _unitType;
     }
 
-    protected enum Directive
-    {
+
+    protected enum Directive {
         MOVE, ATTACK, NONE
     }
 
-    private void Awake()
-    {
+
+    private void Awake () {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _canAttack = true;
         _canMove = true;
@@ -135,8 +114,7 @@ public abstract class Unit : MonoBehaviour
         _directive = Directive.NONE;
     }
 
-    private void Start()
-    {   
+    private void Start () {
         teamColor = GetComponent<TeamColor>();
         teamColor.SetColor(int.Parse(_team));
         renderers = GetComponentsInChildren<Renderer>();
@@ -151,9 +129,10 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void UnitStart () {}
 
-    private void Update()
-    {
-        if (InBoat) return;
+    private void Update () {
+        if (InBoat) {
+            return;
+        }
 
         if (Game.instance.isPaused) {
             if (!paused) {
@@ -184,32 +163,15 @@ public abstract class Unit : MonoBehaviour
             UpdateLadderMovement();
         }
 
-        // if (_navMeshAgent.isOnNavMesh) {
-        //     tempBool = _navMeshAgent.isStopped;
-        // }
-        // else {
-        //     tempBool = false;
-        // }
-
-        // There has got to be a better way to implement this.
         float dist = Vector3.Distance(transform.position, _destination);
-
-        // if (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 1f) && _directive == Directive.MOVE) {
-        //     _directive = Directive.NONE;
-        // }
-
         CanAttack = (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 1f || lastAttacked > 0) && _directive != Directive.ATTACK);
 
         if (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 0.1f) && _directive == Directive.MOVE) {
             SetAnimation("Idle");
             _directive = Directive.NONE;
         }
-        // if (dist < 0.1f && _directive == Directive.NONE) {
-            
-        // }
 
-        if (_navMeshAgent.isOnNavMesh && _canAttack && FindAttack() && !_navMeshAgent.isStopped)
-        {
+        if (_navMeshAgent.isOnNavMesh && _canAttack && FindAttack() && !_navMeshAgent.isStopped) {
             _directive = Directive.ATTACK;
         }
 
@@ -548,8 +510,7 @@ public abstract class Unit : MonoBehaviour
         paused = false;
     }
 
-    internal void IssueDestination(Vector3 destination)
-    {
+    internal void IssueDestination (Vector3 destination) {
         if (!_canMove) {
             return;
         }
@@ -561,7 +522,6 @@ public abstract class Unit : MonoBehaviour
 
         // TODO: Transform destination before setting.
 
-        // _navMeshAgent.isStopped = true;
         _destination = Game.GetGroundLevelPos(destination);
         
         _navMeshAgent.SetDestination(destination);
@@ -680,35 +640,31 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void OnMove () {}
 
-    protected void IssueAttackLocation(Vector3 target)
-    {
-        if (_canMove)
-        {
+    protected void IssueAttackLocation(Vector3 target) {
+        if (_canMove) {
             _navMeshAgent.SetDestination(target);
-            if (UnitManager.GetRemainingDistance(_navMeshAgent, MAX_PROXIMITY + 1) > MAX_PROXIMITY)
-            {
+
+            if (UnitManager.GetRemainingDistance(_navMeshAgent, MAX_PROXIMITY + 1) > MAX_PROXIMITY) {
                 _navMeshAgent.ResetPath();
             }
         }
     }
 
-    protected HashSet<Unit> GetEnemies()
-    {
+    protected HashSet<Unit> GetEnemies () {
         return TeamManager.instance.GetNotOnTeam(_team);
     }
 
-    protected HashSet<Unit> GetAllies()
-    {
+    protected HashSet<Unit> GetAllies () {
         return TeamManager.instance.GetOnTeam(_team);
     }
 
-    protected IOrderedEnumerable<Unit> GetOrderedEnemiesWithin(float maximumDistance)
-    {
+    protected IOrderedEnumerable<Unit> GetOrderedEnemiesWithin (float maximumDistance) {
         HashSet<Unit> enemies = GetEnemies();
         IEnumerable<Unit> e = from enemy in enemies
                               where Vector3.Distance(this.transform.position, enemy.transform.position) < maximumDistance
                               select enemy;
         IOrderedEnumerable<Unit> t = e.OrderBy(v => Vector3.Distance(this.transform.position, v.transform.position));
+        
         return t;
     }
 

@@ -5,32 +5,27 @@ using UnityEngine;
 public class TeamManager : MonoBehaviour
 {
     public static TeamManager instance;
-
-
     private Dictionary<string, HashSet<Unit>> dictionary = new Dictionary<string, HashSet<Unit>>();
 
-    private void Awake()
-    {
-        if (instance != null)
-        {
+
+    private void Awake () {
+        if (instance != null && instance != this) {
             Destroy(gameObject);
         }
-        else
-        {
+        else {
             instance = this;
         }
     }
 
-    public void Add(string team, Unit unit)
-    {
-        if (!dictionary.ContainsKey(team))
-        {
+    public void Add (string team, Unit unit) {
+        if (!dictionary.ContainsKey(team)) {
             dictionary.Add(team, new HashSet<Unit>());
         }
+
         dictionary[team].Add(unit);
     }
-    public void Remove(string team, Unit unit)
-    {
+
+    public void Remove (string team, Unit unit) {
         dictionary[team].Remove(unit);
 
         if (dictionary[team].Count < 1) {
@@ -38,9 +33,7 @@ public class TeamManager : MonoBehaviour
         }
     }
 
-    public HashSet<Unit> GetOnTeam(string team)
-    {
-        Debug.Log(team);
+    public HashSet<Unit> GetOnTeam(string team) {
         HashSet<Unit> set = new HashSet<Unit>();
 
         if (!dictionary.ContainsKey(team)) {
@@ -48,23 +41,38 @@ public class TeamManager : MonoBehaviour
         }
 
         set.UnionWith(dictionary[team]);
+
         return set;
     }
-    public HashSet<Unit> GetNotOnTeam(string team)
-    {
+
+    public HashSet<Unit> GetNotOnTeam(string team) {
         HashSet<Unit> set = new HashSet<Unit>();
 
         foreach (var v in dictionary.Keys) {
-            if (!v.Equals(team))
-            {
+            if (!v.Equals(team)) {
                 set.UnionWith(dictionary[v]);
             }
         }
         
         return set;
     }
-    public void Reset()
-    {
+
+    public void Reset () {
         dictionary.Clear();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
