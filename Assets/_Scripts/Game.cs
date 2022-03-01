@@ -6,11 +6,14 @@ using UnityEngine.InputSystem;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Unity.Netcode;
 
 public class Game : MonoBehaviour {
 
 	public static Game instance;
 	public static MapGenerator mapGenerator;
+	public static NetworkManager networkManager;
+	public static NetworkHelper networkHelper;
 
 	public bool isPaused;
 	public List<PlayerController> players;
@@ -19,6 +22,9 @@ public class Game : MonoBehaviour {
 
 	public TileSetType selectedTileSetType;
 	public TileSet selectedTileSet;
+
+	public static bool online;
+	public static bool isHost;
 
 
 	private void Start()
@@ -83,16 +89,52 @@ public class Game : MonoBehaviour {
 
 	public void SetupGame()
     {
-		Player.numPlayers = 0;
+    	if (online) {
+    		if (isHost) {
+    			SetupGameHost();
+    		}
+    		else {
+    			SetupGameClient();
+    		}
+
+    		return;
+    	}
+
+		Player.numPlayers = 2;
 		players = new List<PlayerController>();
 		PlayerController playerController1 = PrefabFactory.CreatePlayerController();
 		PlayerController playerController2 = PrefabFactory.CreatePlayerController();
-		players.Add(playerController1);
-		players.Add(playerController2);
+		RegisterPlayer(playerController1);
+		RegisterPlayer(playerController2);
+		playerController1.player.playerId = 1;
+		playerController2.player.playerId = 2;
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 	}
+
+	public void SetupGameHost () {
+		Player.numPlayers = 2;
+		players = new List<PlayerController>();
+		PlayerController playerController = PrefabFactory.CreatePlayerController();
+		RegisterPlayer(playerController);
+		playerController.player.playerId = 1;
+
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
+	}
+
+	public void SetupGameClient () {
+		Player.numPlayers = 2;
+		players = new List<PlayerController>();
+		PlayerController playerController = PrefabFactory.CreatePlayerController();
+		RegisterPlayer(playerController);
+		playerController.player.playerId = 2;
+
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
+	}
+
 
 	public bool IsPlayerRegistered(PlayerController player)
     {
@@ -110,17 +152,35 @@ public class Game : MonoBehaviour {
 	public void SwitchToMainMenu()
 	{
 		Unpause();
+
+		if (online) {
+			networkManager.Shutdown();
+		}
+
+		Debug.Log(networkManager.gameObject);
+		Destroy(networkManager.gameObject);
+
+		online = false;
+		isHost = false;
+
 		SceneManager.LoadScene("Title");
     }
 
 	public void RegisterPlayer(PlayerController playerControl)
     {
+    	if (IsPlayerRegistered(playerControl)) {
+    		return;
+    	}
+
 		players.Add(playerControl);
     }
 
 	public void Pause(PlayerController playerController)
     {
-		isPaused = true;
+    	if (!online) {
+			isPaused = true;
+    	}
+
 		foreach(PlayerController player in players)
         {
 			player.SetControlsActivated(false);
@@ -133,6 +193,7 @@ public class Game : MonoBehaviour {
 	public void Unpause()
     {
 		isPaused = false;
+
 		foreach (PlayerController player in players)
 		{
 			player.SetControlsActivated(true);

@@ -10,12 +10,21 @@ public class PlayerController : MonoBehaviour
     private string currentControlScheme;
     public Player player;
 
+    private int deviceIndex;
 
-    private void Awake()
+
+    private void Start ()
     {
+        if (Game.online) {
+            deviceIndex = 0;
+        }
+        else {
+            deviceIndex = player.playerId - 1;
+        }
+
         playerInput = GetComponent<PlayerInput>();
-        player = GetComponent<Player>();
-        SetDevice(DeviceManager.Instance.playerDevices[player.playerId - 1]);
+        // player = GetComponent<Player>();
+        SetDevice(DeviceManager.Instance.playerDevices[deviceIndex]);
         currentControlScheme = playerInput.currentControlScheme;
 
         Game.instance.RegisterPlayer(this);

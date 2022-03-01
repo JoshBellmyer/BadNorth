@@ -77,8 +77,8 @@ public class Player : MonoBehaviour {
 
     private void Awake () {
         numUnitTypes = Enum.GetValues(typeof(UnitType)).Length;
-        numPlayers++;
-        playerId = numPlayers;
+        // numPlayers++;
+        // playerId = numPlayers;
     }
 
     private void Start () {

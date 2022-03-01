@@ -61,9 +61,10 @@ public class DeviceManager : Singleton<DeviceManager>
 			InputSystem.DisableDevice(device);
 		}
 
-		foreach(InputDevice device in playerDevices)
-        {
-			InputSystem.EnableDevice(device);
+		foreach(InputDevice device in playerDevices) {
+			if (device != null) {
+				InputSystem.EnableDevice(device);
+			}
 		}
 	}
 
