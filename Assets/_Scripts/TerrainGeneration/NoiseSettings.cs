@@ -14,6 +14,5 @@ public struct NoiseSettings
 	public float persistance;
 	public float lacunarity;
 
-	public int seed;
 	public Vector3 offset;
 }

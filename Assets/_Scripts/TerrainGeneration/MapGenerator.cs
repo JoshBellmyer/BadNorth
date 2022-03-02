@@ -23,10 +23,10 @@ public class MapGenerator : MonoBehaviour {
 
 		MeshFilter filter = meshObject.GetComponent<MeshFilter>();
 		MeshRenderer renderer = meshObject.GetComponent<MeshRenderer>();
-		float meshScale = terrainGenerator.meshScale;
+		float meshScale = terrainGenerator.settings.meshScale;
 
 		terrainGenerator.GenerateMap();
-		float[,] noise = terrainGenerator.GenerateMapNoise();
+		float[,] noise = terrainGenerator.GenerateHeightMap(0);
 		TileData tileData = new TileData(noise, meshScale);
 		TileSet tileSet = Game.instance.selectedTileSet;
 

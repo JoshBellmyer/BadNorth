@@ -4,9 +4,9 @@ using System.Collections;
 public static class MeshGenerator
 {
 
-    public static MeshData GenerateTerrainMesh(float[,] noiseMap, float meshScale)
+    public static MeshData GenerateTerrainMesh(float[,] heightMap, float meshScale)
 	{
-        int length = noiseMap.GetLength(0);
+        int length = heightMap.GetLength(0);
         float topLeftX = (length - 1) / -2f;
         float topLeftZ = (length - 1) / 2f;
         int area = length * length; // assuming it's a square
@@ -20,7 +20,7 @@ public static class MeshGenerator
         {
             for (int y = 0; y < length; y++)
             {
-                Vector3 vertex = new Vector3(topLeftX + x, noiseMap[x, y] * meshScale, topLeftZ - y);
+                Vector3 vertex = new Vector3(topLeftX + x, heightMap[x, y] * meshScale, topLeftZ - y);
                 meshData.AddVertex(vertex, new Vector2(x/(float)length, y/(float)length), vertexIndex);
 
                 if(x < length - 1 && y < length - 1)
@@ -36,9 +36,9 @@ public static class MeshGenerator
 		return meshData;
 	}
 
-	public static MeshData GenerateTerrainMeshFlatTiles(float[,] noiseMap, float meshScale)
+	public static MeshData GenerateTerrainMeshFlatTiles(float[,] heightMap, float meshScale)
     {
-        int length = noiseMap.GetLength(0);
+        int length = heightMap.GetLength(0);
         float topLeftX = (length - 1) / -2f;
         float topLeftZ = (length - 1) / 2f;
         int area = length * length; // assuming it's a square
@@ -54,10 +54,10 @@ public static class MeshGenerator
             {
                 Vector3 uv = new Vector2(x / (float)length, y / (float)length);
 
-                Vector3 vertexTopLeft = new Vector3(topLeftX + x - 0.5f, noiseMap[x,y] * meshScale, topLeftZ - y + 0.5f);
-                Vector3 vertexTopRight = new Vector3(topLeftX + x + 0.5f, noiseMap[x, y] * meshScale, topLeftZ - y + 0.5f);
-                Vector3 vertexBottomLeft = new Vector3(topLeftX + x - 0.5f, noiseMap[x, y] * meshScale, topLeftZ - y - 0.5f);
-                Vector3 vertexBottomRight = new Vector3(topLeftX + x + 0.5f, noiseMap[x, y] * meshScale, topLeftZ - y - 0.5f);
+                Vector3 vertexTopLeft = new Vector3(topLeftX + x - 0.5f, heightMap[x,y] * meshScale, topLeftZ - y + 0.5f);
+                Vector3 vertexTopRight = new Vector3(topLeftX + x + 0.5f, heightMap[x, y] * meshScale, topLeftZ - y + 0.5f);
+                Vector3 vertexBottomLeft = new Vector3(topLeftX + x - 0.5f, heightMap[x, y] * meshScale, topLeftZ - y - 0.5f);
+                Vector3 vertexBottomRight = new Vector3(topLeftX + x + 0.5f, heightMap[x, y] * meshScale, topLeftZ - y - 0.5f);
 
                 meshData.AddVertex(vertexTopLeft, uv, vertexIndex);
                 meshData.AddVertex(vertexTopRight, uv, vertexIndex + 1);

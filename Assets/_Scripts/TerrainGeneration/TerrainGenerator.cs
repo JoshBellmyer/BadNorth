@@ -4,49 +4,35 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    [Range(2, 24)]
-    [SerializeField]
-    int size;
-    [SerializeField]
-    NoiseSettings noiseSettings;
+    public TerrainSettings settings;
 
-    [SerializeField] float scaleHeight;
-    [SerializeField] bool applyCornerFallOff;
-    [SerializeField] float cornerFallOffDistance;
-    [SerializeField] bool applyTerraces;
-    [SerializeField] int terraceFrequency;
-    [SerializeField] bool flattenPeaks;
-    [SerializeField] int flattenPeaksCutoff;
-    [SerializeField] int flattenPeakLookRange;
+    public MeshFilter meshFilter;
 
-    [SerializeField] Material material;
-    [SerializeField] public MeshFilter meshFilter;
-    [SerializeField] MeshRenderer meshRender;
-    [SerializeField] MeshCollider meshCollider;
-    [SerializeField] public float meshScale;
+    public bool randomizeSeed;
+    public int seed;
 
-    [SerializeField] bool flatTilesMesh;
-
-    [SerializeField] bool autoUpdate;
-
-
+    public void Start()
+    {
+        GenerateMap();
+    }
 
     public void GenerateMap()
     {
-        noiseSettings.seed = Random.Range(10, 5000);
-        float[,] noise = GenerateMapNoise();
+        seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
+        float[,] heightMap = GenerateHeightMap(seed);
 
-        Texture texture = TextureGenerator.TextureFromNoiseMap(noise);
-        material.mainTexture = texture;
+        MeshData data = settings.flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(heightMap, settings.meshScale) : MeshGenerator.GenerateTerrainMesh(heightMap, settings.meshScale);
 
-        Mesh mesh = flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(noise, meshScale).CreateMesh() : MeshGenerator.GenerateTerrainMesh(noise, meshScale).CreateMesh();
-        meshFilter.sharedMesh = mesh;
-        meshCollider.sharedMesh = mesh;
-        meshRender.sharedMaterial.mainTexture = texture;
+        if(meshFilter == null)
+        {
+            meshFilter = new GameObject("TerrainMesh").AddComponent<MeshFilter>();
+            meshFilter.gameObject.AddComponent<MeshRenderer>();
+        }
+        meshFilter.sharedMesh = data.CreateMesh();
     }
 
-    public float[,] GenerateMapNoise () {
-        float[,] noise = Noise.GenerateNoiseMap(size, noiseSettings, Vector2.zero);
+    public float[,] GenerateHeightMap (int seed) {
+        float[,] noise = Noise.GenerateNoiseMap(settings.size, settings.noiseSettings, Vector2.zero, seed);
         AddEffectsToNoise(noise);
 
         return noise;
@@ -59,39 +45,32 @@ public class TerrainGenerator : MonoBehaviour
         List<int> toFlattenY = new List<int>();
 
         // main loop
-        for (int x = 0; x < size; x++)
+        for (int x = 0; x < settings.size; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < settings.size; y++)
             {
                 // island fall off
-                float distFromCenterX = Mathf.Abs(x - size / 2);
-                float distFromCenterY = Mathf.Abs(y - size / 2);
+                float distFromCenterX = Mathf.Abs(x - settings.size / 2);
+                float distFromCenterY = Mathf.Abs(y - settings.size / 2);
                 float distFromCenter = Mathf.Sqrt(distFromCenterX * distFromCenterX + distFromCenterY * distFromCenterY);
-                noise[x, y] *= Mathf.InverseLerp(size / 2, 0, distFromCenter);
-
-                // corner fall off
-                if (applyCornerFallOff)
-                {
-                    noise[x, y] *= Mathf.InverseLerp(cornerFallOffDistance, 0, x);
-                    noise[x, y] *= Mathf.InverseLerp(cornerFallOffDistance, 0, y);
-                }
+                noise[x, y] *= Mathf.InverseLerp(settings.size / 2, 0, distFromCenter);
 
                 // scale height
-                noise[x, y] *= scaleHeight;
+                noise[x, y] *= settings.scaleHeight;
 
                 // terraces
-                if (applyTerraces)
+                if (settings.applyTerraces)
                 {
-                    noise[x, y] = Mathf.Floor(noise[x, y] * terraceFrequency) / terraceFrequency;
+                    noise[x, y] = Mathf.Floor(noise[x, y] * settings.terraceFrequency) / settings.terraceFrequency;
                 }
 
                 // flatten peaks
-                if (flattenPeaks && x > flattenPeakLookRange - 1 && x < size - flattenPeakLookRange && y > flattenPeakLookRange - 1 && y < size - flattenPeakLookRange) // if not an edge
+                if (settings.flattenPeaks && x > settings.flattenPeakLookRange - 1 && x < settings.size - settings.flattenPeakLookRange && y > settings.flattenPeakLookRange - 1 && y < settings.size - settings.flattenPeakLookRange) // if not an edge
                 {
                     int lowNeighborCount = 0;
-                    for (int i = -flattenPeakLookRange; i < flattenPeakLookRange; i++)
+                    for (int i = -settings.flattenPeakLookRange; i < settings.flattenPeakLookRange; i++)
                     {
-                        for (int j = -flattenPeakLookRange; j < flattenPeakLookRange; j++)
+                        for (int j = -settings.flattenPeakLookRange; j < settings.flattenPeakLookRange; j++)
                         {
                             if (noise[x + i, y + j] < noise[x, y])
                             {
@@ -99,7 +78,7 @@ public class TerrainGenerator : MonoBehaviour
                             }
                         }
                     }
-                    if (lowNeighborCount >= flattenPeaksCutoff)
+                    if (lowNeighborCount >= settings.flattenPeaksCutoff)
                     {
                         toFlattenX.Add(x); // flatten later
                         toFlattenY.Add(y);
@@ -111,7 +90,7 @@ public class TerrainGenerator : MonoBehaviour
         // flatten now
         for(int i=0; i<toFlattenX.Count; i++)
         {
-            noise[toFlattenX[i], toFlattenY[i]] -= 1 / (float)terraceFrequency;
+            noise[toFlattenX[i], toFlattenY[i]] -= 1 / (float)settings.terraceFrequency;
         }
     }
 }

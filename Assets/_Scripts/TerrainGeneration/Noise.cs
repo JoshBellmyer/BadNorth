@@ -3,12 +3,11 @@ using System.Collections;
 
 public static class Noise
 {
-
-	public static float[,] GenerateNoiseMap(int mapSize, NoiseSettings settings, Vector2 sampleCentre)
+	public static float[,] GenerateNoiseMap(int mapSize, NoiseSettings settings, Vector2 sampleCentre, int seed)
 	{
 		float[,] noiseMap = new float[mapSize, mapSize];
 
-		System.Random prng = new System.Random(settings.seed);
+		System.Random prng = new System.Random(seed);
 		Vector3[] octaveOffsets = new Vector3[settings.octaves];
 
 		float maxPossibleHeight = 0;
