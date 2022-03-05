@@ -39,8 +39,6 @@ public class TerrainGenerator : MonoBehaviour
         TileData tileData = new TileData(heightMap, settings.meshScale);
         TileSet tileSet = settings.tileSet;
 
-
-        TilePlacer.otherMeshes = otherMeshes;
         tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter);
         tileMeshRenderer.material = tileSet.material;
 
