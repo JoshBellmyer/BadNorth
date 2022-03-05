@@ -7,6 +7,8 @@ public class TerrainGenerator : MonoBehaviour
 {
     public TerrainSettings settings;
 
+    public static System.Random random;
+
     public NavMeshSurface surface;
 
     public MeshFilter navMeshFilter;
@@ -14,9 +16,6 @@ public class TerrainGenerator : MonoBehaviour
 
     public MeshFilter tileMeshFilter;
     public MeshRenderer tileMeshRenderer;
-
-    public bool randomizeSeed;
-    public int seed;
 
     public GameObject[] otherMeshes;
 
@@ -27,7 +26,10 @@ public class TerrainGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
+        int seed = settings.Seed;
+
+        random = new System.Random(seed);
+
         float[,] heightMap = GenerateHeightMap(seed);
 
         MeshData data = settings.flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(heightMap, settings.meshScale) : MeshGenerator.GenerateTerrainMesh(heightMap, settings.meshScale);

@@ -64,10 +64,10 @@ public class TileGroup {
 
     public GameObject RandomVariation (int varChance, bool isTop) {
 		if (isTop) return RandomVariationTop(varChance);
-		int chance = Random.Range(0, 100);
+		int chance = TerrainGenerator.random.Next(0, 100);
 
 		if (chance < varChance && variations.Length > 1) {
-			int rand = Random.Range(0, variations.Length - 1);
+			int rand = TerrainGenerator.random.Next(0, variations.Length - 1);
 
 			return variations[rand + 1];
 		}
@@ -80,10 +80,10 @@ public class TileGroup {
 			return RandomVariation(varChance, false);
 		}
 
-		int chance = Random.Range(0, 100);
+		int chance = TerrainGenerator.random.Next(0, 100);
 
 		if (chance < varChance && tVariations.Length > 1) {
-			int rand = Random.Range(0, tVariations.Length - 1);
+			int rand = TerrainGenerator.random.Next(0, tVariations.Length - 1);
 
 			return tVariations[rand + 1];
 		}

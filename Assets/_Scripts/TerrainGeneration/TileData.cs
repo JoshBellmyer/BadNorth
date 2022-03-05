@@ -99,7 +99,7 @@ public class TileData {
 		int leftChance = 0;
 		int rightChance = 0;
 
-		int randSlope = Random.Range(0, 10);
+		int randSlope = TerrainGenerator.random.Next(0, 10);
 
 		// neighbors = (neighbors << 4) | neighbors2;
 
@@ -145,7 +145,7 @@ public class TileData {
 			break;
 		}
 
-		int rand = Random.Range(0, 100);
+		int rand = TerrainGenerator.random.Next(0, 100);
 
 		if (rand < upChance && upChance > 0 && (neighbors2 & 0b0100) > 0) {
 			if (longSlope) {
