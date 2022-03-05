@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04968f84ecebff644a75474352af989a, type: 3}
   m_Name: CubeUpLeftInvert
   m_EditorClassIdentifier: 
-  relativePosition: {x: 1, y: 1, z: 0}
+  relativePosition: {x: -1, y: 1, z: 0}
   requiredType: 1
   invertCondition: 1

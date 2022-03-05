@@ -148,7 +148,7 @@ public class TilePlacer : MonoBehaviour {
 		GameObject tileObject = tileSet.PickTile(tileData, new Vector3Int(x, y, z), ref rotation);
 		if (tileObject == null) return;
 
-		Vector3 position = new Vector3(x, y, z);
+		Vector3 position = new Vector3(x, y, z) + tileObject.transform.GetChild(0).position;
 		Vector3 eulerAngles = new Vector3(0, rotation, 0) + tileObject.transform.GetChild(0).localEulerAngles;
 
 		GameObject meshObject = tileObject.transform.GetChild(0).gameObject;

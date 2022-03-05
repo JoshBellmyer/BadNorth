@@ -51,7 +51,7 @@ public class TileData {
 			}
 		}
 
-		//EnhanceTiles();
+		EnhanceTiles();
 	}
 
 
@@ -149,10 +149,10 @@ public class TileData {
 
 		if (rand < upChance && upChance > 0 && (neighbors2 & 0b0100) > 0) {
 			if (longSlope) {
-				PlaceLongSlope(x, height, z, new Vector3Int(0, 0, -1), 0b0100, TileType.FullRampU);
+				PlaceLongSlope(x, height, z, new Vector3Int(0, 0, -1), 0b0100, TileType.FullRamp);
 			}
 			else {
-				PlaceFullSlope(x, height, z, TileType.FullRampU);
+				PlaceFullSlope(x, height, z, TileType.FullRamp);
 			}
 
 			return;
@@ -162,10 +162,10 @@ public class TileData {
 
 		if (rand < downChance && downChance > 0 && (neighbors2 & 0b1000) > 0) {
 			if (longSlope) {
-				PlaceLongSlope(x, height, z, new Vector3Int(0, 0, 1), 0b1000, TileType.FullRampD);
+				PlaceLongSlope(x, height, z, new Vector3Int(0, 0, 1), 0b1000, TileType.FullRamp);
 			}
 			else {
-				PlaceFullSlope(x, height, z, TileType.FullRampD);
+				PlaceFullSlope(x, height, z, TileType.FullRamp);
 			}
 
 			return;
@@ -175,10 +175,10 @@ public class TileData {
 
 		if (rand < leftChance && leftChance > 0 && (neighbors2 & 0b0001) > 0) {
 			if (longSlope) {
-				PlaceLongSlope(x, height, z, new Vector3Int(1, 0, 0), 0b0001, TileType.FullRampL);
+				PlaceLongSlope(x, height, z, new Vector3Int(1, 0, 0), 0b0001, TileType.FullRamp);
 			}
 			else {
-				PlaceFullSlope(x, height, z, TileType.FullRampL);
+				PlaceFullSlope(x, height, z, TileType.FullRamp);
 			}
 
 			return;
@@ -188,10 +188,10 @@ public class TileData {
 
 		if (rand < rightChance && rightChance > 0 && (neighbors2 & 0b0010) > 0) {
 			if (longSlope) {
-				PlaceLongSlope(x, height, z, new Vector3Int(-1, 0, 0), 0b0010, TileType.FullRampR);
+				PlaceLongSlope(x, height, z, new Vector3Int(-1, 0, 0), 0b0010, TileType.FullRamp);
 			}
 			else {
-				PlaceFullSlope(x, height, z, TileType.FullRampR);
+				PlaceFullSlope(x, height, z, TileType.FullRamp);
 			}
 
 			return;
@@ -235,9 +235,9 @@ public class TileData {
 		tempSlopes.Add($"{new Vector3Int(x, y, z)}");
 		tempSlopes.Add($"{new Vector3Int(x + backDir.x, y, z + backDir.z)}");
 
-		int temp = (int)type - (int)TileType.FullRampU;
-		TileType raisedType = (TileType)((int)TileType.RaisedRampU + temp);
-		TileType halfType = (TileType)((int)TileType.HalfRampU + temp);
+		int temp = (int)type - (int)TileType.FullRamp;
+		TileType raisedType = (TileType)((int)TileType.HalfRamp + temp);
+		TileType halfType = (TileType)((int)TileType.HalfRamp + temp);
 
 		tileTypes[x, y, z] = raisedType;
 		tileLocations.Add( new TileLocation(raisedType, new Vector3Int(x, y, z)) );
@@ -315,20 +315,20 @@ public class TileData {
 
 		tileEdges.Add(TileType.Cube, new int[] {0b1111, 0b0000, 0b0000, 0b0000, 0b0000});
 
-		tileEdges.Add(TileType.FullRampU, new int[] {0b1000, 0b0011, 0b0000, 0b0000, 0b0000});
-		tileEdges.Add(TileType.FullRampD, new int[] {0b0100, 0b0011, 0b0000, 0b0000, 0b0000});
-		tileEdges.Add(TileType.FullRampL, new int[] {0b0010, 0b1100, 0b0000, 0b0000, 0b0000});
-		tileEdges.Add(TileType.FullRampR, new int[] {0b0001, 0b1100, 0b0000, 0b0000, 0b0000});
+		tileEdges.Add(TileType.FullRamp, new int[] {0b1000, 0b0011, 0b0000, 0b0000, 0b0000});
+		tileEdges.Add(TileType.FullRamp, new int[] {0b0100, 0b0011, 0b0000, 0b0000, 0b0000});
+		tileEdges.Add(TileType.FullRamp, new int[] {0b0010, 0b1100, 0b0000, 0b0000, 0b0000});
+		tileEdges.Add(TileType.FullRamp, new int[] {0b0001, 0b1100, 0b0000, 0b0000, 0b0000});
 
-		tileEdges.Add(TileType.HalfRampU, new int[] {0b0000, 0b0000, 0b0000, 0b0011, 0b1000});
-		tileEdges.Add(TileType.HalfRampD, new int[] {0b0000, 0b0000, 0b0000, 0b0011, 0b0100});
-		tileEdges.Add(TileType.HalfRampL, new int[] {0b0000, 0b0000, 0b0000, 0b1100, 0b0010});
-		tileEdges.Add(TileType.HalfRampR, new int[] {0b0000, 0b0000, 0b0000, 0b1100, 0b0001});
+		tileEdges.Add(TileType.HalfRamp, new int[] {0b0000, 0b0000, 0b0000, 0b0011, 0b1000});
+		tileEdges.Add(TileType.HalfRamp, new int[] {0b0000, 0b0000, 0b0000, 0b0011, 0b0100});
+		tileEdges.Add(TileType.HalfRamp, new int[] {0b0000, 0b0000, 0b0000, 0b1100, 0b0010});
+		tileEdges.Add(TileType.HalfRamp, new int[] {0b0000, 0b0000, 0b0000, 0b1100, 0b0001});
 
-		tileEdges.Add(TileType.RaisedRampU, new int[] {0b1000, 0b0000, 0b0011, 0b0000, 0b0100});
-		tileEdges.Add(TileType.RaisedRampD, new int[] {0b0100, 0b0000, 0b0011, 0b0000, 0b1000});
-		tileEdges.Add(TileType.RaisedRampL, new int[] {0b0010, 0b0000, 0b1100, 0b0000, 0b0001});
-		tileEdges.Add(TileType.RaisedRampR, new int[] {0b0001, 0b0000, 0b1100, 0b0000, 0b0010});
+		tileEdges.Add(TileType.HalfRamp, new int[] {0b1000, 0b0000, 0b0011, 0b0000, 0b0100});
+		tileEdges.Add(TileType.HalfRamp, new int[] {0b0100, 0b0000, 0b0011, 0b0000, 0b1000});
+		tileEdges.Add(TileType.HalfRamp, new int[] {0b0010, 0b0000, 0b1100, 0b0000, 0b0001});
+		tileEdges.Add(TileType.HalfRamp, new int[] {0b0001, 0b0000, 0b1100, 0b0000, 0b0010});
 	}
 }
 
@@ -348,21 +348,23 @@ public class TileLocation {
 public enum TileType {
 	None = 0,
 	Cube = 1,
+	FullRamp = 2,
+	HalfRamp = 3,
 
-	FullRampU = 2,
-	FullRampD = 3,
-	FullRampL = 4,
-	FullRampR = 5,
+	//FullRampU = 2,
+	//FullRampD = 3,
+	//FullRampL = 4,
+	//FullRampR = 5,
 
-	HalfRampU = 6,
-	HalfRampD = 7,
-	HalfRampL = 8,
-	HalfRampR = 9,
+	//HalfRampU = 6,
+	//HalfRampD = 7,
+	//HalfRampL = 8,
+	//HalfRampR = 9,
 
-	RaisedRampU = 10,
-	RaisedRampD = 11,
-	RaisedRampL = 12,
-	RaisedRampR = 13,
+	//RaisedRampU = 10,
+	//RaisedRampD = 11,
+	//RaisedRampL = 12,
+	//RaisedRampR = 13,
 }
 
 
