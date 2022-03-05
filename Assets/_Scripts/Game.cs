@@ -11,7 +11,6 @@ using Unity.Netcode;
 public class Game : MonoBehaviour {
 
 	public static Game instance;
-	public static MapGenerator mapGenerator;
 	public static NetworkManager networkManager;
 	public static NetworkHelper networkHelper;
 
