@@ -26,18 +26,5 @@ public class MapGenerator : MonoBehaviour {
 		float meshScale = terrainGenerator.settings.meshScale;
 
 		terrainGenerator.GenerateMap();
-		float[,] noise = terrainGenerator.GenerateHeightMap(0);
-		TileData tileData = new TileData(noise, meshScale);
-		TileSet tileSet = Game.instance.selectedTileSet;
-
-		filter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, terrainGenerator.meshFilter);
-		renderer.material = tileSet.material;
-		terrainGenerator.meshFilter.gameObject.transform.localScale = new Vector3(1, 1, -1);
-
-		float offset = (noise.GetLength(0) / 2.0f) - 0.5f;
-		meshObject.transform.position += new Vector3(-offset, 0, -offset);
-		
-		surface.BuildNavMesh();
-		terrainGenerator.meshFilter.GetComponent<MeshRenderer>().enabled = false;
 	}
 }

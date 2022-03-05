@@ -17,4 +17,6 @@ public class TerrainSettings : ScriptableObject
     public int flattenPeakLookRange;
     public float meshScale;
     public bool flatTilesMesh;
+
+    public TileSet tileSet;
 }

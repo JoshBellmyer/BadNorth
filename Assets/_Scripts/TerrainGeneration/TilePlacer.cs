@@ -10,15 +10,13 @@ public class TilePlacer : MonoBehaviour {
 
 	private static TileData tileData;
 	private static TileSet tileSet;
-	private static CombineInstance[] cInstances;
-	private static CombineInstance[] mInstances;
+	private static List<CombineInstance> cInstances;
+	private static List<CombineInstance> mInstances;
 	private static List<GameObject> tempTiles;
 	private static Mesh mesh;
 	private static Mesh cMesh;
-	private static GameObject tempObj;
 
-	private static int cIndex;
-	private static int mIndex;
+	public static GameObject[] otherMeshes;
 
 
 	// Places tiles based on the given tileData and tileSet, and combines them into a single mesh
@@ -32,16 +30,13 @@ public class TilePlacer : MonoBehaviour {
 
 		mesh = new Mesh();
 		cMesh = new Mesh();
-		tempTiles = new List<GameObject>();
-		cInstances = new CombineInstance[tileData.tileLocations.Count];
-		cIndex = 0;
+		cInstances = new List<CombineInstance>();
 
-		tempObj = new GameObject();
-		mInstances = new CombineInstance[tileData.slopeCount + 1];
-		mInstances[0] = new CombineInstance();
-		mInstances[0].mesh = colMesh.mesh;
-		mInstances[0].transform = tempObj.transform.localToWorldMatrix;
-		mIndex = 1;
+		mInstances = new List<CombineInstance>();
+		CombineInstance combine = new CombineInstance();
+		combine.mesh = colMesh.sharedMesh;
+		combine.transform = Matrix4x4.identity;
+		mInstances.Add(combine);
 
 		foreach (TileLocation tileLoc in tileData.tileLocations) {
 			switch (tileLoc.type) {
@@ -103,14 +98,10 @@ public class TilePlacer : MonoBehaviour {
 
 		mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
-		mesh.CombineMeshes(cInstances);
-		cMesh.CombineMeshes(mInstances);
+		mesh.CombineMeshes(cInstances.ToArray());
+		cMesh.CombineMeshes(mInstances.ToArray());
 		colMesh.mesh = cMesh;
 		colMesh.GetComponent<MeshCollider>().sharedMesh = cMesh;
-
-		foreach (GameObject obj in tempTiles) {
-			Destroy(obj);
-		}
 
 		return mesh;
 	}
@@ -122,10 +113,10 @@ public class TilePlacer : MonoBehaviour {
 		}
 
 		Vector3Int pos = new Vector3Int(x, y, z);
-		int front = GetEdge(pos, 0, 0)[0] ? 0b1000 : 0b0000;
-		int back = GetEdge(pos, 1, 0)[0] ? 0b0100 : 0b0000;
-		int left = GetEdge(pos, 2, 0)[0] ? 0b0010 : 0b0000;
-		int right = GetEdge(pos, 3, 0)[0] ? 0b0001 : 0b0000;
+		int front = GetEdge(pos, 0)[0] ? 0b1000 : 0b0000;
+		int back = GetEdge(pos, 1)[0] ? 0b0100 : 0b0000;
+		int left = GetEdge(pos, 2)[0] ? 0b0010 : 0b0000;
+		int right = GetEdge(pos, 3)[0] ? 0b0001 : 0b0000;
 
 		int edgeBool = (front | back | left | right);
 		int[] index = new int[4];
@@ -161,10 +152,10 @@ public class TilePlacer : MonoBehaviour {
 	// Places a full slope tile at the given location
 	private static void PlaceSlope (int x, int y, int z, int rotation, int slopeType) {
 		Vector3Int pos = new Vector3Int(x, y, z);
-		int front = GetEdge(pos, 0, 0)[0] ? 0b1000 : 0b0000;
-		int back = GetEdge(pos, 1, 0)[0] ? 0b0100 : 0b0000;
-		int left = GetEdge(pos, 2, 0)[0] ? 0b0010 : 0b0000;
-		int right = GetEdge(pos, 3, 0)[0] ? 0b0001 : 0b0000;
+		int front = GetEdge(pos, 0)[0] ? 0b1000 : 0b0000;
+		int back = GetEdge(pos, 1)[0] ? 0b0100 : 0b0000;
+		int left = GetEdge(pos, 2)[0] ? 0b0010 : 0b0000;
+		int right = GetEdge(pos, 3)[0] ? 0b0001 : 0b0000;
 
 		int rampType = 0;
 
@@ -182,10 +173,10 @@ public class TilePlacer : MonoBehaviour {
 			break;
 		}
 
-		int frontR = GetEdge(pos, 0, 0)[rampType] ? 0b1000 : 0b0000;
-		int backR = GetEdge(pos, 1, 0)[rampType] ? 0b0100 : 0b0000;
-		int leftR = GetEdge(pos, 2, 0)[rampType] ? 0b0010 : 0b0000;
-		int rightR = GetEdge(pos, 3, 0)[rampType] ? 0b0001 : 0b0000;
+		int frontR = GetEdge(pos, 0)[rampType] ? 0b1000 : 0b0000;
+		int backR = GetEdge(pos, 1)[rampType] ? 0b0100 : 0b0000;
+		int leftR = GetEdge(pos, 2)[rampType] ? 0b0010 : 0b0000;
+		int rightR = GetEdge(pos, 3)[rampType] ? 0b0001 : 0b0000;
 
 		front = (front | frontR);
 		back = (back | backR);
@@ -204,44 +195,17 @@ public class TilePlacer : MonoBehaviour {
 
 	// Places a tile and adds it to the mesh
 	private static void PlaceTile (int x, int y, int z, int rotation, int tileIndex) {
-		// GameObject tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
-		GameObject tileObject = null;
+		GameObject tileObject = tileSet.PickTile(tileIndex, tileData, new Vector3Int(x, y, z));
 
-		switch (tileSet.topType) {
-			case TileSet.TopType.None:
-				tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
-			break;
-
-			case TileSet.TopType.Height:
-				if (y > tileData.maxHeight - tileSet.topLayers && tileSet.topLayers > 0 && y >= tileSet.topMinLayer) {
-					tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariationTop(20));
-				}
-				else {
-					tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
-				}
-			break;
-
-			case TileSet.TopType.AllTops:
-				if (tileData.tileTypes[x, y + 1, z] == TileType.None) {
-					tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariationTop(20));
-				}
-				else {
-					tileObject = (GameObject)Instantiate(tileSet.models[tileIndex].RandomVariation(20));
-				}
-			break;
-		}
-
-		tempTiles.Add(tileObject);
-
-		tileObject.transform.position = new Vector3(x, y, z);
-		tileObject.transform.eulerAngles = new Vector3(0, 90 * rotation, 0);
+		Vector3 position = new Vector3(x, y, z);
+		Vector3 eulerAngles = new Vector3(0, 90 * rotation, 0);
 
 		GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
 
-		cInstances[cIndex] = new CombineInstance();
-		cInstances[cIndex].mesh = meshObject.GetComponent<MeshFilter>().mesh;
-		cInstances[cIndex].transform = meshObject.transform.localToWorldMatrix;
-		cIndex++;
+		CombineInstance combine = new CombineInstance();
+		combine.mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
+		combine.transform = Matrix4x4.TRS(position, Quaternion.Euler(eulerAngles), Vector3.one);
+		cInstances.Add(combine);
 	}
 
 	// Places a mesh tile and adds it to the collision mesh
@@ -275,27 +239,22 @@ public class TilePlacer : MonoBehaviour {
 			return;
 		}
 
-		GameObject tileObject = (GameObject)Instantiate(Game.mapGenerator.otherMeshes[meshIndex]);
-		tempTiles.Add(tileObject);
+		GameObject tileObject = otherMeshes[meshIndex];
 
 		float offset = (tileData.sizeX / 2.0f) - 0.5f;
-		tileObject.transform.position = new Vector3(x - offset, y - 0.5f, z - offset);
-		tileObject.transform.eulerAngles = new Vector3(0, 90 * rotation, 0);
-
-		tempObj.transform.localScale = new Vector3(1, 1, 1);
-		tileObject.transform.SetParent(tempObj.transform);
-		tempObj.transform.localScale = new Vector3(1, 1, -1);
+		Vector3 position = new Vector3(x - offset, y - 0.5f, z - offset);
+		Vector3 eulerAngles = new Vector3(0, 90 * rotation, 0);
 
 		GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
 
-		mInstances[mIndex] = new CombineInstance();
-		mInstances[mIndex].mesh = meshObject.GetComponent<MeshFilter>().mesh;
-		mInstances[mIndex].transform = meshObject.transform.localToWorldMatrix;
-		mIndex++;
+		CombineInstance combine = new CombineInstance();
+		combine.mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
+		combine.transform = Matrix4x4.TRS(position, Quaternion.Euler(eulerAngles), Vector3.one);
+		mInstances.Add(combine);
 	}
 
 	// Returns the edge data from the given pos in the given direction
-	private static bool[] GetEdge (Vector3Int pos, int direction, int type) {
+	private static bool[] GetEdge (Vector3Int pos, int direction) {
 		Vector3Int newPos = pos + GetDirectionVector(direction);
 
 		if (newPos.x < 0 || newPos.x >= tileData.sizeX) {

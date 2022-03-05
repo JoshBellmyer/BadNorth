@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
     public TerrainSettings settings;
 
-    public MeshFilter meshFilter;
+    public MeshFilter navMeshFilter;
+    public MeshCollider navMeshCollider;
+
+    public MeshFilter tileMeshFilter;
+    public MeshRenderer tileMeshRenderer;
 
     public bool randomizeSeed;
     public int seed;
+
+    public GameObject[] otherMeshes;
 
     public void Start()
     {
@@ -23,12 +30,60 @@ public class TerrainGenerator : MonoBehaviour
 
         MeshData data = settings.flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(heightMap, settings.meshScale) : MeshGenerator.GenerateTerrainMesh(heightMap, settings.meshScale);
 
-        if(meshFilter == null)
+        NavMeshSurface surface = SetupNavMesh();
+        Mesh m = data.CreateMesh();
+        navMeshFilter.sharedMesh = m;
+        navMeshCollider.sharedMesh = m;
+
+        TileData tileData = new TileData(heightMap, settings.meshScale);
+        TileSet tileSet = settings.tileSet;
+
+        SetupTileMesh();
+
+        TilePlacer.otherMeshes = otherMeshes;
+        tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter);
+        tileMeshRenderer.material = tileSet.material;
+        navMeshFilter.transform.localScale = new Vector3(1, 1, -1); // TODO: What is this?
+
+        float offset = (heightMap.GetLength(0) / 2.0f) - 0.5f;
+        tileMeshFilter.transform.position = new Vector3(-offset, 0, -offset);
+
+        surface.BuildNavMesh();
+        navMeshFilter.GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    private void SetupTileMesh()
+    {
+        GameObject tileMesh = GameObject.Find("TileMesh");
+        if(tileMesh == null)
         {
-            meshFilter = new GameObject("TerrainMesh").AddComponent<MeshFilter>();
-            meshFilter.gameObject.AddComponent<MeshRenderer>();
+            tileMesh = new GameObject("TileMesh");
+            tileMeshFilter = tileMesh.AddComponent<MeshFilter>();
+            tileMeshRenderer = tileMesh.AddComponent<MeshRenderer>();
         }
-        meshFilter.sharedMesh = data.CreateMesh();
+        else
+        {
+            tileMeshFilter = tileMesh.GetComponent<MeshFilter>();
+            tileMeshRenderer = tileMesh.GetComponent<MeshRenderer>();
+        }
+    }
+
+    private NavMeshSurface SetupNavMesh()
+    {
+        if (navMeshFilter == null)
+        {
+            navMeshFilter = new GameObject("NavMesh").AddComponent<MeshFilter>();
+            navMeshFilter.gameObject.AddComponent<MeshRenderer>();
+            navMeshCollider = navMeshFilter.gameObject.AddComponent<MeshCollider>();
+        }
+        NavMeshSurface surface = navMeshFilter.GetComponent<NavMeshSurface>();
+        if (surface == null)
+        {
+            surface = navMeshFilter.gameObject.AddComponent<NavMeshSurface>();
+            surface.collectObjects = CollectObjects.Children;
+            return surface;
+        }
+        return surface;
     }
 
     public float[,] GenerateHeightMap (int seed) {

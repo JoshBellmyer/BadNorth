@@ -6,8 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TileSet", menuName = "ScriptableObjects/TileSet", order = 1)]
 public class TileSet : ScriptableObject {
 
-	public TileSetType type;
-	public string tileSetName;
 	public TopType topType;
 	public int topLayers;
 	public int topMinLayer;
@@ -15,6 +13,12 @@ public class TileSet : ScriptableObject {
 	public Material material;
 	public Color sandColor;
 
+	public GameObject PickTile(int index, TileData data, Vector3Int position)
+    {
+		bool isTop = topType == TopType.AllTops && data.tileTypes[position.x, position.y + 1, position.z] == TileType.None;
+		isTop |= topType == TopType.Height && position.y > data.maxHeight - topLayers && topLayers > 0 && position.y >= topMinLayer;
+		return models[index].RandomVariation(20, isTop);
+	}
 
 	public enum TopType {
 		None = 0,
@@ -30,7 +34,10 @@ public class TileGroup {
 	public GameObject[] variations;
 	public GameObject[] tVariations;
 
-	public GameObject RandomVariation (int varChance) {
+	public List<TilePlacementRequirement> requirements;
+
+	public GameObject RandomVariation (int varChance, bool isTop) {
+		if (isTop) return RandomVariationTop(varChance);
 		int chance = Random.Range(0, 100);
 
 		if (chance < varChance && variations.Length > 1) {
@@ -42,9 +49,9 @@ public class TileGroup {
 		return variations[0];
 	}
 
-	public GameObject RandomVariationTop (int varChance) {
+	private GameObject RandomVariationTop (int varChance) {
 		if (tVariations.Length < 1) {
-			return RandomVariation(varChance);
+			return RandomVariation(varChance, false);
 		}
 
 		int chance = Random.Range(0, 100);
@@ -57,12 +64,4 @@ public class TileGroup {
 
 		return tVariations[0];
 	}
-}
-
-public enum TileSetType
-{
-	Random = 0,
-	A = 1,
-	B = 2,
-	C = 3,
 }
