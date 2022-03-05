@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 701609f5321cf91498931d077d158349, type: 3}
   m_Name: Tile (18)
   m_EditorClassIdentifier: 
-  requirements: []
+  requirements:
+  - {fileID: 11400000, guid: eff73ec52f75cda4a97efae86959daf6, type: 2}
+  - {fileID: 11400000, guid: fea2118d2eb47ce42bc7e8dc1a5761ba, type: 2}
+  - {fileID: 11400000, guid: 197e87ea9108ef040ab67f1d5b85b5b9, type: 2}
+  - {fileID: 11400000, guid: 485386756edd8fb478231b6d593baeaf, type: 2}
+  - {fileID: 11400000, guid: f42b5fbbf5695974bbc0ffa473f472a1, type: 2}
+  - {fileID: 11400000, guid: 45584776b718d484babec7eb9bcfa193, type: 2}
+  - {fileID: 11400000, guid: 84fa0ad7b3dcf554f998e386ac8be6d0, type: 2}

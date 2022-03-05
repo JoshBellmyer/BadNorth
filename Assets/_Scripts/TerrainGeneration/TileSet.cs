@@ -59,7 +59,7 @@ public class TileGroup {
 	public GameObject[] variations;
 	public GameObject[] tVariations;
 
-	public TilePlacementRequirementSet requirements;
+	public TilePlacementRequirementGroup requirements;
 
     public GameObject RandomVariation (int varChance, bool isTop) {
 		if (isTop) return RandomVariationTop(varChance);

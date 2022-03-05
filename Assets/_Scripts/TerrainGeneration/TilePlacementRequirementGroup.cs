@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TilePlacementRequirementSet")]
-public class TilePlacementRequirementSet : ScriptableObject
+[CreateAssetMenu(fileName = "TilePlacementRequirementGroup")]
+public class TilePlacementRequirementGroup : ScriptableObject
 {
     public TilePlacementRequirement[] requirements;
 

@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 1197353246644660426}
   - component: {fileID: 4582578356352998667}
   - component: {fileID: 3738190535446702834}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TileMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
