@@ -21,7 +21,7 @@ public class TileSet : ScriptableObject {
 		GameObject ret = null;
 		foreach (TileGroup group in models)
         {
-			rotation = ret == null ? group.GetRotationalFit(data.tileTypes, position) : rotation;
+			rotation = ret == null ? group.requirements.GetRotationalFit(data.tileTypes, position) : rotation;
 			if (rotation == -1) continue;
 
 			if (ret != null)
@@ -59,28 +59,7 @@ public class TileGroup {
 	public GameObject[] variations;
 	public GameObject[] tVariations;
 
-	public TilePlacementRequirement[] requirements;
-
-	public int GetRotationalFit(TileType[,,] tileTypes, Vector3Int position)
-	{
-		for (int i = 0; i < 4; i++)
-        {
-			bool good = true;
-            foreach (TilePlacementRequirement requirement in requirements)
-            {
-                if (!requirement.Check(tileTypes, position, i))
-                {
-					good = false;
-					break;
-                }
-            }
-			if (good)
-			{
-				return i * 90;
-			}
-        }
-        return -1;
-    }
+	public TilePlacementRequirementSet requirements;
 
     public GameObject RandomVariation (int varChance, bool isTop) {
 		if (isTop) return RandomVariationTop(varChance);
