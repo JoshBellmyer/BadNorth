@@ -43,7 +43,6 @@ public class TerrainGenerator : MonoBehaviour
         TilePlacer.otherMeshes = otherMeshes;
         tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter);
         tileMeshRenderer.material = tileSet.material;
-        navMeshFilter.transform.localScale = new Vector3(1, 1, -1); // TODO: What is this?
 
         float offset = (heightMap.GetLength(0) / 2.0f) - 0.5f;
         tileMeshFilter.transform.position = new Vector3(-offset, 0, -offset);

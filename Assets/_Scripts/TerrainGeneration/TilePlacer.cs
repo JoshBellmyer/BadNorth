@@ -35,12 +35,14 @@ public class TilePlacer : MonoBehaviour {
 		mInstances = new List<CombineInstance>();
 		CombineInstance combine = new CombineInstance();
 		combine.mesh = colMesh.sharedMesh;
-		combine.transform = Matrix4x4.identity;
+		combine.transform = Matrix4x4.TRS(colMesh.transform.position, colMesh.transform.rotation, colMesh.transform.localScale);
+		combine.transform *= Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, 1, -1)); // TODO: why is this scaled?
 		mInstances.Add(combine);
 
 		foreach (TileLocation tileLoc in tileData.tileLocations) {
 			//if (tileLoc.type != TileType.Cube) continue;
 			PlaceTile(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z);
+			PlaceMeshTile(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z);
 		}
 
 		// tempObj.transform.localScale = new Vector3(1, 1, -1);
@@ -137,7 +139,7 @@ public class TilePlacer : MonoBehaviour {
 
 		if (rampEdges.ContainsKey(index)) {
 			PlaceTile(x, y, z);
-			PlaceMeshTile(x, y, z, rotation, rampEdges[index]);
+			PlaceMeshTile(x, y, z);
 		}
 	}
 
@@ -148,59 +150,33 @@ public class TilePlacer : MonoBehaviour {
 		GameObject tileObject = tileSet.PickTile(tileData, new Vector3Int(x, y, z), ref rotation);
 		if (tileObject == null) return;
 
-		Vector3 position = new Vector3(x, y - 0.5f, z) + tileObject.transform.GetChild(0).position;
+		Vector3 position = new Vector3(x, y - 0.5f, z) + tileObject.transform.GetChild(0).localPosition;
 		Vector3 eulerAngles = new Vector3(0, rotation, 0) + tileObject.transform.GetChild(0).localEulerAngles;
+		Vector3 scale = tileObject.transform.GetChild(0).localScale;
 
 		GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
 
 		CombineInstance combine = new CombineInstance();
 		combine.mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
-		combine.transform = Matrix4x4.TRS(position, Quaternion.Euler(eulerAngles), Vector3.one);
+		combine.transform = Matrix4x4.TRS(position, Quaternion.Euler(eulerAngles), scale);
 		cInstances.Add(combine);
 	}
 
 	// Places a mesh tile and adds it to the collision mesh
-	private static void PlaceMeshTile (int x, int y, int z, int rotation, int tileIndex) {
-		int meshIndex = -1;
+	private static void PlaceMeshTile (int x, int y, int z) {
+		int rotation = 0;
+		GameObject tileObject = tileSet.PickTile(tileData, new Vector3Int(x, y, z), ref rotation, true);
+		if (tileObject == null) return;
 
-		switch (tileIndex) {
-			case 6:
-			case 7:
-			case 8:
-			case 9:
-				meshIndex = 0;
-			break;
-
-			case 10:
-			case 11:
-			case 12:
-			case 13:
-				meshIndex = 2;
-			break;
-
-			case 14:
-			case 15:
-			case 16:
-			case 17:
-				meshIndex = 1;
-			break;
-		}
-
-		if (meshIndex < 0) {
-			return;
-		}
-
-		GameObject tileObject = otherMeshes[meshIndex];
-
-		float offset = (tileData.sizeX / 2.0f) - 0.5f;
-		Vector3 position = new Vector3(x - offset, y - 0.5f, z - offset);
-		Vector3 eulerAngles = new Vector3(0, 90 * rotation, 0);
+		Vector3 position = new Vector3(x, y - 0.5f, z) + tileObject.transform.GetChild(0).localPosition - new Vector3(tileData.sizeX - 1, 0, tileData.sizeZ - 1) / 2;
+		Quaternion rotationTransform = Quaternion.Euler(0, rotation, 0) * tileObject.transform.GetChild(0).rotation;
+		Vector3 scale = tileObject.transform.GetChild(0).localScale;
 
 		GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
 
 		CombineInstance combine = new CombineInstance();
 		combine.mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
-		combine.transform = Matrix4x4.TRS(position, Quaternion.Euler(eulerAngles), Vector3.one);
+		combine.transform = Matrix4x4.TRS(position, rotationTransform, scale);
 		mInstances.Add(combine);
 	}
 

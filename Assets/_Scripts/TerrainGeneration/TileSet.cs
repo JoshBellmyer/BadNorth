@@ -13,7 +13,7 @@ public class TileSet : ScriptableObject {
 	public Material material;
 	public Color sandColor;
 
-	public GameObject PickTile(TileData data, Vector3Int position, ref int rotation)
+	public GameObject PickTile(TileData data, Vector3Int position, ref int rotation, bool simple = false)
     {
 		bool isTop = topType == TopType.AllTops && data.tileTypes[position.x, position.y + 1, position.z] == TileType.None;
 		isTop |= topType == TopType.Height && position.y > data.maxHeight - topLayers && topLayers > 0 && position.y >= topMinLayer;
@@ -31,7 +31,7 @@ public class TileSet : ScriptableObject {
 				Debug.Log(ret.name);
 				break;
 			}
-			ret = group.RandomVariation(20, isTop);
+			ret = simple ? group.simple : group.RandomVariation(20, isTop);
         }
 
 		//if (ret == null)
@@ -58,6 +58,7 @@ public class TileGroup {
 
 	public GameObject[] variations;
 	public GameObject[] tVariations;
+	public GameObject simple;
 
 	public TilePlacementRequirementGroup requirements;
 
