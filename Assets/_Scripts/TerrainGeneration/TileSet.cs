@@ -34,14 +34,14 @@ public class TileSet : ScriptableObject {
 			ret = group.RandomVariation(20, isTop);
         }
 
-		if (ret == null)
-		{
-			Debug.LogError("Uh oh");
-			Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z - 1], data.tileTypes[position.x, position.y, position.z - 1], data.tileTypes[position.x + 1, position.y, position.z - 1]));
-			Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z], data.tileTypes[position.x, position.y, position.z], data.tileTypes[position.x + 1, position.y, position.z]));
-			Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z + 1], data.tileTypes[position.x, position.y, position.z + 1], data.tileTypes[position.x + 1, position.y, position.z + 1]));
-			Debug.Log(data.tileTypes[position.x, position.y + 1, position.z] + ", " + rotation);
-		}
+		//if (ret == null)
+		//{
+		//	Debug.LogError("Uh oh");
+		//	Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z - 1], data.tileTypes[position.x, position.y, position.z - 1], data.tileTypes[position.x + 1, position.y, position.z - 1]));
+		//	Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z], data.tileTypes[position.x, position.y, position.z], data.tileTypes[position.x + 1, position.y, position.z]));
+		//	Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z + 1], data.tileTypes[position.x, position.y, position.z + 1], data.tileTypes[position.x + 1, position.y, position.z + 1]));
+		//	Debug.Log(data.tileTypes[position.x, position.y + 1, position.z] + ", " + rotation);
+		//}
 		return ret;
 	}
 
