@@ -39,59 +39,8 @@ public class TilePlacer : MonoBehaviour {
 		mInstances.Add(combine);
 
 		foreach (TileLocation tileLoc in tileData.tileLocations) {
-			switch (tileLoc.type) {
-				case TileType.Cube:
-					PlaceCube(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z);
-				break;
-
-				case TileType.FullRampU:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 0, 0b0000);
-				break;
-
-				case TileType.FullRampD:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 2, 0b0000);
-				break;
-
-				case TileType.FullRampL:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 3, 0b0000);
-				break;
-
-				case TileType.FullRampR:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 1, 0b0000);
-				break;
-
-				case TileType.RaisedRampU:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 0, 0b0100);
-				break;
-
-				case TileType.RaisedRampD:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 2, 0b0100);
-				break;
-
-				case TileType.RaisedRampL:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 3, 0b0100);
-				break;
-
-				case TileType.RaisedRampR:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 1, 0b0100);
-				break;
-
-				case TileType.HalfRampU:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 0, 0b1000);
-				break;
-
-				case TileType.HalfRampD:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 2, 0b1000);
-				break;
-
-				case TileType.HalfRampL:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 3, 0b1000);
-				break;
-
-				case TileType.HalfRampR:
-					PlaceSlope(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z, 1, 0b1000);
-				break;
-			}
+			//if (tileLoc.type != TileType.Cube) continue;
+			PlaceTile(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z);
 		}
 
 		// tempObj.transform.localScale = new Vector3(1, 1, -1);
@@ -145,7 +94,7 @@ public class TilePlacer : MonoBehaviour {
 		}
 
 		if (tileIndex >= 0) {
-			PlaceTile(x, y, z, rotation, tileIndex);
+			PlaceTile(x, y, z);
 		}
 	}
 
@@ -187,18 +136,20 @@ public class TilePlacer : MonoBehaviour {
 		string index = $"{slopeType},{RotateEdges(edgeBool, rotation)}";
 
 		if (rampEdges.ContainsKey(index)) {
-			PlaceTile(x, y, z, rotation, rampEdges[index]);
+			PlaceTile(x, y, z);
 			PlaceMeshTile(x, y, z, rotation, rampEdges[index]);
 		}
 	}
 
 
 	// Places a tile and adds it to the mesh
-	private static void PlaceTile (int x, int y, int z, int rotation, int tileIndex) {
-		GameObject tileObject = tileSet.PickTile(tileIndex, tileData, new Vector3Int(x, y, z));
+	private static void PlaceTile (int x, int y, int z) {
+		int rotation = 0;
+		GameObject tileObject = tileSet.PickTile(tileData, new Vector3Int(x, y, z), ref rotation);
+		if (tileObject == null) return;
 
 		Vector3 position = new Vector3(x, y, z);
-		Vector3 eulerAngles = new Vector3(0, 90 * rotation, 0);
+		Vector3 eulerAngles = new Vector3(0, rotation, 0) + tileObject.transform.GetChild(0).localEulerAngles;
 
 		GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
 

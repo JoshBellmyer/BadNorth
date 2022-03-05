@@ -43,14 +43,15 @@ public class TileData {
 					maxHeight = height;
 				}
 
-				if (height > 0) {
+				while (height > 0) {
 					tileTypes[x, height, z] = TileType.Cube;
 					tileLocations.Add( new TileLocation(TileType.Cube, new Vector3Int(x, height, z)) );
+					height--;
 				}
 			}
 		}
 
-		EnhanceTiles();
+		//EnhanceTiles();
 	}
 
 
