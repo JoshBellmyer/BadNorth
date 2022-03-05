@@ -7,6 +7,8 @@ public class TerrainGenerator : MonoBehaviour
 {
     public TerrainSettings settings;
 
+    public NavMeshSurface surface;
+
     public MeshFilter navMeshFilter;
     public MeshCollider navMeshCollider;
 
@@ -30,7 +32,6 @@ public class TerrainGenerator : MonoBehaviour
 
         MeshData data = settings.flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(heightMap, settings.meshScale) : MeshGenerator.GenerateTerrainMesh(heightMap, settings.meshScale);
 
-        NavMeshSurface surface = SetupNavMesh();
         Mesh m = data.CreateMesh();
         navMeshFilter.sharedMesh = m;
         navMeshCollider.sharedMesh = m;
@@ -38,7 +39,6 @@ public class TerrainGenerator : MonoBehaviour
         TileData tileData = new TileData(heightMap, settings.meshScale);
         TileSet tileSet = settings.tileSet;
 
-        SetupTileMesh();
 
         TilePlacer.otherMeshes = otherMeshes;
         tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter);
@@ -50,40 +50,6 @@ public class TerrainGenerator : MonoBehaviour
 
         surface.BuildNavMesh();
         navMeshFilter.GetComponent<MeshRenderer>().enabled = false;
-    }
-
-    private void SetupTileMesh()
-    {
-        GameObject tileMesh = GameObject.Find("TileMesh");
-        if(tileMesh == null)
-        {
-            tileMesh = new GameObject("TileMesh");
-            tileMeshFilter = tileMesh.AddComponent<MeshFilter>();
-            tileMeshRenderer = tileMesh.AddComponent<MeshRenderer>();
-        }
-        else
-        {
-            tileMeshFilter = tileMesh.GetComponent<MeshFilter>();
-            tileMeshRenderer = tileMesh.GetComponent<MeshRenderer>();
-        }
-    }
-
-    private NavMeshSurface SetupNavMesh()
-    {
-        if (navMeshFilter == null)
-        {
-            navMeshFilter = new GameObject("NavMesh").AddComponent<MeshFilter>();
-            navMeshFilter.gameObject.AddComponent<MeshRenderer>();
-            navMeshCollider = navMeshFilter.gameObject.AddComponent<MeshCollider>();
-        }
-        NavMeshSurface surface = navMeshFilter.GetComponent<NavMeshSurface>();
-        if (surface == null)
-        {
-            surface = navMeshFilter.gameObject.AddComponent<NavMeshSurface>();
-            surface.collectObjects = CollectObjects.Children;
-            return surface;
-        }
-        return surface;
     }
 
     public float[,] GenerateHeightMap (int seed) {
