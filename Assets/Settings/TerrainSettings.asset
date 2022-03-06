@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: TerrainSettings
   m_EditorClassIdentifier: 
   size: 24
-  randomizeSeed: 0
-  seed: 1462554814
+  randomizeSeed: 1
+  seed: -1026046731
   noiseSettings:
     scale: 15
     octaves: 2
@@ -29,4 +29,4 @@ MonoBehaviour:
   flattenPeakLookRange: 3
   meshScale: 10
   flatTilesMesh: 1
-  tileSet: {fileID: 11400000, guid: 69a6358b58ba948fe86bff7b0f2e1737, type: 2}
+  tileSet: {fileID: 11400000, guid: a00173cc522984219964e33348d91e06, type: 2}
