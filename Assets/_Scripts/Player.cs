@@ -106,7 +106,7 @@ public class Player : MonoBehaviour {
             return false;
         }
 
-        Boat = PrefabFactory.CreateBoat(this, SelectedUnitType); ;
+        Boat = PrefabFactory.CreateBoat(this, SelectedUnitType);
 
         return true;
     }

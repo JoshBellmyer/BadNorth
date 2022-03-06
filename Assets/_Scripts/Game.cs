@@ -7,6 +7,8 @@ using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Unity.Netcode;
+using Unity.Netcode.Components;
+
 
 public class Game : MonoBehaviour {
 

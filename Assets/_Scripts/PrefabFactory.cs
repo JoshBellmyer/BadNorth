@@ -60,6 +60,11 @@ public static class PrefabFactory
     }
 
     public static Boat CreateBoat(Player player, UnitType unitType) {
+        if (Game.online) {
+
+            return null;
+        }
+
         Boat boat = Object.Instantiate<Boat>(boatPrefab);
         boat.SetPlayer(player);
 

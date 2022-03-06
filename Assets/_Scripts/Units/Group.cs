@@ -19,15 +19,20 @@ public class Group {
 
         GameObject prefab = UnitManager.instance.GetPrefabOfType(unitType);
 
+        this.CanMove = true;
+        this.CanAttack = true;
+
+        if (Game.online) {
+
+            return;
+        }
+
         for (int i = 0; i < prefab.GetComponent<Unit>().groupAmount; i++) {
             Unit unit = UnityEngine.Object.Instantiate(prefab).GetComponent<Unit>();
             _units.Add(unit);
             unit.Team = team;
             unit.Group = this;
         }
-
-        this.CanMove = true;
-        this.CanAttack = true;
     }
 
 

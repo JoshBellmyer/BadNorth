@@ -32,6 +32,11 @@ public class OnlinePlayer : NetworkBehaviour {
     }
 
 
+    [ServerRpc]
+    public void SpawnObjectServerRpc (string prefabString) {
+        
+    }
+
     // Put handlers for incoming network messages in here
     private void InitMessageHandlers () {
         

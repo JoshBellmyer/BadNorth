@@ -189,9 +189,14 @@ public class CursorController : MonoBehaviour
             return;
         }
 
-        Vector3 pos = Game.GetGridPos(hit.point);
-        player.SelectedGroup.SetAgentEnabled(true);
-        player.SelectedGroup.MoveTo(pos);
+        if (Game.online && !Game.isHost) {
+            
+        }
+        else {
+            Vector3 pos = Game.GetGridPos(hit.point);
+            player.SelectedGroup.SetAgentEnabled(true);
+            player.SelectedGroup.MoveTo(pos);
+        }
 
         DeselectUnits();
     }

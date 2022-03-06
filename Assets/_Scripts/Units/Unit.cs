@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using Unity.Netcode;
 
 public abstract class Unit : MonoBehaviour {
 
@@ -18,6 +19,7 @@ public abstract class Unit : MonoBehaviour {
     [SerializeField] protected string attackSound;
     [SerializeField] protected Directive _directive;
     [SerializeField] protected Unit _targetEnemy;
+    public NetworkUnit networkUnit;
 
     private LadderUnit targetLadder;
     private Vector3 secondDestination;
@@ -112,6 +114,8 @@ public abstract class Unit : MonoBehaviour {
         _canMove = true;
         _destination = Vector3.zero;
         _directive = Directive.NONE;
+
+        networkUnit = GetComponent<NetworkUnit>();
     }
 
     private void Start () {
@@ -130,6 +134,9 @@ public abstract class Unit : MonoBehaviour {
     protected virtual void UnitStart () {}
 
     private void Update () {
+        if (Game.online && !Game.isHost) {
+            return;
+        }
         if (InBoat) {
             return;
         }
@@ -510,7 +517,13 @@ public abstract class Unit : MonoBehaviour {
         paused = false;
     }
 
-    internal void IssueDestination (Vector3 destination) {
+    public void IssueDestination (Vector3 destination) {
+        if (Game.online && !Game.isHost) {
+            networkUnit.IssueDestinationServerRpc(destination);
+
+            return;
+        }
+
         if (!_canMove) {
             return;
         }

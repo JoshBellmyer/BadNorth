@@ -38,4 +38,12 @@ public class NetworkHelper : MonoBehaviour {
         writer.WriteValueSafe(message);
         networkManager.CustomMessagingManager.SendNamedMessage(messageName, clientId, writer, NetworkDelivery.Reliable);
     }
+
+    [ServerRpc]
+    public GameObject SpawnObjectServerRpc (GameObject prefab) {
+        GameObject newObj = Instantiate<GameObject>(prefab);
+        newObj.GetComponent<NetworkObject>().Spawn();
+
+        return newObj;
+    }
 }
