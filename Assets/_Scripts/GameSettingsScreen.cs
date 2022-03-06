@@ -9,28 +9,22 @@ public class GameSettingsScreen : UIScreen
 {
     [SerializeField] Dropdown tileSetSelection;
 
-    Dictionary<int, TileSetType> valueTypeMap;
+    Dictionary<int, TileSet> valueTypeMap;
 
     private void Start()
     {
-        valueTypeMap = new Dictionary<int, TileSetType>();
+        valueTypeMap = new Dictionary<int, TileSet>();
         tileSetSelection.options.Clear();
         int valueCount = 0;
-        foreach (TileSetType type in Enum.GetValues(typeof(TileSetType)))
+        valueTypeMap.Add(valueCount, null);
+        tileSetSelection.options.Add(new OptionData("Random"));
+        valueCount++;
+        foreach (TileSet tileSet in Resources.LoadAll<TileSet>("TileSets"))
         {
-            if(type == TileSetType.Random)
-            {
-                valueTypeMap.Add(valueCount, type);
-                tileSetSelection.options.Add(new OptionData("Random"));
-                valueCount++;
-                continue;
-            }
-
-            TileSet tileSet = TileSetLoader.GetTileSet(type);
             if(tileSet != null)
             {
-                valueTypeMap.Add(valueCount, type);
-                tileSetSelection.options.Add(new OptionData(tileSet.tileSetName));
+                valueTypeMap.Add(valueCount, tileSet);
+                tileSetSelection.options.Add(new OptionData(tileSet.name));
                 valueCount++;
             }
         }
@@ -38,7 +32,7 @@ public class GameSettingsScreen : UIScreen
 
     public void OnBack()
     {
-        Game.instance.selectedTileSetType = valueTypeMap[tileSetSelection.value];
+        Game.instance.terrainSettings.tileSet = valueTypeMap[tileSetSelection.value];
         manager.SetUIScreen("Title Screen");
     }
 }

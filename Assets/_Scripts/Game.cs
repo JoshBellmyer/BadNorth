@@ -13,7 +13,6 @@ using Unity.Netcode.Components;
 public class Game : MonoBehaviour {
 
 	public static Game instance;
-	public static MapGenerator mapGenerator;
 	public static NetworkManager networkManager;
 	public static NetworkHelper networkHelper;
 
@@ -22,8 +21,7 @@ public class Game : MonoBehaviour {
 
 	public const int everythingMask = 0x7FFFFFFF;
 
-	public TileSetType selectedTileSetType;
-	public TileSet selectedTileSet;
+	public TerrainSettings terrainSettings;
 
 	public static bool online;
 	public static bool isHost;
@@ -84,7 +82,6 @@ public class Game : MonoBehaviour {
     {
 		if(scene.name != "Title")
 		{
-			Game.instance.selectedTileSet = TileSetLoader.GetTileSet(Game.instance.selectedTileSetType);
 			SetupGame();
         }
     }

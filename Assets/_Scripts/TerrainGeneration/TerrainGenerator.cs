@@ -1,15 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
     public TerrainSettings settings;
 
-    public MeshFilter meshFilter;
+    public static System.Random random;
 
-    public bool randomizeSeed;
-    public int seed;
+    public NavMeshSurface surface;
+
+    public MeshFilter navMeshFilter;
+    public MeshCollider navMeshCollider;
+
+    public MeshFilter tileMeshFilter;
+    public MeshRenderer tileMeshRenderer;
+
+    public GameObject[] otherMeshes;
 
     public void Start()
     {
@@ -18,17 +26,29 @@ public class TerrainGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
+        int seed = settings.Seed;
+
+        random = new System.Random(seed);
+
         float[,] heightMap = GenerateHeightMap(seed);
 
         MeshData data = settings.flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(heightMap, settings.meshScale) : MeshGenerator.GenerateTerrainMesh(heightMap, settings.meshScale);
 
-        if(meshFilter == null)
-        {
-            meshFilter = new GameObject("TerrainMesh").AddComponent<MeshFilter>();
-            meshFilter.gameObject.AddComponent<MeshRenderer>();
-        }
-        meshFilter.sharedMesh = data.CreateMesh();
+        Mesh m = data.CreateMesh();
+        navMeshFilter.sharedMesh = m;
+        navMeshCollider.sharedMesh = m;
+
+        TileData tileData = new TileData(heightMap, settings.meshScale);
+        TileSet tileSet = settings.tileSet;
+
+        tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter);
+        tileMeshRenderer.material = tileSet.material;
+
+        float offset = (heightMap.GetLength(0) / 2.0f) - 0.5f;
+        tileMeshFilter.transform.position = new Vector3(-offset, 0, -offset);
+
+        surface.BuildNavMesh();
+        navMeshFilter.GetComponent<MeshRenderer>().enabled = false;
     }
 
     public float[,] GenerateHeightMap (int seed) {

@@ -7,6 +7,22 @@ public class TerrainSettings : ScriptableObject
 {
     [Range(2, 24)]
     public int size;
+
+    public bool randomizeSeed;
+    [SerializeField] int seed;
+    public int Seed
+    {
+        get 
+        {
+            if (randomizeSeed)
+            {
+                seed = Random.Range(int.MinValue, int.MaxValue);
+            }
+            return seed; 
+        }
+        set => seed = value;
+    }
+
     public NoiseSettings noiseSettings;
 
     public float scaleHeight;
@@ -17,4 +33,6 @@ public class TerrainSettings : ScriptableObject
     public int flattenPeakLookRange;
     public float meshScale;
     public bool flatTilesMesh;
+
+    public TileSet tileSet;
 }
