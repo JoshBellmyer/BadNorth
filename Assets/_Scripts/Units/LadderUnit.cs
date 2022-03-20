@@ -49,7 +49,7 @@ public class LadderUnit : Unit
     public void AttachToWall (Vector3 pos, Vector3 normal) {
         attachPos = pos;
         attachNormal = normal;
-        landingPos = Game.GetTopFromSide(pos, normal);
+        landingPos = GridUtils.GetTopFromSide(pos, normal);
         attaching = true;
     }
 

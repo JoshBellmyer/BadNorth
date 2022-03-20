@@ -65,10 +65,10 @@ public class Boat : MonoBehaviour {
 
 		if (hitTerrain) {
 			laser.transform.localScale = new Vector3(1, 1, hit.distance);
-			selector.transform.position = Game.GetTopFromSide(hit.point, hit.normal);
+			selector.transform.position = GridUtils.GetTopFromSide(hit.point, hit.normal);
 
 			// Collider[] cols = Physics.OverlapSphere(selector.transform.position + new Vector3(0, 0.75f, 0), 0.35f, LayerMask.GetMask("Terrain"));
-			bool terrainAbove = Game.CheckForTerrainAbove(selector.transform.position);
+			bool terrainAbove = GridUtils.CheckForTerrainAbove(selector.transform.position);
 
 			if (!terrainAbove && selector.transform.position.y <= 1f) {
 				canSail = true;

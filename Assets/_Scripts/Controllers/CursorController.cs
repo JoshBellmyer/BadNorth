@@ -193,7 +193,7 @@ public class CursorController : MonoBehaviour
             
         }
         else {
-            Vector3 pos = Game.GetGridPos(hit.point);
+            Vector3 pos = GridUtils.GetGridPos(hit.point);
             player.SelectedGroup.SetAgentEnabled(true);
             player.SelectedGroup.MoveTo(pos);
         }
@@ -221,7 +221,7 @@ public class CursorController : MonoBehaviour
         }
 
         SetSelectionActive(true);
-        player.GridSelection.transform.position = Game.GetGridPos(position);
+        player.GridSelection.transform.position = GridUtils.GetGridPos(position);
         player.GridSelection.transform.up = normal;
     }
 
@@ -238,11 +238,11 @@ public class CursorController : MonoBehaviour
             return;
         }
 
-        Vector3 topPos = Game.GetTopFromSide(pos, normal);
-        Vector3 topNormal = Game.GetGridNormal(topPos);
-        Vector3 sidePos = Game.GetSideGridPos(pos, normal);
-        ladderFloorPos = Game.GetGridPos(pos + (normal * 0.25f));
-        Vector3 floorNormal = Game.GetGridNormal(ladderFloorPos);
+        Vector3 topPos = GridUtils.GetTopFromSide(pos, normal);
+        Vector3 topNormal = GridUtils.GetGridNormal(topPos);
+        Vector3 sidePos = GridUtils.GetSideGridPos(pos, normal);
+        ladderFloorPos = GridUtils.GetGridPos(pos + (normal * 0.25f));
+        Vector3 floorNormal = GridUtils.GetGridNormal(ladderFloorPos);
 
         if (topNormal != Vector3.up || floorNormal != Vector3.up) {
             SetLadderActive(false);

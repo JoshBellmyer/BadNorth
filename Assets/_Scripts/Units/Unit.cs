@@ -331,7 +331,7 @@ public abstract class Unit : MonoBehaviour {
             return;
         }
 
-        Vector3 groundPos = Game.GetGroundLevelPos(transform.position + (normal * 0.5f) + new Vector3(0, 0.1f, 0));
+        Vector3 groundPos = GridUtils.GetGroundLevelPos(transform.position + (normal * 0.5f) + new Vector3(0, 0.1f, 0));
 
         if (groundPos.y >= transform.position.y) {
             return;
@@ -535,7 +535,7 @@ public abstract class Unit : MonoBehaviour {
 
         // TODO: Transform destination before setting.
 
-        _destination = Game.GetGroundLevelPos(destination);
+        _destination = GridUtils.GetGroundLevelPos(destination);
         
         _navMeshAgent.SetDestination(destination);
         _directive = Directive.MOVE;

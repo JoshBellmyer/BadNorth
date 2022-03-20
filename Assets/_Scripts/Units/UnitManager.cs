@@ -102,7 +102,7 @@ public class UnitManager : MonoBehaviour {
         try {
             type = Type.GetType(str);
         }
-        catch (TypeLoadException e) {
+        catch (TypeLoadException) {
             return null;
         }
 
