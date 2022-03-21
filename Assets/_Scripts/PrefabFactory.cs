@@ -65,7 +65,10 @@ public static class PrefabFactory
     internal static TerrainGenerator CreateTerrainGenerator()
     {
         TerrainGenerator go = Object.Instantiate(terrainGeneratorPrefab);
-        go.GetComponent<NetworkObject>().Spawn();
+        if (Game.online)
+        {
+            go.GetComponent<NetworkObject>().Spawn();
+        }
         return go;
     }
 

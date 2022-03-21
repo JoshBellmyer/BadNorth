@@ -110,6 +110,8 @@ public class Game : MonoBehaviour {
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
+		PrefabFactory.CreateTerrainGenerator();
 	}
 
 	public void SetupGameHost () {
