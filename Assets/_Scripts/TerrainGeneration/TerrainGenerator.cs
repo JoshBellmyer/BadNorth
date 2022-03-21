@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using Unity.Netcode;
 using UnityEngine;
 
-public class TerrainGenerator : MonoBehaviour
+public class TerrainGenerator : NetworkBehaviour
 {
     public TerrainSettings settings;
 
@@ -19,14 +20,20 @@ public class TerrainGenerator : MonoBehaviour
 
     public GameObject[] otherMeshes;
 
+    NetworkVariable<int> seed = new NetworkVariable<int>();
+
     public void Start()
     {
-        GenerateMap();
+        if (Game.isHost || !Application.isPlaying)
+        {
+            seed.Value = settings.randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : settings.defaultSeed;
+        }
+
+        GenerateMap(seed.Value);
     }
 
-    public void GenerateMap()
+    public void GenerateMap(int seed)
     {
-        int seed = settings.Seed;
 
         random = new System.Random(seed);
 

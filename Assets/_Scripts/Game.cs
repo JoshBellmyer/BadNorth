@@ -91,11 +91,11 @@ public class Game : MonoBehaviour {
     	if (online) {
     		if (isHost) {
     			SetupGameHost();
-    		}
+				PrefabFactory.CreateTerrainGenerator();
+			}
     		else {
     			SetupGameClient();
     		}
-
     		return;
     	}
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public static class PrefabFactory
@@ -10,6 +11,7 @@ public static class PrefabFactory
     private static Sprite3D unitSelectPrefabPlayer2;
     private static Boat boatPrefab;
     private static PlayerController playerControllerPrefab;
+    private static TerrainGenerator terrainGeneratorPrefab;
 
     public static void Initialize()
     {
@@ -19,6 +21,7 @@ public static class PrefabFactory
         unitSelectPrefabPlayer2 = Resources.Load<Sprite3D>("Prefabs/Unit Select P2");
         boatPrefab = Resources.Load<Boat>("Prefabs/Boat");
         playerControllerPrefab = Resources.Load<PlayerController>("Prefabs/Player");
+        terrainGeneratorPrefab = Resources.Load<TerrainGenerator>("Prefabs/TerrainGenerator");
     }
 
     public static PlayerController CreatePlayerController()
@@ -57,6 +60,13 @@ public static class PrefabFactory
         sprite.transform.SetParent(unit.transform);
         sprite.transform.localPosition = new Vector3(0, 0.75f, 0);
         return sprite.gameObject;
+    }
+
+    internal static TerrainGenerator CreateTerrainGenerator()
+    {
+        TerrainGenerator go = Object.Instantiate(terrainGeneratorPrefab);
+        go.GetComponent<NetworkObject>().Spawn();
+        return go;
     }
 
     public static Boat CreateBoat(Player player, UnitType unitType) {
