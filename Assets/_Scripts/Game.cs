@@ -134,6 +134,19 @@ public class Game : MonoBehaviour {
 		Cursor.visible = false;
 	}
 
+	// Clear the networking components from a gameobject to prevent errors in local mode
+	public static void ClearNetworking (GameObject obj) {
+		NetworkObject tempNO = obj.GetComponent<NetworkObject>();
+		NetworkTransform tempNT = obj.GetComponent<NetworkTransform>();
+
+		if (tempNT != null) {
+			DestroyImmediate(tempNT);
+		}
+		if (tempNO != null) {
+			DestroyImmediate(tempNO);
+		}
+	}
+
 
 	public bool IsPlayerRegistered(PlayerController player)
     {
@@ -146,6 +159,12 @@ public class Game : MonoBehaviour {
 #if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
 #endif
+	}
+
+	public static OnlinePlayer GetLocalPlayer () {
+		NetworkObject obj = networkManager.LocalClient.PlayerObject;
+
+		return obj.GetComponent<OnlinePlayer>();
 	}
 
 	public void SwitchToMainMenu()
@@ -198,6 +217,54 @@ public class Game : MonoBehaviour {
 			player.SetControlsActivated(true);
 			player.SetActionMap("Player");
 		}
+	}
+
+	public static void SetParent (GameObject obj, GameObject newParent) {
+		if (online) {
+			NetworkObject netObj = obj.GetComponent<NetworkObject>();
+
+			if (netObj != null && newParent == null) {
+				GetLocalPlayer().UnsetParentServerRpc(netObj);
+
+				return;
+			}
+
+			NetworkObject netParent = newParent.GetComponent<NetworkObject>();
+
+			if (netObj != null && netParent != null) {
+				GetLocalPlayer().SetParentServerRpc(netObj, netParent);
+			}
+			else {
+				obj.transform.SetParent(newParent.transform);
+			}
+		}
+		else {
+			obj.transform.SetParent(newParent.transform);
+		}
+	}
+
+	public static void SetPosition (GameObject obj, Vector3 newPos) {
+		if (online) {
+			NetworkObject netObj = obj.GetComponent<NetworkObject>();
+
+			if (netObj != null) {
+				GetLocalPlayer().SetPositionServerRpc(netObj, newPos);
+			}
+		}
+		
+		obj.transform.position = newPos;
+	}
+
+	public static void SetRotation (GameObject obj, Vector3 newRot) {
+		if (online) {
+			NetworkObject netObj = obj.GetComponent<NetworkObject>();
+
+			if (netObj != null) {
+				GetLocalPlayer().SetRotationServerRpc(netObj, newRot);
+			}
+		}
+
+		obj.transform.eulerAngles = newRot;
 	}
 
 	// Returns the position at the center of the grid square containing the given pos

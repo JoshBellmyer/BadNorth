@@ -84,8 +84,23 @@ public abstract class Unit : MonoBehaviour {
     }
 
     public string Team {
-        get => _team;
-        set { _team = value; }
+        get {
+            if (Game.online) {
+                return $"{networkUnit.team.Value}";
+            }
+            else {
+                return _team;
+            }
+        }
+        set { 
+            if (Game.online) {
+                _team = value;
+                networkUnit.SetTeamServerRpc(value);
+            }
+            else {
+                _team = value; 
+            }
+        }
     }
 
     public Group Group {
@@ -120,7 +135,7 @@ public abstract class Unit : MonoBehaviour {
 
     private void Start () {
         teamColor = GetComponent<TeamColor>();
-        teamColor.SetColor(int.Parse(_team));
+        teamColor.SetColor(int.Parse(Team));
         renderers = GetComponentsInChildren<Renderer>();
         animator = GetComponentInChildren<Animator>();
 
@@ -280,7 +295,7 @@ public abstract class Unit : MonoBehaviour {
     }
 
     private void LateUpdate () {
-        if (_health <= 0 || transform.position.y < Sand.height) {
+        if (_health <= 0 || (transform.position.y < Sand.height && transform.parent == null)) {
             Die();
         }
     }
@@ -293,7 +308,7 @@ public abstract class Unit : MonoBehaviour {
         }
 
         _group.RemoveUnit(this);
-        TeamManager.instance.Remove(_team, this);
+        TeamManager.instance.Remove(Team, this);
 
         DestroyMaterialInstances();
 
@@ -441,7 +456,7 @@ public abstract class Unit : MonoBehaviour {
     }
 
     public void ResetTeamColor () {
-        teamColor.SetColor(int.Parse(_team));
+        teamColor.SetColor(int.Parse(Team));
     }
 
     private void DestroyMaterialInstances () {
@@ -540,7 +555,7 @@ public abstract class Unit : MonoBehaviour {
         _navMeshAgent.SetDestination(destination);
         _directive = Directive.MOVE;
 
-        HashSet<Unit> units = TeamManager.instance.GetOnTeam(_team);
+        HashSet<Unit> units = TeamManager.instance.GetOnTeam(Team);
         List<Tuple<NavMeshAgent, NavMeshAgent>> agentTuples = new List<Tuple<NavMeshAgent, NavMeshAgent>>();
         Dictionary<NavMeshAgent, LadderUnit> ladders = new Dictionary<NavMeshAgent, LadderUnit>();
 
@@ -664,11 +679,11 @@ public abstract class Unit : MonoBehaviour {
     }
 
     protected HashSet<Unit> GetEnemies () {
-        return TeamManager.instance.GetNotOnTeam(_team);
+        return TeamManager.instance.GetNotOnTeam(Team);
     }
 
     protected HashSet<Unit> GetAllies () {
-        return TeamManager.instance.GetOnTeam(_team);
+        return TeamManager.instance.GetOnTeam(Team);
     }
 
     protected IOrderedEnumerable<Unit> GetOrderedEnemiesWithin (float maximumDistance) {

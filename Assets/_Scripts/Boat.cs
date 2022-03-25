@@ -13,12 +13,13 @@ public class Boat : MonoBehaviour {
 	[SerializeField] private GameObject laser;
 	[SerializeField] private MeshRenderer laserMesh;
 	[SerializeField] private GameObject selector;
+	[SerializeField] private NetworkBoat networkBoat;
 
 	[Header("Materials")]
 	[SerializeField] private Material red;
 	[SerializeField] private Material green;
 
-	private GameObject cam;
+	[SerializeField] private GameObject cam;
 	private bool moving;
 	private bool following;
 	private Group mountedGroup;
@@ -28,19 +29,52 @@ public class Boat : MonoBehaviour {
 	private bool canSail;
 	private bool sailed;
 	private Vector3 dismountPos;
-	private Player player;
+	[SerializeField] private Player player;
+	private int _playerId;
+	private bool setColor = false;
+
+
+	public int PlayerId {
+        get {
+            if (Game.online) {
+                return networkBoat.playerId.Value;
+            }
+            else {
+                return _playerId;
+            }
+        }
+        set { 
+            if (Game.online) {
+                _playerId = value;
+                networkBoat.SetPlayerIdServerRpc(value);
+            }
+            else {
+                _playerId = value; 
+            }
+        }
+    }
 
 
 	private void Start () {
 		rb = GetComponent<Rigidbody>();
 		canSail = false;
 
-		GetComponent<TeamColor>().SetColor(player.playerId);
+		if (!Game.online) {
+			GetComponent<TeamColor>().SetColor(PlayerId);
+		}
 	}
 
 	private void Update () {
 		if (Game.instance.isPaused) {
 			return;
+		}
+
+		// Set color for online game
+		if (Game.online && !setColor) {
+			if (PlayerId > 0) {
+				GetComponent<TeamColor>().SetColor(PlayerId);
+				setColor = true;
+			}
 		}
 
 		if (moving) {
@@ -90,17 +124,17 @@ public class Boat : MonoBehaviour {
 	}
 
 	public void SetPlayer (Player player) {
-		transform.SetParent(player.transform);
+		// ransform.SetParent(player.transform);
 		cam = player.camera.gameObject;
 		player.Boat = this;
 		following = true;
 		sailed = false;
 		this.player = player.GetComponent<Player>();
 
-		int playerId = this.player.playerId;
+		PlayerId = this.player.playerId;
 		selector.transform.SetParent(null);
-		selector.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
-		laserMesh.gameObject.layer = LayerMask.NameToLayer($"Player {playerId}");
+		selector.GetComponentInChildren<MeshRenderer>().gameObject.layer = LayerMask.NameToLayer($"Player {this.player.playerId}");
+		laserMesh.gameObject.layer = LayerMask.NameToLayer($"Player {this.player.playerId}");
 		laser.SetActive(true);
 
 		player.GetComponent<CameraController>().ZoomOut();
@@ -124,16 +158,21 @@ public class Boat : MonoBehaviour {
 		laser.SetActive(false);
 		selector.SetActive(false);
 
-		player.Boat = null;
+		if (player != null) {
+			player.Boat = null;
+		}
 	}
 
 	public void MountUnits (List<Unit> unitList) {
 		int index = 0;
 
 		foreach (Unit u in unitList) {
-			u.transform.position = mountPoints[index].position;
-			u.transform.eulerAngles = mountPoints[index].transform.eulerAngles;
-			u.transform.SetParent(transform);
+			// u.transform.position = mountPoints[index].position;
+			// u.transform.eulerAngles = mountPoints[index].transform.eulerAngles;
+			// u.transform.SetParent(transform);
+			Game.SetPosition(u.gameObject, mountPoints[index].position);
+			Game.SetRotation(u.gameObject, mountPoints[index].transform.eulerAngles);
+			Game.SetParent(u.gameObject, gameObject);
 			mountedUnits.Add(u);
 
 			index++;
@@ -153,7 +192,8 @@ public class Boat : MonoBehaviour {
 				return;
 			}
 
-			u.transform.SetParent(null);
+			// u.transform.SetParent(null);
+			Game.SetParent(u.gameObject, null);
 			TeamManager.instance.Add(u.Team, u);
 		}
 
@@ -165,18 +205,22 @@ public class Boat : MonoBehaviour {
 		mountedUnits.Clear();
 
 		transform.RotateAround(transform.position, transform.right, -10);
-		transform.position += new Vector3(0, 0.2f, 0);
+		Game.SetRotation(gameObject, transform.eulerAngles);
+		Game.SetPosition(gameObject, new Vector3(0, 0.2f, 0));
+		// transform.position += new Vector3(0, 0.2f, 0);
 	}
 
 	private void MoveForward () {
 		Vector3 movement = transform.forward * speed * Time.deltaTime;
 
-		transform.position += movement;
+		// transform.position += movement;
+		Game.SetPosition(gameObject, transform.position + movement);
 	}
 
 	private void Sink () {
 		float sinkSpeed = 0.6f;
-		transform.position += new Vector3(0, -sinkSpeed * Time.deltaTime, 0);
+		// transform.position += new Vector3(0, -sinkSpeed * Time.deltaTime, 0);
+		Game.SetPosition(gameObject, transform.position + new Vector3(0, -sinkSpeed * Time.deltaTime, 0));
 
 		if (transform.position.y < -2.5f) {
 			player.Boat = null;
@@ -189,7 +233,9 @@ public class Boat : MonoBehaviour {
 		Vector3 direction = Vector3.Normalize(camPos);
 
 		transform.forward = direction * -1;
-		transform.position = direction * islandDistance;
+		Game.SetRotation(gameObject, transform.eulerAngles);
+		Game.SetPosition(gameObject, direction * islandDistance);
+		// transform.position = direction * islandDistance;
 	}
 
 	private void OnTriggerStay (Collider other) {

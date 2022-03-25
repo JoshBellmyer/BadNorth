@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class Player : MonoBehaviour {
 
@@ -105,10 +106,24 @@ public class Player : MonoBehaviour {
         if (!CanDeploy) {
             return false;
         }
+        if (Game.online) {
+            Game.GetLocalPlayer().waitingPlayer = this;
+            Group group = new Group($"{this.playerId}", SelectedUnitType);
+
+            return true;
+        }
 
         Boat = PrefabFactory.CreateBoat(this, SelectedUnitType);
 
         return true;
+    }
+
+    public void FinishOnlineBoat (NetworkObjectReference networkBoat, Group group) {
+        Debug.Log($"IsServer: {Game.isHost}  Player: {playerId}");
+        Boat boat = ( (NetworkObject)networkBoat ).GetComponent<Boat>();
+        boat.SetPlayer(this);
+        boat.MountUnits(group.GetUnits());
+        // Group unitGroup = new Group($"{player.playerId}", unitType);
     }
 
     public void CancelBoat () {
