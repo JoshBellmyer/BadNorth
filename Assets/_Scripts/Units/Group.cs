@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
+using Unity.Netcode.Components;
+
 
 public class Group {
 
@@ -9,6 +12,9 @@ public class Group {
     private bool _canMove;
     private bool _canAttack;
     private bool _inBoat;
+    private string _team;
+
+    private NetworkGroup _networkGroup;
 
     public static readonly float DEFAULT_RADIUS = 0.35f;
 
@@ -16,6 +22,7 @@ public class Group {
     public Group (string team, UnitType unitType) {
         _units = new List<Unit>();
         _targetPosition = Vector3.zero;
+        _team = team;
 
         GameObject prefab = UnitManager.instance.GetPrefabOfType(unitType);
 
@@ -23,14 +30,30 @@ public class Group {
         this.CanAttack = true;
 
         if (Game.online) {
+            Game.GetLocalPlayer().waitingGroup = this;
+            Game.GetLocalPlayer().SpawnUnitServerRpc(Game.networkManager.LocalClientId, unitType);
 
             return;
         }
 
         for (int i = 0; i < prefab.GetComponent<Unit>().groupAmount; i++) {
             Unit unit = UnityEngine.Object.Instantiate(prefab).GetComponent<Unit>();
+
+            Game.ClearNetworking(unit.gameObject);
+
             _units.Add(unit);
             unit.Team = team;
+            unit.Group = this;
+        }
+    }
+
+    public void FinishOnlineSpawn (NetworkObjectReference networkGroup, NetworkObjectReference[] unitObjects) {
+        _networkGroup = ( (NetworkObject)networkGroup ).GetComponent<NetworkGroup>();
+
+        foreach (NetworkObjectReference unitObj in unitObjects) {
+            Unit unit = ( (NetworkObject)unitObj ).GetComponent<Unit>();
+            _units.Add(unit);
+            unit.Team = _team;
             unit.Group = this;
         }
     }
@@ -78,13 +101,15 @@ public class Group {
 
             foreach (Unit u in _units) {
                 Vector3 offset = new Vector3(Mathf.Cos(i * angleIncrement + rotation + rotationCorrection), 0, Mathf.Sin(i * angleIncrement + rotation + rotationCorrection)) * radius;
-                u.transform.position = position + offset;
+                // u.transform.position = position + offset;
+                Game.SetPosition(u.gameObject, position + offset);
                 u.CeaseMovement();
                 i++;
             }
         }
         else {
-            _units[0].transform.position = position;
+            // _units[0].transform.position = position;
+            Game.SetPosition(_units[0].gameObject, position);
             _units[0].CeaseMovement();
         }
     }

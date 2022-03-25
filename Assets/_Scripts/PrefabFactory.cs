@@ -10,6 +10,8 @@ public static class PrefabFactory
     private static Sprite3D unitSelectPrefabPlayer2;
     private static Boat boatPrefab;
     private static PlayerController playerControllerPrefab;
+    private static NetworkGroup networkGroupPrefab;
+
 
     public static void Initialize()
     {
@@ -19,11 +21,16 @@ public static class PrefabFactory
         unitSelectPrefabPlayer2 = Resources.Load<Sprite3D>("Prefabs/Unit Select P2");
         boatPrefab = Resources.Load<Boat>("Prefabs/Boat");
         playerControllerPrefab = Resources.Load<PlayerController>("Prefabs/Player");
+        networkGroupPrefab = Resources.Load<NetworkGroup>("Prefabs/NetworkGroup");
     }
 
     public static PlayerController CreatePlayerController()
     {
         return Object.Instantiate(playerControllerPrefab);
+    }
+
+    public static NetworkGroup CreateNetworkGroup () {
+        return Object.Instantiate(networkGroupPrefab);
     }
 
     public static GameObject CreateLadderVisual(Player player)
@@ -60,20 +67,18 @@ public static class PrefabFactory
     }
 
     public static Boat CreateBoat(Player player, UnitType unitType) {
-        if (Game.online) {
-
-            return null;
-        }
-
         Boat boat = Object.Instantiate<Boat>(boatPrefab);
+        Game.ClearNetworking(boat.gameObject);
         boat.SetPlayer(player);
 
         Group unitGroup = new Group($"{player.playerId}", unitType);
-
-        unitGroup.CanMove = true;
-        unitGroup.CanAttack = true;
         boat.MountUnits(unitGroup.GetUnits());
+
         return boat;
+    }
+
+    public static Boat CreateBoat () {
+        return Object.Instantiate<Boat>(boatPrefab);
     }
 }
 
