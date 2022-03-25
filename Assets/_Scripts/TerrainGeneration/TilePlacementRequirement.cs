@@ -28,7 +28,10 @@ public class TilePlacementRequirement : ScriptableObject
         }
         catch (System.IndexOutOfRangeException)
         {
-            return invertCondition ? true : false;
+            if (!invertCondition)
+                return TileType.None == requiredType;
+            else
+                return TileType.None != requiredType;
         }
     }
 }

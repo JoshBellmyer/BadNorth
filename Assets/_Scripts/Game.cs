@@ -91,11 +91,11 @@ public class Game : MonoBehaviour {
     	if (online) {
     		if (isHost) {
     			SetupGameHost();
-    		}
+				PrefabFactory.CreateTerrainGenerator();
+			}
     		else {
     			SetupGameClient();
     		}
-
     		return;
     	}
 
@@ -110,6 +110,8 @@ public class Game : MonoBehaviour {
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
+		PrefabFactory.CreateTerrainGenerator();
 	}
 
 	public void SetupGameHost () {

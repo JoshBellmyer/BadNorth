@@ -9,19 +9,7 @@ public class TerrainSettings : ScriptableObject
     public int size;
 
     public bool randomizeSeed;
-    [SerializeField] int seed;
-    public int Seed
-    {
-        get 
-        {
-            if (randomizeSeed)
-            {
-                seed = Random.Range(int.MinValue, int.MaxValue);
-            }
-            return seed; 
-        }
-        set => seed = value;
-    }
+    public int defaultSeed;
 
     public NoiseSettings noiseSettings;
 

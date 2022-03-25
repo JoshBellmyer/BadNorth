@@ -21,28 +21,12 @@ public class TileSet : ScriptableObject {
 		GameObject ret = null;
 		foreach (TileGroup group in models)
         {
-			rotation = ret == null ? group.requirements.GetRotationalFit(data.tileTypes, position) : rotation;
+			rotation = group.requirements.GetRotationalFit(data.tileTypes, position);
 			if (rotation == -1) continue;
 
-			if (ret != null)
-			{
-				Debug.LogWarning("Found multiple matches in a tileset");
-				Debug.Log(group.variations[0].name);
-				Debug.Log(ret.name);
-				break;
-			}
-			ret = simple ? group.simple : group.RandomVariation(20, isTop);
+			return simple ? group.simple : group.RandomVariation(20, isTop);
         }
-
-		//if (ret == null)
-		//{
-		//	Debug.LogError("Uh oh");
-		//	Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z - 1], data.tileTypes[position.x, position.y, position.z - 1], data.tileTypes[position.x + 1, position.y, position.z - 1]));
-		//	Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z], data.tileTypes[position.x, position.y, position.z], data.tileTypes[position.x + 1, position.y, position.z]));
-		//	Debug.Log(string.Format("{0} {1} {2}", data.tileTypes[position.x - 1, position.y, position.z + 1], data.tileTypes[position.x, position.y, position.z + 1], data.tileTypes[position.x + 1, position.y, position.z + 1]));
-		//	Debug.Log(data.tileTypes[position.x, position.y + 1, position.z] + ", " + rotation);
-		//}
-		return ret;
+        return null;
 	}
 
 	public enum TopType {
