@@ -27,9 +27,17 @@ public class TerrainGenerator : NetworkBehaviour
         if (Game.isHost || !Application.isPlaying)
         {
             seed.Value = settings.randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : settings.defaultSeed;
+            GenerateMap(seed.Value);
         }
+        if (!Game.isHost)
+        {
+            seed.OnValueChanged += OnSeedChange;
+        }
+    }
 
-        GenerateMap(seed.Value);
+    private void OnSeedChange(int prevVal, int newVal)
+    {
+        GenerateMap(newVal);
     }
 
     public void GenerateMap(int seed)
