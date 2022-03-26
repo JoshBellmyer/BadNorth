@@ -20,24 +20,19 @@ public class TerrainGenerator : NetworkBehaviour
 
     public GameObject[] otherMeshes;
 
-    NetworkVariable<int> seed = new NetworkVariable<int>();
-
     public void Start()
     {
-        if (Game.isHost || !Application.isPlaying)
+        if (Game.isHost)
         {
-            seed.Value = settings.randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : settings.defaultSeed;
-            GenerateMap(seed.Value);
-        }
-        if (!Game.isHost)
-        {
-            seed.OnValueChanged += OnSeedChange;
+            int seed = settings.randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : settings.defaultSeed;
+            SendSeedClientRpc(seed);
         }
     }
 
-    private void OnSeedChange(int prevVal, int newVal)
+    [ClientRpc]
+    private void SendSeedClientRpc(int seed)
     {
-        GenerateMap(newVal);
+        GenerateMap(seed);
     }
 
     public void GenerateMap(int seed)
