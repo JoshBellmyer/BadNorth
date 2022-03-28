@@ -22,10 +22,14 @@ public class TerrainGenerator : NetworkBehaviour
 
     public void Start()
     {
-        if (Game.isHost)
+        if (Game.isHost && Game.online)
         {
             int seed = settings.randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : settings.defaultSeed;
             SendSeedClientRpc(seed);
+        }
+        else if (!Game.online) {
+            int seed = settings.randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : settings.defaultSeed;
+            GenerateMap(seed); 
         }
     }
 

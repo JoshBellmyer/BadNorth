@@ -246,7 +246,12 @@ public class Game : MonoBehaviour {
 			}
 		}
 		else {
-			obj.transform.SetParent(newParent.transform);
+			if (newParent == null) {
+				obj.transform.SetParent(null);
+			}
+			else {
+				obj.transform.SetParent(newParent.transform);
+			}
 		}
 	}
 
