@@ -57,6 +57,7 @@ public class OnlinePlayer : NetworkBehaviour {
 
         Boat boat = PrefabFactory.CreateBoat();
         boat.GetComponent<NetworkObject>().Spawn();
+        boat.GetComponent<NetworkObject>().ChangeOwnership(clientId);
 
         SendSpawnedUnitsClientRpc(clientId, playerId, networkGroup.GetComponent<NetworkObject>(), boat.GetComponent<NetworkObject>(), unitRef);
     }
@@ -79,11 +80,6 @@ public class OnlinePlayer : NetworkBehaviour {
 
         waitingGroup = null;
         waitingPlayer = null;
-    }
-
-    [ServerRpc]
-    public void SpawnBoatServerRpc (ulong clientId) {
-
     }
 
     [ServerRpc]

@@ -927,8 +927,8 @@ GameObject:
   - component: {fileID: 7351449562876905078}
   - component: {fileID: 1511257565835170770}
   - component: {fileID: -4453523232249438555}
-  - component: {fileID: -3434747595655966983}
   - component: {fileID: -4929402800614837213}
+  - component: {fileID: -2321303749116434513}
   m_Layer: 0
   m_Name: Boat
   m_TagString: Untagged
@@ -983,6 +983,8 @@ MonoBehaviour:
   networkBoat: {fileID: -4929402800614837213}
   red: {fileID: 2100000, guid: 7f8dc2ca86a0d41b5987a05b064e4035, type: 2}
   green: {fileID: 2100000, guid: 931991389930b42e7a8f8e16d23f3416, type: 2}
+  cam: {fileID: 0}
+  player: {fileID: 0}
 --- !u!114 &1958649528252793764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1056,33 +1058,6 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-3434747595655966983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7351449562876905035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  InLocalSpace: 0
-  Interpolate: 1
-  CanCommitToTransform: 0
 --- !u!114 &-4929402800614837213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1097,6 +1072,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerId:
     m_InternalValue: 0
+--- !u!114 &-2321303749116434513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351449562876905035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c9647dc784a46bca664910f182491e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.01
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+  CanCommitToTransform: 0
 --- !u!1 &8146939154375589644
 GameObject:
   m_ObjectHideFlags: 0

@@ -118,6 +118,7 @@ MonoBehaviour:
   attackSound: Thud
   _directive: 0
   _targetEnemy: {fileID: 0}
+  networkUnit: {fileID: 0}
 --- !u!114 &9210497780530537670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,13 +167,13 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
-  PositionThreshold: 0.001
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.01
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
-  InLocalSpace: 0
+  InLocalSpace: 1
   Interpolate: 1
   CanCommitToTransform: 0
 --- !u!114 &-7093501034898731278
@@ -203,6 +204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858506c94521e4199926a6ff1fb85d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team:
+    m_InternalValue: 0
 --- !u!1 &5117292426565283433
 GameObject:
   m_ObjectHideFlags: 0

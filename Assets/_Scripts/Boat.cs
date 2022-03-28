@@ -205,22 +205,22 @@ public class Boat : MonoBehaviour {
 		mountedUnits.Clear();
 
 		transform.RotateAround(transform.position, transform.right, -10);
-		Game.SetRotation(gameObject, transform.eulerAngles);
-		Game.SetPosition(gameObject, new Vector3(0, 0.2f, 0));
-		// transform.position += new Vector3(0, 0.2f, 0);
+		// Game.SetRotation(gameObject, transform.eulerAngles);
+		// Game.SetPosition(gameObject, new Vector3(0, 0.2f, 0));
+		transform.position += new Vector3(0, 0.2f, 0);
 	}
 
 	private void MoveForward () {
 		Vector3 movement = transform.forward * speed * Time.deltaTime;
 
-		// transform.position += movement;
-		Game.SetPosition(gameObject, transform.position + movement);
+		transform.position += movement;
+		// Game.SetPosition(gameObject, transform.position + movement);
 	}
 
 	private void Sink () {
 		float sinkSpeed = 0.6f;
-		// transform.position += new Vector3(0, -sinkSpeed * Time.deltaTime, 0);
-		Game.SetPosition(gameObject, transform.position + new Vector3(0, -sinkSpeed * Time.deltaTime, 0));
+		transform.position += new Vector3(0, -sinkSpeed * Time.deltaTime, 0);
+		// Game.SetPosition(gameObject, transform.position + new Vector3(0, -sinkSpeed * Time.deltaTime, 0));
 
 		if (transform.position.y < -2.5f) {
 			player.Boat = null;
@@ -233,9 +233,9 @@ public class Boat : MonoBehaviour {
 		Vector3 direction = Vector3.Normalize(camPos);
 
 		transform.forward = direction * -1;
-		Game.SetRotation(gameObject, transform.eulerAngles);
-		Game.SetPosition(gameObject, direction * islandDistance);
-		// transform.position = direction * islandDistance;
+		// Game.SetRotation(gameObject, transform.eulerAngles);
+		// Game.SetPosition(gameObject, direction * islandDistance);
+		transform.position = direction * islandDistance;
 	}
 
 	private void OnTriggerStay (Collider other) {
