@@ -18,7 +18,6 @@ public class TileSet : ScriptableObject {
 		bool isTop = topType == TopType.AllTops && data.tileTypes[position.x, position.y + 1, position.z] == TileType.None;
 		isTop |= topType == TopType.Height && position.y > data.maxHeight - topLayers && topLayers > 0 && position.y >= topMinLayer;
 
-		GameObject ret = null;
 		foreach (TileGroup group in models)
         {
 			rotation = group.requirements.GetRotationalFit(data.tileTypes, position);

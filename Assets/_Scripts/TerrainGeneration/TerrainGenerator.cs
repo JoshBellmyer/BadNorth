@@ -4,9 +4,13 @@ using Unity.AI.Navigation;
 using Unity.Netcode;
 using UnityEngine;
 
-public class TerrainGenerator : NetworkBehaviour
+public class TerrainGenerator : NetworkBehaviour, ISavable
 {
     public TerrainSettings settings;
+    public bool randomizeSeed;
+    public int seed;
+    public string tileSetName;
+    private TileSet tileSet;
 
     public static System.Random random;
 
@@ -20,28 +24,44 @@ public class TerrainGenerator : NetworkBehaviour
 
     public GameObject[] otherMeshes;
 
-    public void Start()
+    public void SetUpMap()
     {
         if (Game.isHost && Game.online)
         {
-            int seed = settings.randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : settings.defaultSeed;
-            SendSeedClientRpc(seed);
+            seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
+            SendGenerationInfoClientRpc(seed, tileSetName);
         }
-        else if (!Game.online) {
-            int seed = settings.randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : settings.defaultSeed;
-            GenerateMap(seed); 
+        else if (!Game.online || !Application.isPlaying)
+        {
+            seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
+            GenerateMap(seed, tileSetName);
         }
+
+        StartCoroutine(FindSandCoroutine());
+    }
+
+    /// <summary>
+    /// Work around for FindObjectOfType not working during scene change.
+    /// </summary>
+    private IEnumerator FindSandCoroutine()
+    {
+        Sand sand = FindObjectOfType<Sand>();
+        while (sand == null)
+        {
+            yield return null;
+            sand = FindObjectOfType<Sand>();
+        }
+        sand.SetColor(tileSet.sandColor);
     }
 
     [ClientRpc]
-    private void SendSeedClientRpc(int seed)
+    private void SendGenerationInfoClientRpc(int seed, string tileSetName)
     {
-        GenerateMap(seed);
+        GenerateMap(seed, tileSetName);
     }
 
-    public void GenerateMap(int seed)
+    public void GenerateMap(int seed, string tileSetName)
     {
-
         random = new System.Random(seed);
 
         float[,] heightMap = GenerateHeightMap(seed);
@@ -53,7 +73,12 @@ public class TerrainGenerator : NetworkBehaviour
         navMeshCollider.sharedMesh = m;
 
         TileData tileData = new TileData(heightMap, settings.meshScale);
-        TileSet tileSet = settings.tileSet;
+        tileSet = Resources.Load<TileSet>("TileSets/" + tileSetName);
+        if(tileSet == null)
+        {
+            var tileSets = Resources.LoadAll<TileSet>("TileSets/");
+            tileSet = tileSets[random.Next(0, tileSets.Length)];
+        }
 
         tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter);
         tileMeshRenderer.material = tileSet.material;
@@ -127,6 +152,27 @@ public class TerrainGenerator : NetworkBehaviour
             noise[toFlattenX[i], toFlattenY[i]] -= 1 / (float)settings.terraceFrequency;
         }
     }
+
+    #region ISavable implementation
+
+    public System.Type GetSaveDataType()
+    {
+        return typeof(TerrainGeneratorData);
+    }
+
+    public void OnFinishLoad()
+    {
+        SetUpMap();
+    }
+
+    public class TerrainGeneratorData : SaveData
+    {
+        public bool randomizeSeed;
+        public int seed;
+        public string tileSetName;
+    }
+
+    #endregion
 }
 
 
