@@ -79,8 +79,23 @@ public abstract class Unit : MonoBehaviour {
     }
 
     public bool InBoat {
-        get => _inBoat;
-        set { _inBoat = value; }
+        get {
+            if (Game.online) {
+                return networkUnit.inBoat.Value;
+            }
+            else {
+                return _inBoat;
+            }
+        }
+        set {
+            if (Game.online) {
+                _inBoat = value;
+                networkUnit.SetInBoatServerRpc(value);
+            }
+            else {
+                _inBoat = value;
+            }
+        }
     }
 
     public string Team {
@@ -393,9 +408,11 @@ public abstract class Unit : MonoBehaviour {
     }
 
     private void FallUpdate () {
-        if (_inBoat) {
+        if (InBoat) {
             return;
         }
+
+        Debug.Log("fall");
 
         transform.position += (Vector3.down * 1 * Time.deltaTime);
     }
@@ -474,7 +491,7 @@ public abstract class Unit : MonoBehaviour {
     }
 
     private void CheckForGround () {
-        if (_inBoat) {
+        if (InBoat) {
             return;
         }
 

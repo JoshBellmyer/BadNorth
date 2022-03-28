@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using Unity.Netcode.Samples;
 
 
 public class Game : MonoBehaviour {
@@ -140,12 +141,16 @@ public class Game : MonoBehaviour {
 	public static void ClearNetworking (GameObject obj) {
 		NetworkObject tempNO = obj.GetComponent<NetworkObject>();
 		NetworkTransform tempNT = obj.GetComponent<NetworkTransform>();
+		ClientNetworkTransform tempCNT = obj.GetComponent<ClientNetworkTransform>();
 
 		if (tempNT != null) {
 			DestroyImmediate(tempNT);
 		}
 		if (tempNO != null) {
 			DestroyImmediate(tempNO);
+		}
+		if (tempCNT != null) {
+			DestroyImmediate(tempCNT);
 		}
 	}
 
