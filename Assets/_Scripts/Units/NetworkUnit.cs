@@ -7,6 +7,7 @@ public class NetworkUnit : NetworkBehaviour {
 
     private Unit unit;
     public NetworkVariable<int> team = new NetworkVariable<int>();
+    public NetworkVariable<bool> inBoat = new NetworkVariable<bool>(true);
 
 
     private void Awake () {
@@ -27,5 +28,10 @@ public class NetworkUnit : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     public void SetTeamServerRpc (string newTeam) {
         team.Value = int.Parse(newTeam);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetInBoatServerRpc (bool newInBoat) {
+        inBoat.Value = newInBoat;
     }
 }

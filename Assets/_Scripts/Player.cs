@@ -119,7 +119,7 @@ public class Player : MonoBehaviour {
     }
 
     public void FinishOnlineBoat (NetworkObjectReference networkBoat, Group group) {
-        Debug.Log($"IsServer: {Game.isHost}  Player: {playerId}");
+        // Debug.Log($"IsServer: {Game.isHost}  Player: {playerId}");
         Boat boat = ( (NetworkObject)networkBoat ).GetComponent<Boat>();
         boat.SetPlayer(this);
         boat.MountUnits(group.GetUnits());
