@@ -1,29 +1,30 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.UI.Dropdown;
 
 public class GameSettingsScreen : UIScreen
 {
+    [SerializeField] string savePath;
     [SerializeField] Dropdown tileSetSelection;
 
-    Dictionary<int, TileSet> valueTypeMap;
+    string fullPath;
 
     private void Start()
     {
-        valueTypeMap = new Dictionary<int, TileSet>();
+        fullPath = Path.Combine(Application.persistentDataPath, savePath);
+
         tileSetSelection.options.Clear();
         int valueCount = 0;
-        valueTypeMap.Add(valueCount, null);
         tileSetSelection.options.Add(new OptionData("Random"));
         valueCount++;
         foreach (TileSet tileSet in Resources.LoadAll<TileSet>("TileSets"))
         {
             if(tileSet != null)
             {
-                valueTypeMap.Add(valueCount, tileSet);
                 tileSetSelection.options.Add(new OptionData(tileSet.name));
                 valueCount++;
             }
@@ -32,7 +33,18 @@ public class GameSettingsScreen : UIScreen
 
     public void OnBack()
     {
-        Game.instance.terrainSettings.tileSet = valueTypeMap[tileSetSelection.value];
+        TerrainGenerator.TerrainGeneratorData terrainGeneratorData;
+        if (File.Exists(fullPath))
+        {
+            terrainGeneratorData = JsonUtility.FromJson<TerrainGenerator.TerrainGeneratorData>(File.ReadAllText(fullPath));
+        }
+        else
+        {
+            terrainGeneratorData = new TerrainGenerator.TerrainGeneratorData();
+            terrainGeneratorData.randomizeSeed = true;
+        }
+        terrainGeneratorData.tileSetName = tileSetSelection.options[tileSetSelection.value].text;
+        File.WriteAllText(fullPath, JsonUtility.ToJson(terrainGeneratorData));
         manager.SetUIScreen("Title Screen");
     }
 }

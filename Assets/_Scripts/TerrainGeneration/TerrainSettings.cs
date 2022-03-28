@@ -8,8 +8,6 @@ public class TerrainSettings : ScriptableObject
     [Range(2, 24)]
     public int size;
 
-    public bool randomizeSeed;
-    public int defaultSeed;
 
     public NoiseSettings noiseSettings;
 
@@ -21,6 +19,4 @@ public class TerrainSettings : ScriptableObject
     public int flattenPeakLookRange;
     public float meshScale;
     public bool flatTilesMesh;
-
-    public TileSet tileSet;
 }

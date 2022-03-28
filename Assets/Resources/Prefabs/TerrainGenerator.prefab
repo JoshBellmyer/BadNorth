@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1190708696764531045}
   - component: {fileID: 700166397746196059}
   - component: {fileID: 8382801972214108913}
+  - component: {fileID: 3476875261506323965}
   m_Layer: 0
   m_Name: TerrainGenerator
   m_TagString: Untagged
@@ -48,6 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: 40583b88303d8f64f89490536bddad4d, type: 2}
+  randomizeSeed: 1
+  seed: 0
+  tileSetName: Random
   surface: {fileID: 700166397746196059}
   navMeshFilter: {fileID: 59512660206147034}
   navMeshCollider: {fileID: 6807506488611538437}
@@ -103,6 +107,22 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &3476875261506323965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190708696764531044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e6d83b8af1153843a4328320aa1c0e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetScript: {fileID: 1190708696764531045}
+  savePath: TerrainGenerator.json
+  loadOnStart: 1
+  saveOnDestroy: 0
 --- !u!1 &2186269211268707874
 GameObject:
   m_ObjectHideFlags: 0

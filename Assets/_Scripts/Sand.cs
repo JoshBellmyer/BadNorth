@@ -7,7 +7,6 @@ public class Sand : MonoBehaviour
     [SerializeField] private float risingSpeed;
     [SerializeField] private float scrollSpeed;
     [SerializeField] private MeshRenderer waveRenderer;
-    private Material waveMaterial;
 
     public static float height;
     private float textureOffset;
@@ -16,10 +15,11 @@ public class Sand : MonoBehaviour
     void Start()
     {
         Clock.instance.clockFinished += OnClockFinished;
-        TileSet tileSet = Game.instance.terrainSettings.tileSet;
-        waveMaterial = waveRenderer.material;
+    }
 
-        waveMaterial.color = tileSet.sandColor;
+    public void SetColor(Color c)
+    {
+        waveRenderer.material.color = c;
     }
 
     private void Update () {
@@ -35,7 +35,7 @@ public class Sand : MonoBehaviour
             textureOffset -= 1;
         }
 
-        waveMaterial.SetTextureOffset("_MainTex", new Vector2(0, textureOffset));
+        waveRenderer.material.SetTextureOffset("_MainTex", new Vector2(0, textureOffset));
     }
 
     private void OnClockFinished()

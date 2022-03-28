@@ -13,7 +13,7 @@ public class TerrainGeneratorEditor : Editor
         if (GUILayout.Button("Generate"))
         {
             TerrainGenerator generator = (TerrainGenerator)target;
-            generator.Start();
+            generator.SetUpMap();
         }
     }
 }
