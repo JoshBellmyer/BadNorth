@@ -66,7 +66,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
 
         float[,] heightMap = GenerateHeightMap(seed);
 
-        MeshData data = settings.flatTilesMesh ? MeshGenerator.GenerateTerrainMeshFlatTiles(heightMap, settings.meshScale) : MeshGenerator.GenerateTerrainMesh(heightMap, settings.meshScale);
+        MeshData data = MeshGenerator.GenerateTerrainMeshFlatTiles(heightMap, settings.meshScale);
 
         Mesh m = data.CreateMesh();
         navMeshFilter.sharedMesh = m;

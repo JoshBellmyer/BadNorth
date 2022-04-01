@@ -3,39 +3,6 @@ using System.Collections;
 
 public static class MeshGenerator
 {
-
-    public static MeshData GenerateTerrainMesh(float[,] heightMap, float meshScale)
-	{
-        int length = heightMap.GetLength(0);
-        float topLeftX = (length - 1) / -2f;
-        float topLeftZ = (length - 1) / 2f;
-        int area = length * length; // assuming it's a square
-        int maxMeshTriangles = area * 2;
-        int maxMeshVertices = maxMeshTriangles * 3;
-        MeshData meshData = new MeshData(maxMeshVertices, maxMeshTriangles);
-
-		int vertexIndex = 0;
-
-        for (int x = 0; x < length; x++)
-        {
-            for (int y = 0; y < length; y++)
-            {
-                Vector3 vertex = new Vector3(topLeftX + x, heightMap[x, y] * meshScale, topLeftZ - y);
-                meshData.AddVertex(vertex, new Vector2(x/(float)length, y/(float)length), vertexIndex);
-
-                if(x < length - 1 && y < length - 1)
-                {
-                    meshData.AddTriangle(vertexIndex + length, vertexIndex + length + 1, vertexIndex);
-                    meshData.AddTriangle(vertexIndex + 1, vertexIndex, vertexIndex + length + 1);
-                }
-
-                vertexIndex++;
-            }
-        }
-
-		return meshData;
-	}
-
 	public static MeshData GenerateTerrainMeshFlatTiles(float[,] heightMap, float meshScale)
     {
         int length = heightMap.GetLength(0);
