@@ -111,6 +111,17 @@ public class OnlinePlayer : NetworkBehaviour {
         netObj.transform.eulerAngles = rot;
     }
 
+    [ServerRpc]
+    public void DestroyObjectServerRpc (NetworkObjectReference obj) {
+        NetworkObject netObj = (NetworkObject)obj;
+
+        if (netObj == null) {
+            return;
+        }
+
+        Destroy(netObj.gameObject);
+    }
+
 
     // Put handlers for incoming network messages in here
     private void InitMessageHandlers () {

@@ -278,4 +278,35 @@ public class Game : MonoBehaviour {
 
 		obj.transform.eulerAngles = newRot;
 	}
+
+	public static void DestroyObject (GameObject obj) {
+		if (obj == null) {
+			return;
+		}
+
+		if (online) {
+			NetworkObject netObj = obj.GetComponent<NetworkObject>();
+
+			if (netObj != null) {
+				GetLocalPlayer().DestroyObjectServerRpc(netObj);
+			}
+		}
+		else {
+			Destroy(obj);
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

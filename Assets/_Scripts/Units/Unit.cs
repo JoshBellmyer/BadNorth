@@ -47,6 +47,8 @@ public abstract class Unit : MonoBehaviour {
     protected Vector3 _destination;
     protected float _currentCooldown;
 
+    private bool setColor;
+
     public static readonly float MAX_PROXIMITY = 5.0f;
 
 
@@ -150,7 +152,12 @@ public abstract class Unit : MonoBehaviour {
 
     private void Start () {
         teamColor = GetComponent<TeamColor>();
-        teamColor.SetColor(int.Parse(Team));
+        // teamColor.SetColor(int.Parse(Team));
+
+        if (!Game.online) {
+            teamColor.SetColor(int.Parse(Team));
+        }
+
         renderers = GetComponentsInChildren<Renderer>();
         animator = GetComponentInChildren<Animator>();
 
@@ -164,6 +171,14 @@ public abstract class Unit : MonoBehaviour {
     protected virtual void UnitStart () {}
 
     private void Update () {
+        // Set color for online game
+        if (Game.online && !setColor) {
+            if (int.Parse(Team) > 0) {
+                GetComponent<TeamColor>().SetColor(int.Parse(Team));
+                setColor = true;
+            }
+        }
+
         if (Game.online && !Game.isHost) {
             return;
         }
@@ -476,6 +491,15 @@ public abstract class Unit : MonoBehaviour {
         teamColor.SetColor(int.Parse(Team));
     }
 
+    public void SetAgentEnabled (bool enabled) {
+        if (Game.online && !Game.isHost) {
+            networkUnit.SetAgentEnabledServerRpc(enabled);
+        }
+        else {
+            NavMeshAgent.enabled = enabled;
+        }
+    }
+
     private void DestroyMaterialInstances () {
         foreach (Renderer r in renderers) {
             if (r == null) {
@@ -555,6 +579,8 @@ public abstract class Unit : MonoBehaviour {
 
             return;
         }
+
+        Debug.Log(_navMeshAgent.isOnNavMesh);
 
         if (!_canMove) {
             return;

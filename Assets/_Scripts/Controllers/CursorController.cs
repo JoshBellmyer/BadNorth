@@ -190,7 +190,8 @@ public class CursorController : MonoBehaviour
         }
 
         if (Game.online && !Game.isHost) {
-            
+            Vector3 pos = GridUtils.GetGridPos(hit.point);
+            player.SelectedGroup.MoveTo(pos);
         }
         else {
             Vector3 pos = GridUtils.GetGridPos(hit.point);

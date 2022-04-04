@@ -184,7 +184,7 @@ public class Group {
         this.CanMove = true;
 
         foreach (Unit u in _units) {
-            u.NavMeshAgent.enabled = enabled;
+            u.SetAgentEnabled(enabled);
         }
     }
 

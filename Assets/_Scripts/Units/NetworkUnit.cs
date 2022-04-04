@@ -19,7 +19,7 @@ public class NetworkUnit : NetworkBehaviour {
     }
 
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void IssueDestinationServerRpc (Vector3 destination) {
         unit.IssueDestination(destination);
     }
@@ -33,5 +33,10 @@ public class NetworkUnit : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     public void SetInBoatServerRpc (bool newInBoat) {
         inBoat.Value = newInBoat;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetAgentEnabledServerRpc (bool enabled) {
+        unit.NavMeshAgent.enabled = enabled;
     }
 }

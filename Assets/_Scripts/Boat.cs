@@ -31,8 +31,9 @@ public class Boat : MonoBehaviour {
 	private Vector3 dismountPos;
 	[SerializeField] private Player player;
 	private int _playerId;
-	private bool setColor = false;
 
+	private bool setColor = false;
+	private bool destroyed = false;
 
 	public int PlayerId {
         get {
@@ -222,9 +223,10 @@ public class Boat : MonoBehaviour {
 		transform.position += new Vector3(0, -sinkSpeed * Time.deltaTime, 0);
 		// Game.SetPosition(gameObject, transform.position + new Vector3(0, -sinkSpeed * Time.deltaTime, 0));
 
-		if (transform.position.y < -2.5f) {
+		if (transform.position.y < -2.5f && !destroyed) {
 			player.Boat = null;
-			Destroy(gameObject);
+			Game.DestroyObject(gameObject);
+			destroyed = true;
 		}
 	}
 
