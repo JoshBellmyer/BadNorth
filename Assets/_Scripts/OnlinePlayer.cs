@@ -35,7 +35,7 @@ public class OnlinePlayer : NetworkBehaviour {
 
 
     [ServerRpc]
-    public void SpawnUnitServerRpc (ulong clientId, UnitType unitType) {
+    public void SpawnUnitServerRpc (ulong clientId, int team, UnitType unitType) {
         GameObject prefab = UnitManager.instance.GetPrefabOfType(unitType);
 
         if (prefab == null) {
@@ -53,6 +53,7 @@ public class OnlinePlayer : NetworkBehaviour {
 
             unitNetObj.Spawn();
             unitRef[i] = unitNetObj;
+            TeamManager.instance.Add($"{team}", unit);
         }
 
         Boat boat = PrefabFactory.CreateBoat();

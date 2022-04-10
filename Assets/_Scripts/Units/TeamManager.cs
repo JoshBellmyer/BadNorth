@@ -22,7 +22,9 @@ public class TeamManager : MonoBehaviour
             dictionary.Add(team, new HashSet<Unit>());
         }
 
-        dictionary[team].Add(unit);
+        if (!dictionary[team].Contains(unit)) {
+            dictionary[team].Add(unit);
+        }
     }
 
     public void Remove (string team, Unit unit) {
@@ -49,6 +51,8 @@ public class TeamManager : MonoBehaviour
         HashSet<Unit> set = new HashSet<Unit>();
 
         foreach (var v in dictionary.Keys) {
+            Debug.Log($"key: {v}");
+
             if (!v.Equals(team)) {
                 set.UnionWith(dictionary[v]);
             }

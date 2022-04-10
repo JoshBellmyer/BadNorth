@@ -8,6 +8,8 @@ public class NetworkUnit : NetworkBehaviour {
     private Unit unit;
     public NetworkVariable<int> team = new NetworkVariable<int>();
     public NetworkVariable<bool> inBoat = new NetworkVariable<bool>(true);
+    public NetworkVariable<bool> canMove = new NetworkVariable<bool>(true);
+    public NetworkVariable<bool> canAttack = new NetworkVariable<bool>(true);
 
 
     private void Awake () {
@@ -24,7 +26,6 @@ public class NetworkUnit : NetworkBehaviour {
         unit.IssueDestination(destination);
     }
 
-
     [ServerRpc(RequireOwnership = false)]
     public void SetTeamServerRpc (string newTeam) {
         team.Value = int.Parse(newTeam);
@@ -38,5 +39,15 @@ public class NetworkUnit : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     public void SetAgentEnabledServerRpc (bool enabled) {
         unit.NavMeshAgent.enabled = enabled;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetCanMoveServerRpc (bool newCanMove) {
+        canMove.Value = newCanMove;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetCanAttackServerRpc (bool newCanAttack) {
+        canAttack.Value = newCanAttack;
     }
 }

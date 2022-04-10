@@ -57,9 +57,20 @@ public abstract class Unit : MonoBehaviour {
     }
 
     internal bool CanMove {
-        get => _canMove;
+        get {
+            if (Game.online) {
+                return networkUnit.canMove.Value;
+            }
+            else {
+                return _canMove;
+            }
+        }
         set {
             _canMove = value;
+
+            if (Game.online) {
+                networkUnit.SetCanMoveServerRpc(value);
+            }
             
             if (_navMeshAgent.isOnNavMesh) {
                 _navMeshAgent.isStopped = !value;
@@ -76,8 +87,21 @@ public abstract class Unit : MonoBehaviour {
     }
 
     internal bool CanAttack {
-        get => _canAttack;
-        set { _canAttack = value; }
+        get {
+            if (Game.online) {
+                return networkUnit.canAttack.Value;
+            }
+            else {
+                return _canAttack;
+            }
+        }
+        set {
+            _canAttack = value;
+
+            if (Game.online) {
+                networkUnit.SetCanAttackServerRpc(value);
+            }
+        }
     }
 
     public bool InBoat {
@@ -223,7 +247,7 @@ public abstract class Unit : MonoBehaviour {
             _directive = Directive.NONE;
         }
 
-        if (_navMeshAgent.isOnNavMesh && _canAttack && FindAttack() && !_navMeshAgent.isStopped) {
+        if (_navMeshAgent.isOnNavMesh && CanAttack && FindAttack() && !_navMeshAgent.isStopped) {
             _directive = Directive.ATTACK;
         }
 
@@ -300,6 +324,8 @@ public abstract class Unit : MonoBehaviour {
 
     protected virtual bool FindAttack () {
         HashSet<Unit> units = TeamManager.instance.GetNotOnTeam(Team);
+
+        Debug.Log(units.Count);
 
         float minDist = _attackDistance;
         Unit target = null;
@@ -582,7 +608,7 @@ public abstract class Unit : MonoBehaviour {
 
         Debug.Log(_navMeshAgent.isOnNavMesh);
 
-        if (!_canMove) {
+        if (!CanMove) {
             return;
         }
         if (!_navMeshAgent.isOnNavMesh) {
@@ -712,7 +738,7 @@ public abstract class Unit : MonoBehaviour {
     protected virtual void OnMove () {}
 
     protected void IssueAttackLocation(Vector3 target) {
-        if (_canMove) {
+        if (CanMove) {
             _navMeshAgent.SetDestination(target);
 
             if (UnitManager.GetRemainingDistance(_navMeshAgent, MAX_PROXIMITY + 1) > MAX_PROXIMITY) {

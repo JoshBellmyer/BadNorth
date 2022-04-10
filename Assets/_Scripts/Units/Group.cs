@@ -31,7 +31,7 @@ public class Group {
 
         if (Game.online) {
             Game.GetLocalPlayer().waitingGroup = this;
-            Game.GetLocalPlayer().SpawnUnitServerRpc(Game.networkManager.LocalClientId, unitType);
+            Game.GetLocalPlayer().SpawnUnitServerRpc(Game.networkManager.LocalClientId, int.Parse(team), unitType);
 
             return;
         }
