@@ -236,7 +236,7 @@ public class TileData {
 		tempSlopes.Add($"{new Vector3Int(x + backDir.x, y, z + backDir.z)}");
 
 		int temp = (int)type - (int)TileType.FullRamp;
-		TileType raisedType = (TileType)((int)TileType.HalfRamp + temp);
+		TileType raisedType = (TileType)((int)TileType.HalfRampRaised + temp);
 		TileType halfType = (TileType)((int)TileType.HalfRamp + temp);
 
 		tileTypes[x, y, z] = raisedType;
@@ -325,10 +325,10 @@ public class TileData {
 		tileEdges.Add(TileType.HalfRamp, new int[] {0b0000, 0b0000, 0b0000, 0b1100, 0b0010});
 		tileEdges.Add(TileType.HalfRamp, new int[] {0b0000, 0b0000, 0b0000, 0b1100, 0b0001});
 
-		tileEdges.Add(TileType.HalfRamp, new int[] {0b1000, 0b0000, 0b0011, 0b0000, 0b0100});
-		tileEdges.Add(TileType.HalfRamp, new int[] {0b0100, 0b0000, 0b0011, 0b0000, 0b1000});
-		tileEdges.Add(TileType.HalfRamp, new int[] {0b0010, 0b0000, 0b1100, 0b0000, 0b0001});
-		tileEdges.Add(TileType.HalfRamp, new int[] {0b0001, 0b0000, 0b1100, 0b0000, 0b0010});
+		tileEdges.Add(TileType.HalfRampRaised, new int[] {0b1000, 0b0000, 0b0011, 0b0000, 0b0100});
+		tileEdges.Add(TileType.HalfRampRaised, new int[] {0b0100, 0b0000, 0b0011, 0b0000, 0b1000});
+		tileEdges.Add(TileType.HalfRampRaised, new int[] {0b0010, 0b0000, 0b1100, 0b0000, 0b0001});
+		tileEdges.Add(TileType.HalfRampRaised, new int[] {0b0001, 0b0000, 0b1100, 0b0000, 0b0010});
 	}
 }
 
@@ -350,6 +350,7 @@ public enum TileType {
 	Cube = 1,
 	FullRamp = 2,
 	HalfRamp = 3,
+	HalfRampRaised = 4,
 
 	//FullRampU = 2,
 	//FullRampD = 3,
