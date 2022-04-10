@@ -1,17 +1,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Clock : MonoBehaviour
+public class Clock : NetworkBehaviour
 {
     public static Clock instance;
 
     public Text[] winTexts;
 
     public float startTime;
-    public float time;
+    public NetworkVariable<float> time;
+    private float localTime;
+    public float CurrentTime
+    {
+        get => Game.online ? time.Value : localTime;
+        set {
+            if (Game.online)
+            {
+                time.Value = value;
+            }
+            else
+            {
+                localTime = value;
+            }
+        }
+    }
+
     Text text;
     public bool finished;
 
@@ -30,7 +47,10 @@ public class Clock : MonoBehaviour
         }
 
         text = transform.GetComponentInChildren<Text>();
-        time = startTime;
+        if(!Game.online || Game.isHost)
+        {
+            time.Value = startTime;
+        }
     }
 
     private void Update()
@@ -39,15 +59,18 @@ public class Clock : MonoBehaviour
             return;
         }
 
-        if (!finished)
+        if (!Game.online || Game.isHost)
         {
-            time -= Time.deltaTime;
-            if (time <= 0)
+            if (!finished)
             {
-                finished = true;
-                clockFinished();
+                CurrentTime -= Time.deltaTime;
+                if (time.Value <= 0)
+                {
+                    finished = true;
+                    clockFinished();
+                }
             }
-            text.text = (int)time + "";
         }
+        text.text = (int)time.Value + "";
     }
 }

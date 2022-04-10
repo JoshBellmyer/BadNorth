@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Sand : MonoBehaviour
+public class Sand : NetworkBehaviour
 {
     [SerializeField] private float risingSpeed;
     [SerializeField] private float scrollSpeed;
@@ -46,13 +47,21 @@ public class Sand : MonoBehaviour
 
     public IEnumerator RaiseSand()
     {
-        while (true)
+        if (Game.isHost)
         {
-            if (!Game.instance.isPaused) {
-                transform.position += new Vector3(0, risingSpeed * Time.deltaTime, 0);
+            while (true)
+            {
+                if (!Game.instance.isPaused)
+                {
+                    transform.position += new Vector3(0, risingSpeed * Time.deltaTime, 0);
+                }
+
+                yield return null;
             }
-            
-            yield return null;
+        }
+        else
+        {
+            Debug.LogWarning("Raising sand as a client is not allowed");
         }
     }
 }
