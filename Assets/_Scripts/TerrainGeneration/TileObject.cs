@@ -5,9 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class TileObject
 {
-	public TileType type;
 	public GameObject simple;
-	public TilePlacementRequirementGroup requirements;
 	public MeshArrangement[] meshArrangements;
 
 	public GameObject DetermineMeshArrangement(TileData data, TileSet tileSet, Vector3Int position, ref int rotation, bool simple = false)
