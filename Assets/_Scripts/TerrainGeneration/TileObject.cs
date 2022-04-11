@@ -13,12 +13,21 @@ public class TileObject
 		bool isTop = tileSet.topType == TileSet.TopType.AllTops && data.tileTypes[position.x, position.y + 1, position.z] == TileType.None;
 		isTop |= tileSet.topType == TileSet.TopType.Height && position.y > data.maxHeight - tileSet.topLayers && tileSet.topLayers > 0 && position.y >= tileSet.topMinLayer;
 
-		foreach (MeshArrangement arrangment in meshArrangements)
+		if (meshArrangements.Length == 1)
 		{
-			rotation = arrangment.requirements.GetRotationalFit(data.tileTypes, position);
-			if (rotation == -1) continue;
+			rotation = TerrainGenerator.random.Next(0, 4) * 90;
+			return simple ? this.simple : meshArrangements[0].GetMesh(isTop);
+		}
+		else
+		{
+			foreach (MeshArrangement arrangment in meshArrangements)
+			{
 
-			return simple ? this.simple : arrangment.GetMesh(20, isTop);
+				rotation = arrangment.requirements.GetRotationalFit(data.tileTypes, position);
+				if (rotation == -1) continue;
+
+				return simple ? this.simple : arrangment.GetMesh(isTop);
+			}
 		}
 		return null;
 	}
@@ -32,37 +41,20 @@ public class MeshArrangement
 
 	public TilePlacementRequirementGroup requirements;
 
-	public GameObject GetMesh(int varChance, bool isTop)
+	public GameObject GetMesh(bool isTop)
 	{
-		if (isTop) return GetTopMesh(varChance);
-		int chance = TerrainGenerator.random.Next(0, 100);
-
-		if (chance < varChance && variations.Length > 1)
-		{
-			int rand = TerrainGenerator.random.Next(0, variations.Length - 1);
-
-			return variations[rand + 1];
-		}
-
-		return variations[0];
+		if (isTop) return GetTopMesh();
+		int chance = TerrainGenerator.random.Next(0, variations.Length);
+		return variations[chance];
 	}
 
-	private GameObject GetTopMesh(int varChance)
+	private GameObject GetTopMesh()
 	{
 		if (tVariations.Length < 1)
 		{
-			return GetMesh(varChance, false);
+			return GetMesh(false);
 		}
-
-		int chance = TerrainGenerator.random.Next(0, 100);
-
-		if (chance < varChance && tVariations.Length > 1)
-		{
-			int rand = TerrainGenerator.random.Next(0, tVariations.Length - 1);
-
-			return tVariations[rand + 1];
-		}
-
-		return tVariations[0];
+		int chance = TerrainGenerator.random.Next(0, tVariations.Length);
+		return tVariations[chance];
 	}
 }

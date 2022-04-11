@@ -16,9 +16,7 @@ MonoBehaviour:
   topLayers: 2
   topMinLayer: 1
   cube:
-    type: 1
     simple: {fileID: 0}
-    requirements: {fileID: 0}
     meshArrangements:
     - variations:
       - {fileID: 1092448020752765243, guid: 28734358e222d4f15ab1753a926bf3cb, type: 3}
@@ -51,9 +49,7 @@ MonoBehaviour:
       - {fileID: 4975775813458618018, guid: b9ead5803bae746f4824ac151b4e9316, type: 3}
       requirements: {fileID: 11400000, guid: 146f02f83e4e2214e809df77325d6525, type: 2}
   fullRamp:
-    type: 2
     simple: {fileID: 3589962871750393295, guid: 4ebe7c03cab504120b7b6568f0521fd8, type: 3}
-    requirements: {fileID: 0}
     meshArrangements:
     - variations:
       - {fileID: 6248155194061553519, guid: ce6999c2738cb416f9654b428204e8d8, type: 3}
@@ -72,9 +68,7 @@ MonoBehaviour:
       tVariations: []
       requirements: {fileID: 11400000, guid: c8dea1527c24d464cb6bc129153955ac, type: 2}
   halfRamp:
-    type: 3
     simple: {fileID: 3854521246255464273, guid: cc3705d3cd6de46e4b8a47c6d508a700, type: 3}
-    requirements: {fileID: 0}
     meshArrangements:
     - variations:
       - {fileID: 1689089498789175252, guid: 03a5893c7b31d4f079d96f29f6ec5c1a, type: 3}
@@ -93,9 +87,7 @@ MonoBehaviour:
       tVariations: []
       requirements: {fileID: 11400000, guid: ca128015bafbab244ad7c5e8d66b8ff5, type: 2}
   halfRampRaised:
-    type: 4
     simple: {fileID: 8341411567610398985, guid: 8c59a6910ca9c4eadbc5bbea1189fa61, type: 3}
-    requirements: {fileID: 0}
     meshArrangements:
     - variations:
       - {fileID: 4514610926570007663, guid: 72653c9519b3e400fa7a2dbaea6d63e8, type: 3}
@@ -113,5 +105,13 @@ MonoBehaviour:
       - {fileID: 6644360087443387089, guid: e14267aa2e3fc498a923b71f47848329, type: 3}
       tVariations: []
       requirements: {fileID: 11400000, guid: f0c09a859d9099c41af14c3cafbe97c0, type: 2}
+  miscellaneous:
+    simple: {fileID: 0}
+    meshArrangements:
+    - variations:
+      - {fileID: 4975775813458618018, guid: 3c3b0bb1e87acb44f96d360f2a606210, type: 3}
+      - {fileID: 4975775813458618018, guid: 890faa4e2f40f564d912cd4958d38755, type: 3}
+      tVariations: []
+      requirements: {fileID: 0}
   material: {fileID: 2100000, guid: a12cbda2a7a624e9fbfb58e5e95b0df7, type: 2}
   sandColor: {r: 1, g: 0.8627451, b: 0.5803922, a: 1}

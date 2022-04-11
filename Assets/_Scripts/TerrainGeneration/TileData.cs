@@ -20,43 +20,74 @@ public class TileData {
 	private List<string> tempSlopes;
 	
 
-	public TileData (float[,] _noise, float _meshScale) {
-		noise = _noise;
-		meshScale = _meshScale;
+	public TileData (float[,] _noise, float _meshScale, float miscDensity)
+    {
+        noise = _noise;
+        meshScale = _meshScale;
 
-		sizeX = noise.GetLength(0);
-		sizeZ = noise.GetLength(1);
-		sizeY = (int)meshScale + 5;
-		maxHeight = 0;
+        sizeX = noise.GetLength(0);
+        sizeZ = noise.GetLength(1);
+        sizeY = (int)meshScale + 5;
+        maxHeight = 0;
 
-		tileTypes = new TileType[sizeX, sizeY, sizeZ];
-		tileLocations = new List<TileLocation>();
-		tileHeights = new int[sizeX, sizeZ];
+        tileTypes = new TileType[sizeX, sizeY, sizeZ];
+        tileLocations = new List<TileLocation>();
+        tileHeights = new int[sizeX, sizeZ];
 
-		// Place initial cube-shaped tiles
-		for (int x = 0; x < sizeX; x++) {
-			for (int z = 0; z < sizeZ; z++) {
-				int height = (int)Mathf.Round(noise[x, z] * meshScale);
-				tileHeights[x, z] = height;
+        PlaceCubes();
 
-				if (height > maxHeight) {
-					maxHeight = height;
-				}
+        PlaceSlopes();
 
-				while (height > 0) {
-					tileTypes[x, height, z] = TileType.Cube;
-					tileLocations.Add( new TileLocation(TileType.Cube, new Vector3Int(x, height, z)) );
-					height--;
+		PlaceMisc(miscDensity);
+    }
+
+	private void PlaceMisc(float density)
+    {
+		for (int x=0; x<tileHeights.GetLength(0); x++)
+        {
+			for (int z = 0; z < tileHeights.GetLength(1); z++)
+			{
+				int height = tileHeights[x, z] + 1;
+				if(height > 1)
+				{
+					double roll = TerrainGenerator.random.NextDouble();
+					if (roll < density)
+					{
+						tileTypes[x, height, z] = TileType.Miscellaneous;
+						tileLocations.Add(new TileLocation(TileType.Miscellaneous, new Vector3Int(x, height, z)));
+					}
 				}
 			}
 		}
+    }
 
-		EnhanceTiles();
-	}
+    private void PlaceCubes()
+    {
+        for (int x = 0; x < sizeX; x++)
+        {
+            for (int z = 0; z < sizeZ; z++)
+            {
+                int height = (int)Mathf.Round(noise[x, z] * meshScale);
+                tileHeights[x, z] = height;
+
+                if (height > maxHeight)
+                {
+                    maxHeight = height;
+                }
+
+                while (height > 0)
+                {
+                    tileTypes[x, height, z] = TileType.Cube;
+                    tileLocations.Add(new TileLocation(TileType.Cube, new Vector3Int(x, height, z)));
+                    height--;
+                }
+            }
+        }
+    }
 
 
-	// Enhances the terrain by placing slope tiles and some additional cube-shaped tiles
-	private void EnhanceTiles () {
+    // Enhances the terrain by placing slope tiles and some additional cube-shaped tiles
+    private void PlaceSlopes () {
 		tempSlopes = new List<string>();
 
 		for (int x = 0; x < sizeX; x++) {
@@ -346,26 +377,12 @@ public class TileLocation {
 
 
 public enum TileType {
-	None = 0,
-	Cube = 1,
-	FullRamp = 2,
-	HalfRamp = 3,
-	HalfRampRaised = 4,
-
-	//FullRampU = 2,
-	//FullRampD = 3,
-	//FullRampL = 4,
-	//FullRampR = 5,
-
-	//HalfRampU = 6,
-	//HalfRampD = 7,
-	//HalfRampL = 8,
-	//HalfRampR = 9,
-
-	//RaisedRampU = 10,
-	//RaisedRampD = 11,
-	//RaisedRampL = 12,
-	//RaisedRampR = 13,
+	None,
+	Cube,
+	FullRamp,
+	HalfRamp,
+	HalfRampRaised,
+	Miscellaneous,
 }
 
 

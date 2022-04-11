@@ -13,6 +13,7 @@ public class TileSet : ScriptableObject {
 	public TileObject fullRamp;
 	public TileObject halfRamp;
 	public TileObject halfRampRaised;
+	public TileObject miscellaneous;
 
 	public Material material;
 	public Color sandColor;
@@ -29,6 +30,8 @@ public class TileSet : ScriptableObject {
 				return halfRamp.DetermineMeshArrangement(data, this, position, ref rotation, simple);
 			case TileType.HalfRampRaised:
 				return halfRampRaised.DetermineMeshArrangement(data, this, position, ref rotation, simple);
+			case TileType.Miscellaneous:
+				return miscellaneous.DetermineMeshArrangement(data, this, position, ref rotation, simple);
 			default:
 				Debug.LogError("No object found of type " + data.tileTypes[position.x, position.y, position.z]);
 				return null;
