@@ -72,7 +72,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
         navMeshFilter.sharedMesh = m;
         navMeshCollider.sharedMesh = m;
 
-        TileData tileData = new TileData(heightMap, settings.meshScale);
+        TileData tileData = new TileData(heightMap, settings.meshScale, settings.miscDensity);
         tileSet = Resources.Load<TileSet>("TileSets/" + tileSetName);
         if(tileSet == null)
         {

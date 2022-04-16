@@ -15,114 +15,95 @@ MonoBehaviour:
   topType: 1
   topLayers: 2
   topMinLayer: 1
-  models:
-  - variations:
-    - {fileID: 5639512962896332556, guid: 37cda9432ad3d4902b8451f556c76ec0, type: 3}
-    tVariations:
-    - {fileID: 6018597668278051846, guid: 3ca8be1365fdc41c9bba0a34d6cc07f4, type: 3}
+  cube:
     simple: {fileID: 0}
-    requirements: {fileID: 11400000, guid: 459ba4607c75cff44985784c0478d957, type: 2}
-  - variations:
-    - {fileID: 5345002959198969568, guid: b1a69d350e2084f17a4f6b6443c08102, type: 3}
-    tVariations:
-    - {fileID: 1818345570937006752, guid: 07e75d714a9c64dbbb7a9dec42fc55c1, type: 3}
-    simple: {fileID: 0}
-    requirements: {fileID: 11400000, guid: 737ca3d2b9f034a49906b49c50025ecc, type: 2}
-  - variations:
-    - {fileID: 2537609616764360726, guid: 5fa22c766b3af41ac92b82bb7d6e00a7, type: 3}
-    tVariations:
-    - {fileID: 3069246000019105348, guid: b28eede59f969466c969b4227accfeaa, type: 3}
-    simple: {fileID: 0}
-    requirements: {fileID: 11400000, guid: c78e56b812a573f4195ee53ad16a11dc, type: 2}
-  - variations:
-    - {fileID: 921560935085654573, guid: 3592259a3b5ad46e8ac70d6a1d1f11d6, type: 3}
-    tVariations:
-    - {fileID: 1692396997252679718, guid: b520573c79db04bd79215ba4920044ea, type: 3}
-    simple: {fileID: 0}
-    requirements: {fileID: 11400000, guid: f9076ad3ed9651d45bc68d57fae24543, type: 2}
-  - variations:
-    - {fileID: 1807335058715364933, guid: 6b312ece555ce4edea636a2dedea2907, type: 3}
-    tVariations:
-    - {fileID: 2543502816956172856, guid: 12b54329273cb424abf5bc49fe7bd8a5, type: 3}
-    simple: {fileID: 0}
-    requirements: {fileID: 11400000, guid: 56f3c9c290605134298c1a31fd3aed11, type: 2}
-  - variations:
-    - {fileID: 8310039109505940210, guid: a7a59d47791144f9193c9fc30f6a2583, type: 3}
-    tVariations:
-    - {fileID: 4653400254681250003, guid: 1d39b6b2adc904bf3b56000c008f1fb1, type: 3}
-    simple: {fileID: 0}
-    requirements: {fileID: 11400000, guid: 146f02f83e4e2214e809df77325d6525, type: 2}
-  - variations:
-    - {fileID: 860094849356568587, guid: 8fdafca2c9d7941e5a6a7589a454986a, type: 3}
-    tVariations:
-    - {fileID: 860094849356568587, guid: 8fdafca2c9d7941e5a6a7589a454986a, type: 3}
+    meshArrangements:
+    - variations:
+      - {fileID: 5639512962896332556, guid: 37cda9432ad3d4902b8451f556c76ec0, type: 3}
+      tVariations:
+      - {fileID: 6018597668278051846, guid: 3ca8be1365fdc41c9bba0a34d6cc07f4, type: 3}
+      requirements: {fileID: 11400000, guid: 459ba4607c75cff44985784c0478d957, type: 2}
+    - variations:
+      - {fileID: 5345002959198969568, guid: b1a69d350e2084f17a4f6b6443c08102, type: 3}
+      tVariations:
+      - {fileID: 1818345570937006752, guid: 07e75d714a9c64dbbb7a9dec42fc55c1, type: 3}
+      requirements: {fileID: 11400000, guid: 737ca3d2b9f034a49906b49c50025ecc, type: 2}
+    - variations:
+      - {fileID: 2537609616764360726, guid: 5fa22c766b3af41ac92b82bb7d6e00a7, type: 3}
+      tVariations:
+      - {fileID: 3069246000019105348, guid: b28eede59f969466c969b4227accfeaa, type: 3}
+      requirements: {fileID: 11400000, guid: c78e56b812a573f4195ee53ad16a11dc, type: 2}
+    - variations:
+      - {fileID: 921560935085654573, guid: 3592259a3b5ad46e8ac70d6a1d1f11d6, type: 3}
+      tVariations:
+      - {fileID: 1692396997252679718, guid: b520573c79db04bd79215ba4920044ea, type: 3}
+      requirements: {fileID: 11400000, guid: f9076ad3ed9651d45bc68d57fae24543, type: 2}
+    - variations:
+      - {fileID: 1807335058715364933, guid: 6b312ece555ce4edea636a2dedea2907, type: 3}
+      tVariations:
+      - {fileID: 2543502816956172856, guid: 12b54329273cb424abf5bc49fe7bd8a5, type: 3}
+      requirements: {fileID: 11400000, guid: 56f3c9c290605134298c1a31fd3aed11, type: 2}
+    - variations:
+      - {fileID: 4653400254681250003, guid: 1d39b6b2adc904bf3b56000c008f1fb1, type: 3}
+      tVariations:
+      - {fileID: 4653400254681250003, guid: 1d39b6b2adc904bf3b56000c008f1fb1, type: 3}
+      requirements: {fileID: 11400000, guid: 146f02f83e4e2214e809df77325d6525, type: 2}
+  fullRamp:
     simple: {fileID: 3589962871750393295, guid: 4ebe7c03cab504120b7b6568f0521fd8, type: 3}
-    requirements: {fileID: 11400000, guid: 6ca89a748acc5ce48a337c2fa68cc82d, type: 2}
-  - variations:
-    - {fileID: 2616925145263992222, guid: aad8711340ded4d7faaf33473eb12400, type: 3}
-    tVariations:
-    - {fileID: 2616925145263992222, guid: aad8711340ded4d7faaf33473eb12400, type: 3}
-    simple: {fileID: 3589962871750393295, guid: 4ebe7c03cab504120b7b6568f0521fd8, type: 3}
-    requirements: {fileID: 11400000, guid: 4f817e8cdf569ec4ea56d52522ebf738, type: 2}
-  - variations:
-    - {fileID: 3579837085704970054, guid: 4638db2a69e1c4abc98eb795ea0e8d29, type: 3}
-    tVariations:
-    - {fileID: 3579837085704970054, guid: 4638db2a69e1c4abc98eb795ea0e8d29, type: 3}
-    simple: {fileID: 3589962871750393295, guid: 4ebe7c03cab504120b7b6568f0521fd8, type: 3}
-    requirements: {fileID: 11400000, guid: 776de34cdcd1f3c4893df867f3df1d7b, type: 2}
-  - variations:
-    - {fileID: 7537964864272236839, guid: b97c5913d378e4046a49a2d9c1c12681, type: 3}
-    tVariations:
-    - {fileID: 7537964864272236839, guid: b97c5913d378e4046a49a2d9c1c12681, type: 3}
-    simple: {fileID: 3589962871750393295, guid: 4ebe7c03cab504120b7b6568f0521fd8, type: 3}
-    requirements: {fileID: 11400000, guid: c8dea1527c24d464cb6bc129153955ac, type: 2}
-  - variations:
-    - {fileID: 1551775218541428576, guid: 5d47f01b1180349c990475d330091884, type: 3}
-    tVariations:
-    - {fileID: 1551775218541428576, guid: 5d47f01b1180349c990475d330091884, type: 3}
-    simple: {fileID: 8341411567610398985, guid: 8c59a6910ca9c4eadbc5bbea1189fa61, type: 3}
-    requirements: {fileID: 11400000, guid: 93d497e753c3f6d4386e33a73da984cf, type: 2}
-  - variations:
-    - {fileID: 8652638687133212471, guid: d091bf580ef0445a0bbc61b81cb5625e, type: 3}
-    tVariations:
-    - {fileID: 8652638687133212471, guid: d091bf580ef0445a0bbc61b81cb5625e, type: 3}
-    simple: {fileID: 8341411567610398985, guid: 8c59a6910ca9c4eadbc5bbea1189fa61, type: 3}
-    requirements: {fileID: 11400000, guid: 9b67195e48a5c7c49b1637c700ce8877, type: 2}
-  - variations:
-    - {fileID: 3038224224959956010, guid: 92bb877d75e4c4d75a4502c9a899d464, type: 3}
-    tVariations:
-    - {fileID: 3038224224959956010, guid: 92bb877d75e4c4d75a4502c9a899d464, type: 3}
-    simple: {fileID: 8341411567610398985, guid: 8c59a6910ca9c4eadbc5bbea1189fa61, type: 3}
-    requirements: {fileID: 11400000, guid: ddb74b461c611cd4c998f8d9acbf2b65, type: 2}
-  - variations:
-    - {fileID: 1994493040594416620, guid: 99165bf67d4c14f739ce613486e4301b, type: 3}
-    tVariations:
-    - {fileID: 1994493040594416620, guid: 99165bf67d4c14f739ce613486e4301b, type: 3}
-    simple: {fileID: 8341411567610398985, guid: 8c59a6910ca9c4eadbc5bbea1189fa61, type: 3}
-    requirements: {fileID: 11400000, guid: f0c09a859d9099c41af14c3cafbe97c0, type: 2}
-  - variations:
-    - {fileID: 3195925131705916896, guid: 7ee0b3e3c6e2e44718844115e28a4b3a, type: 3}
-    tVariations:
-    - {fileID: 3195925131705916896, guid: 7ee0b3e3c6e2e44718844115e28a4b3a, type: 3}
+    meshArrangements:
+    - variations:
+      - {fileID: 860094849356568587, guid: 8fdafca2c9d7941e5a6a7589a454986a, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: 6ca89a748acc5ce48a337c2fa68cc82d, type: 2}
+    - variations:
+      - {fileID: 2616925145263992222, guid: aad8711340ded4d7faaf33473eb12400, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: 4f817e8cdf569ec4ea56d52522ebf738, type: 2}
+    - variations:
+      - {fileID: 3579837085704970054, guid: 4638db2a69e1c4abc98eb795ea0e8d29, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: 776de34cdcd1f3c4893df867f3df1d7b, type: 2}
+    - variations:
+      - {fileID: 7537964864272236839, guid: b97c5913d378e4046a49a2d9c1c12681, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: c8dea1527c24d464cb6bc129153955ac, type: 2}
+  halfRamp:
     simple: {fileID: 3854521246255464273, guid: cc3705d3cd6de46e4b8a47c6d508a700, type: 3}
-    requirements: {fileID: 11400000, guid: 1bc5ba7ae457b8c40a8daeedbd11edfe, type: 2}
-  - variations:
-    - {fileID: 2498564389178106265, guid: ad571d5b665b54e96ab160f834a0b267, type: 3}
-    tVariations:
-    - {fileID: 2498564389178106265, guid: ad571d5b665b54e96ab160f834a0b267, type: 3}
-    simple: {fileID: 3854521246255464273, guid: cc3705d3cd6de46e4b8a47c6d508a700, type: 3}
-    requirements: {fileID: 11400000, guid: e6d7776e1aa5df64cb4d0e03ea7af996, type: 2}
-  - variations:
-    - {fileID: 7278808779747577193, guid: 0d480f965d16c4eeb8b2b389b6062909, type: 3}
-    tVariations:
-    - {fileID: 7278808779747577193, guid: 0d480f965d16c4eeb8b2b389b6062909, type: 3}
-    simple: {fileID: 3854521246255464273, guid: cc3705d3cd6de46e4b8a47c6d508a700, type: 3}
-    requirements: {fileID: 11400000, guid: 9123b95ea61b99049a874c2997b8c348, type: 2}
-  - variations:
-    - {fileID: 7920698166394611960, guid: 17304d18b18504620a8a96fd9cd669b7, type: 3}
-    tVariations:
-    - {fileID: 7920698166394611960, guid: 17304d18b18504620a8a96fd9cd669b7, type: 3}
-    simple: {fileID: 3854521246255464273, guid: cc3705d3cd6de46e4b8a47c6d508a700, type: 3}
-    requirements: {fileID: 11400000, guid: ca128015bafbab244ad7c5e8d66b8ff5, type: 2}
+    meshArrangements:
+    - variations:
+      - {fileID: 3195925131705916896, guid: 7ee0b3e3c6e2e44718844115e28a4b3a, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: 1bc5ba7ae457b8c40a8daeedbd11edfe, type: 2}
+    - variations:
+      - {fileID: 2498564389178106265, guid: ad571d5b665b54e96ab160f834a0b267, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: e6d7776e1aa5df64cb4d0e03ea7af996, type: 2}
+    - variations:
+      - {fileID: 7278808779747577193, guid: 0d480f965d16c4eeb8b2b389b6062909, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: 9123b95ea61b99049a874c2997b8c348, type: 2}
+    - variations:
+      - {fileID: 7920698166394611960, guid: 17304d18b18504620a8a96fd9cd669b7, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: ca128015bafbab244ad7c5e8d66b8ff5, type: 2}
+  halfRampRaised:
+    simple: {fileID: 8341411567610398985, guid: 8c59a6910ca9c4eadbc5bbea1189fa61, type: 3}
+    meshArrangements:
+    - variations:
+      - {fileID: 1551775218541428576, guid: 5d47f01b1180349c990475d330091884, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: 93d497e753c3f6d4386e33a73da984cf, type: 2}
+    - variations:
+      - {fileID: 8652638687133212471, guid: d091bf580ef0445a0bbc61b81cb5625e, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: 9b67195e48a5c7c49b1637c700ce8877, type: 2}
+    - variations:
+      - {fileID: 3038224224959956010, guid: 92bb877d75e4c4d75a4502c9a899d464, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: ddb74b461c611cd4c998f8d9acbf2b65, type: 2}
+    - variations:
+      - {fileID: 1994493040594416620, guid: 99165bf67d4c14f739ce613486e4301b, type: 3}
+      tVariations: []
+      requirements: {fileID: 11400000, guid: f0c09a859d9099c41af14c3cafbe97c0, type: 2}
   material: {fileID: 2100000, guid: 22c89cb0ea92b4bb99ad76454fe4a4f4, type: 2}
   sandColor: {r: 0.24705882, g: 0.20392157, b: 0.32941177, a: 1}
