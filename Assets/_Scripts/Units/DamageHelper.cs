@@ -21,6 +21,8 @@ public class DamageHelper : MonoBehaviour
             Initialize();
         }
 
+        Debug.Log(unit.Team);
+
         int damage = 1;
         string str = $"{damageType}{unit.Type}";
 
@@ -38,7 +40,18 @@ public class DamageHelper : MonoBehaviour
         SetRed(0.2f);
         ParticleSpawner.SpawnParticle(transform.position + new Vector3(0, 0.5f, 0), 0, 0.3f);
 
+        if (Game.online) {
+            if (Game.isHost) {
+                unit.networkUnit.DamageEffectClientRpc();
+            }
+        }
+
         unit.lastAttacked = 0.2f;
+    }
+
+    public void DamageEffect () {
+        SetRed(0.2f);
+        ParticleSpawner.SpawnParticle(transform.position + new Vector3(0, 0.5f, 0), 0, 0.3f);
     }
 
     private void SetRed (float redTime) {

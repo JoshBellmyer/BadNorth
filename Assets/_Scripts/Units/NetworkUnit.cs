@@ -10,6 +10,7 @@ public class NetworkUnit : NetworkBehaviour {
     public NetworkVariable<bool> inBoat = new NetworkVariable<bool>(true);
     public NetworkVariable<bool> canMove = new NetworkVariable<bool>(true);
     public NetworkVariable<bool> canAttack = new NetworkVariable<bool>(true);
+    public NetworkVariable<int> health = new NetworkVariable<int>();
 
 
     private void Awake () {
@@ -18,6 +19,15 @@ public class NetworkUnit : NetworkBehaviour {
         if (!Game.online) {
             return;
         }
+    }
+
+    [ClientRpc]
+    public void DamageEffectClientRpc () {
+        if (Game.isHost) {
+            return;
+        }
+
+        unit.GetComponent<DamageHelper>().DamageEffect();
     }
 
 
@@ -49,5 +59,10 @@ public class NetworkUnit : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     public void SetCanAttackServerRpc (bool newCanAttack) {
         canAttack.Value = newCanAttack;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetHealthServerRpc (int newHealth) {
+        health.Value = newHealth;
     }
 }

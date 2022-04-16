@@ -46,6 +46,7 @@ public abstract class Unit : MonoBehaviour {
     private bool _inBoat;
     protected Vector3 _destination;
     protected float _currentCooldown;
+    private float startDelay = 1;
 
     private bool setColor;
 
@@ -150,8 +151,21 @@ public abstract class Unit : MonoBehaviour {
     }
 
     public int Health {
-        get => _health;
-        set {_health = value;}
+        get {
+            if (Game.online) {
+                return networkUnit.health.Value;
+            }
+            else {
+                return _health;
+            }
+        }
+        set {
+            if (Game.online) {
+                networkUnit.SetHealthServerRpc(value);
+            }
+
+            _health = value;
+        }
     }
 
     public UnitType Type {
@@ -170,8 +184,8 @@ public abstract class Unit : MonoBehaviour {
         _canMove = true;
         _destination = Vector3.zero;
         _directive = Directive.NONE;
-
-        networkUnit = GetComponent<NetworkUnit>();
+        
+        networkUnit = GetComponent<NetworkUnit>(); 
     }
 
     private void Start () {
@@ -190,6 +204,8 @@ public abstract class Unit : MonoBehaviour {
         }
 
         UnitStart();
+
+        Health = _health;
     }
 
     protected virtual void UnitStart () {}
@@ -325,7 +341,7 @@ public abstract class Unit : MonoBehaviour {
     protected virtual bool FindAttack () {
         HashSet<Unit> units = TeamManager.instance.GetNotOnTeam(Team);
 
-        Debug.Log(units.Count);
+        // Debug.Log(units.Count);
 
         float minDist = _attackDistance;
         Unit target = null;
@@ -351,7 +367,13 @@ public abstract class Unit : MonoBehaviour {
     }
 
     private void LateUpdate () {
-        if (_health <= 0 || (transform.position.y < Sand.height && transform.parent == null)) {
+        if (startDelay > 0) {
+            startDelay -= Time.deltaTime;
+
+            return;
+        }
+
+        if (Health <= 0 || (transform.position.y < Sand.height && transform.parent == null)) {
             Die();
         }
     }
@@ -363,12 +385,17 @@ public abstract class Unit : MonoBehaviour {
             targetLadder.Occupied = false;
         }
 
-        _group.RemoveUnit(this);
+        if (_group != null) {
+            _group.RemoveUnit(this);
+        }
+
         TeamManager.instance.Remove(Team, this);
 
         DestroyMaterialInstances();
 
-        Destroy(gameObject);
+        if (Game.isHost) {
+            Destroy(gameObject);
+        }
     }
 
     private void UpdateEdgeJumping () {
@@ -453,7 +480,7 @@ public abstract class Unit : MonoBehaviour {
             return;
         }
 
-        Debug.Log("fall");
+        // Debug.Log("fall");
 
         transform.position += (Vector3.down * 1 * Time.deltaTime);
     }
@@ -606,7 +633,7 @@ public abstract class Unit : MonoBehaviour {
             return;
         }
 
-        Debug.Log(_navMeshAgent.isOnNavMesh);
+        // Debug.Log(_navMeshAgent.isOnNavMesh);
 
         if (!CanMove) {
             return;

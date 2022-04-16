@@ -51,8 +51,6 @@ public class TeamManager : MonoBehaviour
         HashSet<Unit> set = new HashSet<Unit>();
 
         foreach (var v in dictionary.Keys) {
-            Debug.Log($"key: {v}");
-
             if (!v.Equals(team)) {
                 set.UnionWith(dictionary[v]);
             }

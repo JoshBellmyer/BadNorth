@@ -206,6 +206,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team:
     m_InternalValue: 0
+  inBoat:
+    m_InternalValue: 1
+  canMove:
+    m_InternalValue: 1
+  canAttack:
+    m_InternalValue: 1
 --- !u!1 &5117292426565283433
 GameObject:
   m_ObjectHideFlags: 0
