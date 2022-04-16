@@ -76,6 +76,9 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
                 Game.instance.Pause(playerController);
                 playerUIManager.SwitchMenu(typeof(PauseMenu));
             }
@@ -88,6 +91,9 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
                 Game.instance.Unpause();
                 playerUIManager.SwitchMenu(typeof(OverlayMenu));
             }
