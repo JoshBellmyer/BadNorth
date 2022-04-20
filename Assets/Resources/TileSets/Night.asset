@@ -105,5 +105,19 @@ MonoBehaviour:
       - {fileID: 1994493040594416620, guid: 99165bf67d4c14f739ce613486e4301b, type: 3}
       tVariations: []
       requirements: {fileID: 11400000, guid: f0c09a859d9099c41af14c3cafbe97c0, type: 2}
+  miscellaneous:
+    simple: {fileID: 0}
+    meshArrangements:
+    - variations:
+      - {fileID: 469780196259206389, guid: 017eb3e3be79a474bbd3b9253b51db2e, type: 3}
+      - {fileID: 3411195541005788988, guid: 530d31ac2fdfea745ab36bd1353c1c1a, type: 3}
+      - {fileID: 3411195541005788988, guid: 8d3b4d0be1b234946a760bcc068b2177, type: 3}
+      - {fileID: 3411195541005788988, guid: 361ce76f470b3444991493639f64e78a, type: 3}
+      - {fileID: 3411195541005788988, guid: 59198cb2bd20ccc4cad74f3af235f892, type: 3}
+      - {fileID: 3411195541005788988, guid: 4329d5b381cd8b34d901ce637b926466, type: 3}
+      - {fileID: 5935743154472907176, guid: 5490581638270514ba4f379e6fabc068, type: 3}
+      - {fileID: 5935743154472907176, guid: 4ad7d8990909a6b4198c10abb497e70e, type: 3}
+      tVariations: []
+      requirements: {fileID: 0}
   material: {fileID: 2100000, guid: 22c89cb0ea92b4bb99ad76454fe4a4f4, type: 2}
   sandColor: {r: 0.24705882, g: 0.20392157, b: 0.32941177, a: 1}
