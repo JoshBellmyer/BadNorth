@@ -80,10 +80,10 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
             tileSet = tileSets[random.Next(0, tileSets.Length)];
         }
 
-        tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter);
+        float offset = (heightMap.GetLength(0) / 2.0f) - 0.5f;
+        tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter, offset);
         tileMeshRenderer.material = tileSet.material;
 
-        float offset = (heightMap.GetLength(0) / 2.0f) - 0.5f;
         tileMeshFilter.transform.position = new Vector3(-offset, 0, -offset);
 
         surface.BuildNavMesh();
