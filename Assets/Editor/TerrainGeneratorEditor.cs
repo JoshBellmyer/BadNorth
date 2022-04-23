@@ -13,6 +13,8 @@ public class TerrainGeneratorEditor : Editor
         if (GUILayout.Button("Generate"))
         {
             TerrainGenerator generator = (TerrainGenerator)target;
+            GameObject tiles = GameObject.Find("Tiles");
+            DestroyImmediate(tiles);
             generator.SetUpMap();
         }
     }
