@@ -142,6 +142,7 @@ public class Game : MonoBehaviour {
 		NetworkObject tempNO = obj.GetComponent<NetworkObject>();
 		NetworkTransform tempNT = obj.GetComponent<NetworkTransform>();
 		ClientNetworkTransform tempCNT = obj.GetComponent<ClientNetworkTransform>();
+		NetworkRigidbody tempRB = obj.GetComponent<NetworkRigidbody>();
 
 		if (tempNT != null) {
 			DestroyImmediate(tempNT);
@@ -151,6 +152,9 @@ public class Game : MonoBehaviour {
 		}
 		if (tempCNT != null) {
 			DestroyImmediate(tempCNT);
+		}
+		if (tempRB != null) {
+			DestroyImmediate(tempRB);
 		}
 	}
 

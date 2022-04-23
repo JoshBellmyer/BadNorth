@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Unity.Netcode;
 
 public class ArcherUnit : Unit
 {
@@ -9,7 +10,7 @@ public class ArcherUnit : Unit
     public static readonly float LAUNCH_SPEED = 20F;
     public static readonly int HEALTH = 100;
 
-    [SerializeField] private GameObject[] arrowPrefabs;
+    public GameObject[] arrowPrefabs;
     private int teamIndex;
     private bool currentUseB = false;
 
@@ -83,7 +84,22 @@ public class ArcherUnit : Unit
     }
 
     private void LaunchArrow (Vector3 launchVector, bool useB) {
+        // if (Game.online) {
+        //     Game.GetLocalPlayer().LaunchArrowServerRpc(GetComponent<NetworkObject>(), int.Parse(Team), launchVector, useB);
+
+        //     return;
+        // }
+
+        teamIndex = int.Parse(Team) - 1;
         GameObject arrow = Instantiate<GameObject>(arrowPrefabs[teamIndex]);
+        
+        if (Game.online) {
+            arrow.GetComponent<NetworkObject>().Spawn();
+        }
+        else {
+            Game.ClearNetworking(arrow);
+        }
+
         Rigidbody arrowRb = arrow.GetComponent<Rigidbody>();
 
         arrow.GetComponent<Arrow>().Setup(Team, this, useB);

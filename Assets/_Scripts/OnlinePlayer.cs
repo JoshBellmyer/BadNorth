@@ -33,6 +33,26 @@ public class OnlinePlayer : NetworkBehaviour {
         };
     }
 
+    [ServerRpc]
+    public void LaunchArrowServerRpc (NetworkObjectReference archerUnit, int team, Vector3 launchVector, bool useB) {
+        NetworkObject archerObj = (NetworkObject)archerUnit;
+
+        Debug.Log(archerObj.gameObject);
+
+        return;
+
+        ArcherUnit archer = archerObj.GetComponent<ArcherUnit>();
+
+        GameObject arrow = Instantiate<GameObject>(archer.arrowPrefabs[team]);
+        arrow.GetComponent<NetworkObject>().Spawn();
+        Rigidbody arrowRb = arrow.GetComponent<Rigidbody>();
+
+        arrow.GetComponent<Arrow>().Setup($"{team}", archer, useB);
+        arrow.transform.position = archer.transform.position + (Vector3.up * 0.5f);
+        arrow.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        arrowRb.velocity = launchVector;
+    }
+
 
     [ServerRpc]
     public void SpawnUnitServerRpc (ulong clientId, int team, UnitType unitType) {

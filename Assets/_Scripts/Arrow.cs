@@ -10,12 +10,19 @@ public class Arrow : MonoBehaviour {
 	
 
 	private void Update () {
+		if (Game.online && !Game.isHost) {
+			return;
+		}
+		
 		if (transform.position.y < -1) {
 			Destroy(gameObject);
 		}
 	}
 
 	private void OnTriggerEnter (Collider other) {
+		if (Game.online && !Game.isHost) {
+			return;
+		}
 		if (other.isTrigger) {
 			return;
 		}
