@@ -96,6 +96,9 @@ GameObject:
   - component: {fileID: 8626478893608150049}
   - component: {fileID: 1193303207208295666}
   - component: {fileID: 5719972224066884518}
+  - component: {fileID: -5784953089507652904}
+  - component: {fileID: 3925042916303476974}
+  - component: {fileID: -821339484204650478}
   m_Layer: 11
   m_Name: Axe
   m_TagString: Unit
@@ -201,9 +204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ab13bbe9d5be64698805b3612c52db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _directive: 0
   lastAttacked: 0
-  _targetEnemy: {fileID: 0}
+  groupAmount: 3
   _unitType: 1
   _health: 15
   _attackRange: 0.5
@@ -211,7 +213,74 @@ MonoBehaviour:
   _attackCooldown: 2
   _damageType: 204
   attackSound: Thud
-  groupAmount: 3
+  _directive: 0
+  _targetEnemy: {fileID: 0}
+  networkUnit: {fileID: 0}
+--- !u!114 &-5784953089507652904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5719972224066884517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.01
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 1
+  Interpolate: 1
+  CanCommitToTransform: 0
+--- !u!114 &3925042916303476974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5719972224066884517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &-821339484204650478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5719972224066884517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858506c94521e4199926a6ff1fb85d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team:
+    m_InternalValue: 0
+  inBoat:
+    m_InternalValue: 1
+  canMove:
+    m_InternalValue: 1
+  canAttack:
+    m_InternalValue: 1
+  health:
+    m_InternalValue: 0
 --- !u!1 &5719972224389656206
 GameObject:
   m_ObjectHideFlags: 0

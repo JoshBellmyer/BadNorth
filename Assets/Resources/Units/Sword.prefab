@@ -293,6 +293,9 @@ GameObject:
   - component: {fileID: 8828889487592634726}
   - component: {fileID: 2143319929136644533}
   - component: {fileID: 4778460500378980067}
+  - component: {fileID: 2866978397589293463}
+  - component: {fileID: -644306342054171664}
+  - component: {fileID: 296624342427725744}
   m_Layer: 11
   m_Name: Sword
   m_TagString: Unit
@@ -402,9 +405,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7178046c926c64a8700eca676d86ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _directive: 0
   lastAttacked: 0
-  _targetEnemy: {fileID: 0}
+  groupAmount: 4
   _unitType: 0
   _health: 8
   _attackRange: 0.5
@@ -412,7 +414,74 @@ MonoBehaviour:
   _attackCooldown: 1
   _damageType: 203
   attackSound: Slice
-  groupAmount: 4
+  _directive: 0
+  _targetEnemy: {fileID: 0}
+  networkUnit: {fileID: 0}
+--- !u!114 &2866978397589293463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778460500378980066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.01
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 1
+  Interpolate: 1
+  CanCommitToTransform: 0
+--- !u!114 &-644306342054171664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778460500378980066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &296624342427725744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778460500378980066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858506c94521e4199926a6ff1fb85d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team:
+    m_InternalValue: 0
+  inBoat:
+    m_InternalValue: 1
+  canMove:
+    m_InternalValue: 1
+  canAttack:
+    m_InternalValue: 1
+  health:
+    m_InternalValue: 0
 --- !u!1 &7682005199596819371
 GameObject:
   m_ObjectHideFlags: 0

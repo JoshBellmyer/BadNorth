@@ -2167,6 +2167,9 @@ GameObject:
   - component: {fileID: 3250976250529101002}
   - component: {fileID: 5342913496609950745}
   - component: {fileID: 1570574411813356361}
+  - component: {fileID: -4830130855154439793}
+  - component: {fileID: -9046409410039452330}
+  - component: {fileID: -2164029287989175552}
   m_Layer: 11
   m_Name: Pike
   m_TagString: Unit
@@ -2282,9 +2285,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92f2351e804bfbb42a57f68e9427084e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _directive: 0
   lastAttacked: 0
-  _targetEnemy: {fileID: 0}
+  groupAmount: 4
   _unitType: 3
   _health: 12
   _attackRange: 0.8
@@ -2292,7 +2294,74 @@ MonoBehaviour:
   _attackCooldown: 1.5
   _damageType: 205
   attackSound: Grunt
-  groupAmount: 4
+  _directive: 0
+  _targetEnemy: {fileID: 0}
+  networkUnit: {fileID: 0}
+--- !u!114 &-4830130855154439793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570574411813356366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.01
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 1
+  Interpolate: 1
+  CanCommitToTransform: 0
+--- !u!114 &-9046409410039452330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570574411813356366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &-2164029287989175552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570574411813356366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858506c94521e4199926a6ff1fb85d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team:
+    m_InternalValue: 0
+  inBoat:
+    m_InternalValue: 1
+  canMove:
+    m_InternalValue: 1
+  canAttack:
+    m_InternalValue: 1
+  health:
+    m_InternalValue: 0
 --- !u!1 &1580209679164833841
 GameObject:
   m_ObjectHideFlags: 0
