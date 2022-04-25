@@ -31,7 +31,6 @@ public class TilePlacer : MonoBehaviour {
 		mInstances.Add(combine);
 
 		foreach (TileLocation tileLoc in tileData.tileLocations) {
-			//if (tileLoc.type != TileType.Cube) continue;
 			PlaceTile(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z);
 			PlaceMeshTile(tileLoc.pos.x, tileLoc.pos.y, tileLoc.pos.z);
 		}
