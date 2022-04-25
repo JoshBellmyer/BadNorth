@@ -17,6 +17,9 @@ public class TeamColor : MonoBehaviour {
 			InitializeMaterials();
 		}
 
+		Debug.Log($"Flat Material: {flatMaterials[colorId]}");
+		Debug.Log($"Light Material: {lightMaterials[colorId]}");
+
 		foreach (MaterialGroup mg in flatColorParts) {
 			Material[] materials = mg.meshRenderer.materials;
 			materials[mg.materialIndex] = flatMaterials[colorId];
@@ -39,6 +42,8 @@ public class TeamColor : MonoBehaviour {
 			flatMaterials[i] = Resources.Load<Material>($"Materials/team_flat_{i}");
 			lightMaterials[i] = Resources.Load<Material>($"Materials/team_light_{i}");
 		}
+
+		initialized = true;
 	}
 }
 
