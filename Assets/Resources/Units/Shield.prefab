@@ -212,6 +212,8 @@ MonoBehaviour:
     m_InternalValue: 1
   canAttack:
     m_InternalValue: 1
+  health:
+    m_InternalValue: 0
 --- !u!1 &5117292426565283433
 GameObject:
   m_ObjectHideFlags: 0

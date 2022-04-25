@@ -139,10 +139,10 @@ public class Game : MonoBehaviour {
 
 	// Clear the networking components from a gameobject to prevent errors in local mode
 	public static void ClearNetworking (GameObject obj) {
+		NetworkRigidbody tempRB = obj.GetComponent<NetworkRigidbody>();
 		NetworkObject tempNO = obj.GetComponent<NetworkObject>();
 		NetworkTransform tempNT = obj.GetComponent<NetworkTransform>();
 		ClientNetworkTransform tempCNT = obj.GetComponent<ClientNetworkTransform>();
-		NetworkRigidbody tempRB = obj.GetComponent<NetworkRigidbody>();
 
 		if (tempNT != null) {
 			DestroyImmediate(tempNT);
