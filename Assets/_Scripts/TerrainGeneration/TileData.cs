@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TileData {
@@ -39,7 +40,7 @@ public class TileData {
         PlaceSlopes();
 
 		PlaceMisc(miscDensity);
-    }
+	}
 
 	private void PlaceMisc(float density)
     {
@@ -51,7 +52,7 @@ public class TileData {
 				if(height > 1)
 				{
 					double roll = TerrainGenerator.random.NextDouble();
-					if (roll < density)
+					if (roll < density && tileTypes[x, height, z] == TileType.None)
 					{
 						tileTypes[x, height, z] = TileType.Miscellaneous;
 						tileLocations.Add(new TileLocation(TileType.Miscellaneous, new Vector3Int(x, height, z)));
@@ -266,15 +267,11 @@ public class TileData {
 		tempSlopes.Add($"{new Vector3Int(x, y, z)}");
 		tempSlopes.Add($"{new Vector3Int(x + backDir.x, y, z + backDir.z)}");
 
-		int temp = (int)type - (int)TileType.FullRamp;
-		TileType raisedType = (TileType)((int)TileType.HalfRampRaised + temp);
-		TileType halfType = (TileType)((int)TileType.HalfRamp + temp);
+		tileTypes[x, y, z] = TileType.HalfRampRaised;
+		tileLocations.Add( new TileLocation(TileType.HalfRampRaised, new Vector3Int(x, y, z)) );
 
-		tileTypes[x, y, z] = raisedType;
-		tileLocations.Add( new TileLocation(raisedType, new Vector3Int(x, y, z)) );
-
-		tileTypes[x + backDir.x, y, z + backDir.z] = halfType;
-		tileLocations.Add( new TileLocation(halfType, new Vector3Int(x + backDir.x, y, z + backDir.z)) );
+		tileTypes[x + backDir.x, y, z + backDir.z] = TileType.HalfRamp;
+		tileLocations.Add( new TileLocation(TileType.HalfRamp, new Vector3Int(x + backDir.x, y, z + backDir.z)) );
 
 		slopeCount += 2;
 	}
