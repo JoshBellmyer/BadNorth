@@ -14,6 +14,9 @@ public class LadderUnit : Unit
     private Vector3 landingPos;
     private Vector3 bottomPos;
 
+    private Vector3 ladderStartPos;
+    private Vector3 ladderStartRot;
+
     private bool _attached;
     private bool _occupied;
 
@@ -24,6 +27,11 @@ public class LadderUnit : Unit
     public bool Occupied {
         get => _occupied;
         set { _occupied = value; }
+    }
+
+    protected override void UnitStart () {
+        ladderStartPos = ladder.transform.localPosition;
+        ladderStartRot = ladder.transform.localEulerAngles;
     }
 
     protected override void UnitUpdate () {
@@ -41,9 +49,11 @@ public class LadderUnit : Unit
     protected override void OnMove () {
         _occupied = false;
         _attached = false;
-        ladder.transform.localPosition = new Vector3(0, 0.6f, 0);
-        ladder.transform.forward = Vector3.up;
-        ladder.transform.localEulerAngles = new Vector3(ladder.transform.localEulerAngles.x, 0, 0);
+        // ladder.transform.localPosition = new Vector3(0, 0.6f, 0);
+        // ladder.transform.forward = Vector3.up;
+        // ladder.transform.localEulerAngles = new Vector3(ladder.transform.localEulerAngles.x, 0, 0);
+        ladder.transform.localPosition = ladderStartPos;
+        ladder.transform.localEulerAngles = ladderStartRot;
     }
 
     public void AttachToWall (Vector3 pos, Vector3 normal) {
