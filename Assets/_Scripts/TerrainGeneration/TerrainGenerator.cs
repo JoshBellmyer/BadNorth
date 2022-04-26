@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TerrainGenerator : NetworkBehaviour, ISavable
 {
@@ -57,11 +58,13 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
     [ClientRpc]
     private void SendGenerationInfoClientRpc(int seed, string tileSetName)
     {
-        GenerateMap(seed, tileSetName);
+        StartCoroutine(GenerateMap(seed, tileSetName));
     }
 
-    public void GenerateMap(int seed, string tileSetName)
+    public IEnumerator GenerateMap(int seed, string tileSetName)
     {
+        while (SceneManager.GetActiveScene().name != "Island") yield return null;
+
         random = new System.Random(seed);
 
         float[,] heightMap = GenerateHeightMap(seed);
