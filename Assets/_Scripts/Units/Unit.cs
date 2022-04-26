@@ -393,7 +393,7 @@ public abstract class Unit : MonoBehaviour {
 
         DestroyMaterialInstances();
 
-        if (Game.isHost) {
+        if (!Game.online || Game.isHost) {
             Destroy(gameObject);
         }
     }
