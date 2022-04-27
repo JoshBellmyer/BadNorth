@@ -51,12 +51,18 @@ public class MusicManager : Singleton<MusicManager>
                 if(specialThemePlaying)
                 {
                     StartCoroutine(Fade(specialThemePlayer, 0));
+                    specialThemePlaying = false;
+                    Debug.Log("Stopped");
                 }
                 Debug.Log(count.Key);
                 return;
             }
         }
-        StartCoroutine(Fade(specialThemePlayer, 1));
+        if (!specialThemePlaying)
+        {
+            StartCoroutine(Fade(specialThemePlayer, 1));
+            specialThemePlaying = true;
+        }
     }
 
     private IEnumerator Fade(AudioSource source, float targetVolume)
@@ -65,6 +71,7 @@ public class MusicManager : Singleton<MusicManager>
         for (float i = 0; i < fadeTime; i += Time.deltaTime)
         {
             source.volume = Mathf.Lerp(originalVolume, targetVolume, i / fadeTime);
+            Debug.Log(source.volume);
             yield return null;
         }
     }
