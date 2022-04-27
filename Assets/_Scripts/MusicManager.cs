@@ -6,9 +6,13 @@ public class MusicManager : Singleton<MusicManager>
 {
     [Range(1, 2)]
     [SerializeField] float volumeScale = 1.5f;
+    [SerializeField] float fadeTime = 1f;
     [SerializeField] AudioClip mainTheme;
+    [SerializeField] AudioClip specialTheme;
     [SerializeField] List<UnitTheme> themes;
     AudioSource mainThemePlayer;
+    AudioSource specialThemePlayer;
+    bool specialThemePlaying;
     Dictionary<UnitType, AudioSource> players;
     Dictionary<UnitType, int> unitCounts;
 
@@ -17,6 +21,11 @@ public class MusicManager : Singleton<MusicManager>
         mainThemePlayer = gameObject.AddComponent<AudioSource>();
         mainThemePlayer.clip = mainTheme;
         mainThemePlayer.loop = true;
+
+        specialThemePlayer = gameObject.AddComponent<AudioSource>();
+        specialThemePlayer.clip = specialTheme;
+        specialThemePlayer.loop = true;
+        specialThemePlayer.volume = 0;
 
         players = new Dictionary<UnitType, AudioSource>();
         unitCounts = new Dictionary<UnitType, int>();
@@ -33,9 +42,37 @@ public class MusicManager : Singleton<MusicManager>
         Play();
     }
 
+    private void Update()
+    {
+        foreach (var count in unitCounts)
+        {
+            if (count.Value <= 0)
+            {
+                if(specialThemePlaying)
+                {
+                    StartCoroutine(Fade(specialThemePlayer, 0));
+                }
+                Debug.Log(count.Key);
+                return;
+            }
+        }
+        StartCoroutine(Fade(specialThemePlayer, 1));
+    }
+
+    private IEnumerator Fade(AudioSource source, float targetVolume)
+    {
+        float originalVolume = source.volume;
+        for (float i = 0; i < fadeTime; i += Time.deltaTime)
+        {
+            source.volume = Mathf.Lerp(originalVolume, targetVolume, i / fadeTime);
+            yield return null;
+        }
+    }
+
     public void Play()
     {
         mainThemePlayer.Play();
+        specialThemePlayer.Play();
         foreach (var player in players.Values)
         {
             player.Play();
@@ -63,15 +100,16 @@ public class MusicManager : Singleton<MusicManager>
     public void AddTheme(UnitType unitType)
     {
         unitCounts[unitType]++;
-        players[unitType].volume = -Mathf.Pow(volumeScale, -unitCounts[unitType]) + 1;
-        Debug.Log(players[unitType].volume);
+        float targetVolume = -Mathf.Pow(volumeScale, -unitCounts[unitType]) + 1;
+        StartCoroutine(Fade(players[unitType], targetVolume));
     }
 
     public void RemoveTheme(UnitType unitType)
     {
         unitCounts[unitType]--;
         Debug.Assert(unitCounts[unitType] >= 0);
-        players[unitType].volume = -Mathf.Pow(volumeScale, -unitCounts[unitType]) + 1;
+        float targetVolume = -Mathf.Pow(volumeScale, -unitCounts[unitType]) + 1;
+        StartCoroutine(Fade(players[unitType], targetVolume));
 
     }
 }
