@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeScale: 1.1
-  fadeTime: 1
+  fadeTime: 3
   mainTheme: {fileID: 8300000, guid: 7fe472a1040494f4090f454f4823a921, type: 3}
   specialTheme: {fileID: 8300000, guid: 7f1449b4772390a4db1f769a4c5ebc9c, type: 3}
   themes:
