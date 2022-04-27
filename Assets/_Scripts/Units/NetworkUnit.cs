@@ -31,6 +31,13 @@ public class NetworkUnit : NetworkBehaviour {
     }
 
 
+    [ClientRpc]
+    public void SetAnimationClientRpc (AnimationType animation) {
+        if (!Game.isHost) {
+            unit.SetAnimation(animation);
+        }
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void IssueDestinationServerRpc (Vector3 destination) {
         unit.IssueDestination(destination);

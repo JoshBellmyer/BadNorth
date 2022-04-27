@@ -27,6 +27,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
 
     public void SetUpMap()
     {
+        random = new System.Random(seed);
         LoadTileSet();
 
         if (Game.isHost && Game.online)
@@ -76,7 +77,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
     {
         while (SceneManager.GetActiveScene().name != "Island") yield return null;
 
-        random = new System.Random(seed);
+        // random = new System.Random(seed);
 
         float[,] heightMap = GenerateHeightMap(seed);
 

@@ -71,7 +71,7 @@ public class MusicManager : Singleton<MusicManager>
         for (float i = 0; i < fadeTime; i += Time.deltaTime)
         {
             source.volume = Mathf.Lerp(originalVolume, targetVolume, i / fadeTime);
-            Debug.Log(source.volume);
+            // Debug.Log(source.volume);
             yield return null;
         }
     }

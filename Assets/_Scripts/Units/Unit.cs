@@ -29,7 +29,7 @@ public abstract class Unit : MonoBehaviour {
 
     private Animator animator;
     private string[] animationNames;
-    private string currentAnimation = "";
+    private AnimationType currentAnimation = AnimationType.None;
 
     private bool climbing;
     private bool falling;
@@ -189,6 +189,8 @@ public abstract class Unit : MonoBehaviour {
     }
 
     private void Start () {
+        Debug.Log(AnimationType.Idle);
+
         teamColor = GetComponent<TeamColor>();
         // teamColor.SetColor(int.Parse(Team));
 
@@ -266,7 +268,7 @@ public abstract class Unit : MonoBehaviour {
         CanAttack = (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 1f || lastAttacked > 0) && _directive != Directive.ATTACK);
 
         if (_navMeshAgent.isOnNavMesh && (_navMeshAgent.isStopped || dist < 0.1f) && _directive == Directive.MOVE) {
-            SetAnimation("Idle");
+            SetAnimation(AnimationType.Idle);
             _directive = Directive.NONE;
         }
 
@@ -318,7 +320,7 @@ public abstract class Unit : MonoBehaviour {
                 _navMeshAgent.SetDestination(_targetEnemy.transform.position);
             }
 
-            SetAnimation("Walk");
+            SetAnimation(AnimationType.Walk);
 
             return;
         }
@@ -332,14 +334,14 @@ public abstract class Unit : MonoBehaviour {
                 _currentCooldown = 0;
             }
             else {
-                SetAnimation("Idle");
+                SetAnimation(AnimationType.Idle);
 
                 return;
             }
         }
     
         SoundPlayer.PlaySound(attackSound, 0.7f);
-        SetAnimation("Attack");
+        SetAnimation(AnimationType.Attack);
 
         _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
         _currentCooldown = _attackCooldown;
@@ -649,7 +651,7 @@ public abstract class Unit : MonoBehaviour {
             return;
         }
 
-        SetAnimation("Walk");
+        SetAnimation(AnimationType.Walk);
 
         // TODO: Transform destination before setting.
 
@@ -799,7 +801,7 @@ public abstract class Unit : MonoBehaviour {
         return t;
     }
 
-    protected void SetAnimation (string animation) {
+    public void SetAnimation (AnimationType animation) {
         if (animator == null) {
             return;
         }
@@ -807,8 +809,12 @@ public abstract class Unit : MonoBehaviour {
             return;
         }
 
+        if (Game.online && Game.isHost) {
+            networkUnit.SetAnimationClientRpc(animation);
+        }
+
         foreach (string str in animationNames) {
-            bool newValue = (str == animation);
+            bool newValue = (str == $"{animation}");
 
             animator.SetBool(str, newValue);
         }
@@ -826,6 +832,14 @@ public abstract class Unit : MonoBehaviour {
             index++;
         }
     }
+}
+
+
+public enum AnimationType {
+    None = -1,
+    Idle = 0,
+    Walk = 1,
+    Attack = 2,
 }
 
 
