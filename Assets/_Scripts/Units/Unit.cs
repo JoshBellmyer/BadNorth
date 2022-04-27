@@ -206,6 +206,13 @@ public abstract class Unit : MonoBehaviour {
         UnitStart();
 
         Health = _health;
+
+        MusicManager.Instance.AddTheme(Type);
+    }
+
+    private void OnDestroy()
+    {
+        MusicManager.Instance.RemoveTheme(Type);
     }
 
     protected virtual void UnitStart () {}

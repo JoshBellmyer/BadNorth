@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TerrainGenerator : NetworkBehaviour, ISavable
 {
@@ -26,6 +27,8 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
 
     public void SetUpMap()
     {
+        LoadTileSet();
+
         if (Game.isHost && Game.online)
         {
             seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
@@ -34,7 +37,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
         else if (!Game.online || !Application.isPlaying)
         {
             seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
-            GenerateMap(seed, tileSetName);
+            StartCoroutine(GenerateMap(seed, tileSetName));
         }
 
         StartCoroutine(FindSandCoroutine());
@@ -57,11 +60,22 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
     [ClientRpc]
     private void SendGenerationInfoClientRpc(int seed, string tileSetName)
     {
-        GenerateMap(seed, tileSetName);
+        StartCoroutine(GenerateMap(seed, tileSetName));
     }
 
-    public void GenerateMap(int seed, string tileSetName)
+    private void LoadTileSet () {
+        tileSet = Resources.Load<TileSet>("TileSets/" + tileSetName);
+        if(tileSet == null)
+        {
+            var tileSets = Resources.LoadAll<TileSet>("TileSets/");
+            tileSet = tileSets[random.Next(0, tileSets.Length)];
+        }
+    }
+
+    public IEnumerator GenerateMap(int seed, string tileSetName)
     {
+        while (SceneManager.GetActiveScene().name != "Island") yield return null;
+
         random = new System.Random(seed);
 
         float[,] heightMap = GenerateHeightMap(seed);
@@ -73,12 +87,6 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
         navMeshCollider.sharedMesh = m;
 
         TileData tileData = new TileData(heightMap, settings.meshScale, settings.miscDensity);
-        tileSet = Resources.Load<TileSet>("TileSets/" + tileSetName);
-        if(tileSet == null)
-        {
-            var tileSets = Resources.LoadAll<TileSet>("TileSets/");
-            tileSet = tileSets[random.Next(0, tileSets.Length)];
-        }
 
         float offset = (heightMap.GetLength(0) / 2.0f) - 0.5f;
         tileMeshFilter.mesh = TilePlacer.PlaceTiles(tileData, tileSet, navMeshFilter, offset);
