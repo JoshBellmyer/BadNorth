@@ -33,6 +33,12 @@ public class OnlinePlayer : NetworkBehaviour {
         };
     }
 
+    [ClientRpc]
+    public void EndGameClientRpc (int losingTeam) {
+        Game.instance.EndGame(losingTeam);
+    }
+
+
     [ServerRpc]
     public void LaunchArrowServerRpc (NetworkObjectReference archerUnit, int team, Vector3 launchVector, bool useB) {
         NetworkObject archerObj = (NetworkObject)archerUnit;

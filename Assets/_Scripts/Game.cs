@@ -61,7 +61,19 @@ public class Game : MonoBehaviour {
 
 	public void OnGameOver(string losingTeam)
     {
-		string winningColor = losingTeam == "1" ? "yellow" : "blue";
+    	int losingTeamInt = int.Parse(losingTeam);
+
+    	if (online) {
+    		GetLocalPlayer().EndGameClientRpc(losingTeamInt);
+
+    		return;
+    	}
+
+    	EndGame(losingTeamInt);
+	}
+
+	public void EndGame (int losingTeam) {
+		string winningColor = losingTeam == 1 ? "yellow" : "blue";
 
 		UIManager.Instance.DisplayWinner(winningColor);
 
