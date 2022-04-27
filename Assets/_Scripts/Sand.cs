@@ -12,6 +12,7 @@ public class Sand : NetworkBehaviour
     public static float height;
     private float textureOffset;
 
+
     // Start is called before the first frame update
     void Start()
     {
