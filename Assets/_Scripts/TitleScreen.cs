@@ -54,6 +54,8 @@ public class TitleScreen : UIScreen
 
             }
         };
+
+        SoundPlayer.PlayTitleMusic();
     }
 
     private void Update () {
@@ -144,6 +146,7 @@ public class TitleScreen : UIScreen
 
         if (DeviceManager.Instance.HasValidDevices && player2DeviceSelection.captionText.text != "Missing")
         {
+            SoundPlayer.StopTitleMusic();
             SceneManager.LoadScene("Island");
         }
         else
@@ -156,6 +159,7 @@ public class TitleScreen : UIScreen
         DeviceManager.Instance.SetPlayerDevice(0, player1DeviceSelection.value);
 
         if (Game.isHost) {
+            SoundPlayer.StopTitleMusic();
             networkManager.SceneManager.LoadScene("Island", LoadSceneMode.Single);
         }
     }

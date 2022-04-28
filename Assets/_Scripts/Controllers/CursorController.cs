@@ -164,6 +164,8 @@ public class CursorController : MonoBehaviour
 
         DeselectUnits();
 
+        SoundPlayer.PlaySoundLocal(Sound.MenuMove, 1, false);
+
         player.SelectedGroup = unit.Group;
         List<Unit> unitList = unit.Group.GetUnits();
 
@@ -189,6 +191,8 @@ public class CursorController : MonoBehaviour
             return;
         }
 
+        SoundPlayer.PlaySoundLocal(Sound.MenuClick, 0.9f, false);
+
         if (Game.online && !Game.isHost) {
             Vector3 pos = GridUtils.GetGridPos(hit.point);
             player.SelectedGroup.MoveTo(pos);
@@ -206,6 +210,8 @@ public class CursorController : MonoBehaviour
         if (player.SelectedGroup == null) {
             return;
         }
+
+        SoundPlayer.PlaySoundLocal(Sound.MenuClick, 0.9f, false);
 
         player.SelectedGroup.SetAgentEnabled(true);
         player.SelectedGroup.MoveTo(ladderFloorPos);

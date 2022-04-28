@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class SoundPlayer : MonoBehaviour {
 
+	public AudioClip titleMusic;
+
 	public static SoundPlayer instance;
 
 	private static AudioSource[] sources;
+	private static AudioSource musicSource;
 	private static Dictionary<string, AudioClip[]> audioClips;
 
 
 	private void Awake () {
 		if (instance == null || instance == this) {
 			instance = this;
+			DontDestroyOnLoad(gameObject);
 		}
 		else {
 			Destroy(gameObject);
@@ -29,6 +33,24 @@ public class SoundPlayer : MonoBehaviour {
 			sources[i] = Instantiate<AudioSource>(sourcePrefab);
 			sources[i].transform.parent = instance.transform;
 		}
+
+		musicSource = Instantiate<AudioSource>(sourcePrefab);
+		musicSource.transform.parent = instance.transform;
+		musicSource.loop = true;
+	}
+
+	public static void PlayTitleMusic () {
+		if (musicSource.clip == instance.titleMusic && musicSource.isPlaying) {
+			return;
+		}
+
+		musicSource.clip = instance.titleMusic;
+		musicSource.volume = 0.6f;
+		musicSource.Play();
+	}
+
+	public static void StopTitleMusic () {
+		musicSource.Stop();
 	}
 
 	// Play a sound clip directly if in local mode, otherwise if online send a ClientRpc to play the sound for both players

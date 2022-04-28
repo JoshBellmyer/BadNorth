@@ -41,6 +41,8 @@ public class UIController : MonoBehaviour
             return;
         }
 
+        SoundPlayer.PlaySound(Sound.MenuClick, 1, false);
+
         if (!isDeploying && player.Boat == null) {
             if(player.TryPrepBoat()) isDeploying = true;
         }
@@ -57,6 +59,8 @@ public class UIController : MonoBehaviour
         {
             if (context.performed)
             {
+                SoundPlayer.PlaySoundLocal(Sound.MenuMove, 1, false);
+
                 if (isDeploying)
                 {
                     player.CancelBoat();
