@@ -54,7 +54,7 @@ public class MusicManager : Singleton<MusicManager>
                     specialThemePlaying = false;
                     Debug.Log("Stopped");
                 }
-                Debug.Log(count.Key);
+                // Debug.Log(count.Key);
                 return;
             }
         }

@@ -179,7 +179,8 @@ MonoBehaviour:
   _attackDistance: 0
   _attackCooldown: 0
   _damageType: 0
-  attackSound: Grunt
+  attackSound: 7
+  attackVolume: 1
   _directive: 0
   _targetEnemy: {fileID: 0}
   networkUnit: {fileID: 0}

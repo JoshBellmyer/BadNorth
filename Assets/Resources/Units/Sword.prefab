@@ -406,7 +406,8 @@ MonoBehaviour:
   _attackDistance: 2
   _attackCooldown: 1
   _damageType: 203
-  attackSound: Slice
+  attackSound: 12
+  attackVolume: 1
   _directive: 0
   _targetEnemy: {fileID: 0}
   networkUnit: {fileID: 0}

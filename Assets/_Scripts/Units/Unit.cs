@@ -16,7 +16,8 @@ public abstract class Unit : MonoBehaviour {
     [SerializeField] private float _attackDistance;
     [SerializeField] protected float _attackCooldown;
     [SerializeField] private DamageType _damageType;
-    [SerializeField] protected string attackSound;
+    [SerializeField] protected Sound attackSound;
+    [SerializeField] protected float attackVolume;
     [SerializeField] protected Directive _directive;
     [SerializeField] protected Unit _targetEnemy;
     public NetworkUnit networkUnit;
@@ -189,8 +190,6 @@ public abstract class Unit : MonoBehaviour {
     }
 
     private void Start () {
-        Debug.Log(AnimationType.Idle);
-
         teamColor = GetComponent<TeamColor>();
         // teamColor.SetColor(int.Parse(Team));
 
@@ -340,7 +339,7 @@ public abstract class Unit : MonoBehaviour {
             }
         }
     
-        SoundPlayer.PlaySound(attackSound, 0.7f);
+        SoundPlayer.PlaySound(attackSound, attackVolume, true);
         SetAnimation(AnimationType.Attack);
 
         _targetEnemy.GetComponent<DamageHelper>().TakeDamage(_damageType, _targetEnemy.transform.position - transform.position);
@@ -388,7 +387,7 @@ public abstract class Unit : MonoBehaviour {
     }
 
     internal void Die () {
-        SoundPlayer.PlaySound("Unit Death", 1.0f);
+        SoundPlayer.PlaySound(Sound.Death, 1.0f, true);
 
         if (climbing && targetLadder != null) {
             targetLadder.Occupied = false;
