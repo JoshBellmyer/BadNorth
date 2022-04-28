@@ -33,6 +33,7 @@ public class Arrow : MonoBehaviour {
 			if (unit.Team != team) {
 				// Debug.Log(other.gameObject);
 				unit.GetComponent<DamageHelper>().TakeDamage(DamageType.Piercing, GetComponent<Rigidbody>().velocity);
+				SoundPlayer.PlaySound(Sound.ArrowDamage, 1, true);
 
 				Destroy(gameObject);
 			}

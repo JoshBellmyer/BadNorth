@@ -106,6 +106,8 @@ public class ArcherUnit : Unit
         arrow.transform.position = transform.position + (Vector3.up * 0.5f);
         arrow.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
         arrowRb.velocity = launchVector;
+
+        SoundPlayer.PlaySound(Sound.ArrowFling, 1, true);
     }
 }
 

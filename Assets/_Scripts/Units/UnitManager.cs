@@ -22,7 +22,7 @@ public class UnitManager : MonoBehaviour {
         }
 
         InitializePrefabs();
-        InitializeDummies(20);
+        InitializeDummies(50);
     }
 
     public GameObject GetPrefabOfType (UnitType type) {
@@ -53,6 +53,9 @@ public class UnitManager : MonoBehaviour {
     }
 
     public void DeactivateDummy (NavMeshAgent agent) {
+        if (agent == null) {
+            return;
+        }
         if (!dummyActive.Contains(agent)) {
             return;
         }

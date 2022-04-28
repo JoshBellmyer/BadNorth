@@ -16,6 +16,8 @@ public class SoundPlayer : MonoBehaviour {
 		}
 		else {
 			Destroy(gameObject);
+
+			return;
 		}
 
 		LoadSounds();
@@ -29,8 +31,18 @@ public class SoundPlayer : MonoBehaviour {
 		}
 	}
 
+	// Play a sound clip directly if in local mode, otherwise if online send a ClientRpc to play the sound for both players
+	public static void PlaySound (Sound sound, float volume, bool varyPitch) {
+		if (Game.online) {
+			Game.GetLocalPlayer().PlaySoundClientRpc(sound, volume, varyPitch);
+		}
+		else {
+			PlaySoundLocal(sound, volume, varyPitch);
+		}
+	}
 
-	public static void PlaySound(Sound sound, float volume, bool varyPitch) {
+	// Play a sound clip on the local client only, regardless of online or host status
+	public static void PlaySoundLocal(Sound sound, float volume, bool varyPitch) {
 		if (instance == null) {
 			return;
 		}

@@ -38,6 +38,11 @@ public class OnlinePlayer : NetworkBehaviour {
         Game.instance.EndGame(losingTeam);
     }
 
+    [ClientRpc]
+    public void PlaySoundClientRpc (Sound sound, float volume, bool varyPitch) {
+        SoundPlayer.PlaySoundLocal(sound, volume, varyPitch);
+    }
+
 
     [ServerRpc]
     public void LaunchArrowServerRpc (NetworkObjectReference archerUnit, int team, Vector3 launchVector, bool useB) {

@@ -76,6 +76,8 @@ public class Game : MonoBehaviour {
 		string winningColor = losingTeam == 1 ? "yellow" : "blue";
 
 		UIManager.Instance.DisplayWinner(winningColor);
+		MusicManager.Instance.Stop();
+		SoundPlayer.PlaySound(Sound.GameEnd, 1, false);
 
 		Pause(null);
 		StartCoroutine(SwitchToMainMenuCoroutine(10));
@@ -156,6 +158,9 @@ public class Game : MonoBehaviour {
 		NetworkTransform tempNT = obj.GetComponent<NetworkTransform>();
 		ClientNetworkTransform tempCNT = obj.GetComponent<ClientNetworkTransform>();
 
+		if (tempRB != null) {
+			DestroyImmediate(tempRB);
+		}
 		if (tempNT != null) {
 			DestroyImmediate(tempNT);
 		}
@@ -164,9 +169,6 @@ public class Game : MonoBehaviour {
 		}
 		if (tempCNT != null) {
 			DestroyImmediate(tempCNT);
-		}
-		if (tempRB != null) {
-			DestroyImmediate(tempRB);
 		}
 	}
 

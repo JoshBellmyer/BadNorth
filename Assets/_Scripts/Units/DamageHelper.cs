@@ -21,8 +21,6 @@ public class DamageHelper : MonoBehaviour
             Initialize();
         }
 
-        Debug.Log(unit.Team);
-
         int damage = 1;
         string str = $"{damageType}{unit.Type}";
 

@@ -176,6 +176,7 @@ public class Group {
         _units.Remove(unit);
 
         if (_units.Count == 0) {
+            SoundPlayer.PlaySound(Sound.SquadWipe, 1, false);
             DestroyGroup();
         }
     }

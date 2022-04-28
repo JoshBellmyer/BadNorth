@@ -39,6 +39,7 @@ public class MusicManager : Singleton<MusicManager>
             unitCounts.Add(theme.type, 0);
         }
 
+        SoundPlayer.PlaySound(Sound.GameStart, 1, false);
         Play();
     }
 

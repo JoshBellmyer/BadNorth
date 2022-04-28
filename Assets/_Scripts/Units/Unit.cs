@@ -50,6 +50,7 @@ public abstract class Unit : MonoBehaviour {
     private float startDelay = 1;
 
     private bool setColor;
+    private List<Tuple<NavMeshAgent, NavMeshAgent>> agentTuples = new List<Tuple<NavMeshAgent, NavMeshAgent>>();
 
     public static readonly float MAX_PROXIMITY = 5.0f;
 
@@ -399,6 +400,7 @@ public abstract class Unit : MonoBehaviour {
 
         TeamManager.instance.Remove(Team, this);
 
+        ClearAllAgents();
         DestroyMaterialInstances();
 
         if (!Game.online || Game.isHost) {
@@ -660,7 +662,8 @@ public abstract class Unit : MonoBehaviour {
         _directive = Directive.MOVE;
 
         HashSet<Unit> units = TeamManager.instance.GetOnTeam(Team);
-        List<Tuple<NavMeshAgent, NavMeshAgent>> agentTuples = new List<Tuple<NavMeshAgent, NavMeshAgent>>();
+        // List<Tuple<NavMeshAgent, NavMeshAgent>> agentTuples = new List<Tuple<NavMeshAgent, NavMeshAgent>>();
+        ClearAllAgents();
         Dictionary<NavMeshAgent, LadderUnit> ladders = new Dictionary<NavMeshAgent, LadderUnit>();
 
         foreach (Unit u in units) {
@@ -759,6 +762,13 @@ public abstract class Unit : MonoBehaviour {
         NavMeshAgent agent1 = UnitManager.instance.GetDummyAgent(transform.position);
         NavMeshAgent agent2 = UnitManager.instance.GetDummyAgent(ladderUnit.GetEdgePos());
 
+        if (agent1 == null || agent2 == null) {
+            UnitManager.instance.DeactivateDummy(agent1);
+            UnitManager.instance.DeactivateDummy(agent2);
+
+            return null;
+        }
+
         agent1.SetDestination(ladderUnit.GetBottomPos());
         agent2.SetDestination(destination);
 
@@ -768,6 +778,17 @@ public abstract class Unit : MonoBehaviour {
     internal void ClearDummyPath (Tuple<NavMeshAgent, NavMeshAgent> agents) {
         UnitManager.instance.DeactivateDummy(agents.Item1);
         UnitManager.instance.DeactivateDummy(agents.Item2);
+    }
+
+    internal void ClearAllAgents () {
+        foreach (Tuple<NavMeshAgent, NavMeshAgent> agents in agentTuples) {
+            if (agents != null) {
+                UnitManager.instance.DeactivateDummy(agents.Item1);
+                UnitManager.instance.DeactivateDummy(agents.Item2);
+            }
+        }
+
+        agentTuples.Clear();
     }
 
     protected virtual void OnMove () {}

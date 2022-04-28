@@ -209,6 +209,8 @@ public class Boat : MonoBehaviour {
 		// Game.SetRotation(gameObject, transform.eulerAngles);
 		// Game.SetPosition(gameObject, new Vector3(0, 0.2f, 0));
 		transform.position += new Vector3(0, 0.2f, 0);
+
+		SoundPlayer.PlaySound(Sound.Boat, 1, false);
 	}
 
 	private void MoveForward () {
