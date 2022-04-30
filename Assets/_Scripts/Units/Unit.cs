@@ -583,7 +583,7 @@ public abstract class Unit : MonoBehaviour {
         }
 
         RaycastHit hit;
-        bool didHit = Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.6f, LayerMask.GetMask("Terrain"));
+        bool didHit = Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.5f, LayerMask.GetMask("Terrain"));
 
         if (falling && didHit) {
             falling = false;
