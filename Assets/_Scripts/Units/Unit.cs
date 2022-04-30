@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
@@ -36,6 +37,7 @@ public abstract class Unit : MonoBehaviour {
     private bool falling;
     private bool knockback;
     private bool resumeMovement;
+    private bool dead = false;
     private Vector3 knockDestination;
     private bool paused;
 
@@ -307,7 +309,7 @@ public abstract class Unit : MonoBehaviour {
 
         float dist = Vector3.Distance(transform.position, _targetEnemy.transform.position);
 
-        if (dist > _attackDistance + 0.5f) {
+        if (dist > _attackDistance + 0.5f || _targetEnemy.Health <= 0) {
             _targetEnemy = null;
             _directive = Directive.MOVE;
             IssueDestination(_destination);
@@ -359,7 +361,7 @@ public abstract class Unit : MonoBehaviour {
             if (u == null) continue;
             float dist = Vector3.Distance(transform.position, u.transform.position);
 
-            if (dist <= minDist) {
+            if (dist <= minDist && u.Health > 0) {
                 minDist = dist;
                 target = u;
             }
@@ -388,6 +390,12 @@ public abstract class Unit : MonoBehaviour {
     }
 
     internal void Die () {
+        if (dead) {
+            return;
+        }
+
+        dead = true;
+
         SoundPlayer.PlaySound(Sound.Death, 1.0f, true);
 
         if (climbing && targetLadder != null) {
@@ -400,13 +408,22 @@ public abstract class Unit : MonoBehaviour {
 
         TeamManager.instance.Remove(Team, this);
 
+        SetAnimation(AnimationType.Death);
         ClearAllAgents();
+        
+        StartCoroutine( DieCoroutine() );
+    }
+
+    private IEnumerator DieCoroutine () {
+        yield return new WaitForSeconds(4f);
+
         DestroyMaterialInstances();
 
         if (!Game.online || Game.isHost) {
             Destroy(gameObject);
         }
     }
+
 
     private void UpdateEdgeJumping () {
         if (!_navMeshAgent.isOnNavMesh) {
@@ -860,6 +877,7 @@ public enum AnimationType {
     Idle = 0,
     Walk = 1,
     Attack = 2,
+    Death = 3,
 }
 
 

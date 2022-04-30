@@ -75,7 +75,7 @@ public class Game : MonoBehaviour {
 	public void EndGame (int losingTeam) {
 		string winningColor = losingTeam == 1 ? "yellow" : "blue";
 
-		UIManager.Instance.DisplayWinner(winningColor);
+		UIManager.instance.DisplayWinner(winningColor);
 		MusicManager.Instance.Stop();
 		SoundPlayer.PlaySound(Sound.GameEnd, 1, false);
 
@@ -87,7 +87,7 @@ public class Game : MonoBehaviour {
     {
 		for(float i = delay; i>0; i -= Time.deltaTime)
         {
-			UIManager.Instance.UpdateCountdown(Mathf.CeilToInt(i));
+			UIManager.instance.UpdateCountdown(Mathf.CeilToInt(i));
 			yield return null;
         }
 		SwitchToMainMenu();
