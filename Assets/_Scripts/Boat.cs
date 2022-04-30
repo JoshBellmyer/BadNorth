@@ -162,6 +162,8 @@ public class Boat : MonoBehaviour {
 		if (player != null) {
 			player.Boat = null;
 		}
+
+		DestroyMountedUnits();
 	}
 
 	public void MountUnits (List<Unit> unitList) {
@@ -211,6 +213,12 @@ public class Boat : MonoBehaviour {
 		transform.position += new Vector3(0, 0.2f, 0);
 
 		SoundPlayer.PlaySound(Sound.Boat, 1, false);
+	}
+
+	private void DestroyMountedUnits () {
+		foreach (Unit u in mountedUnits) {
+			Game.DestroyObject(u.gameObject);
+		}
 	}
 
 	private void MoveForward () {

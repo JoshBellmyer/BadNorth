@@ -32,6 +32,7 @@ public class OnlinePlayer : NetworkBehaviour {
             }
         };
     }
+    
 
     [ClientRpc]
     public void EndGameClientRpc (int losingTeam) {

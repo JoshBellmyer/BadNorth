@@ -30,6 +30,8 @@ public class TeamManager : MonoBehaviour
     public void Remove (string team, Unit unit) {
         dictionary[team].Remove(unit);
 
+        Debug.Log("called remove");
+
         if (dictionary[team].Count < 1) {
             Game.instance.OnGameOver(team);
         }

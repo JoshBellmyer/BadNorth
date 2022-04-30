@@ -49,14 +49,19 @@ public class LadderUnit : Unit
     protected override void OnMove () {
         _occupied = false;
         _attached = false;
-        // ladder.transform.localPosition = new Vector3(0, 0.6f, 0);
-        // ladder.transform.forward = Vector3.up;
-        // ladder.transform.localEulerAngles = new Vector3(ladder.transform.localEulerAngles.x, 0, 0);
         ladder.transform.localPosition = ladderStartPos;
         ladder.transform.localEulerAngles = ladderStartRot;
+
+        SetLadderPos(ladderStartPos, ladderStartRot, false);
     }
 
     public void AttachToWall (Vector3 pos, Vector3 normal) {
+        if (Game.online && !Game.isHost) {
+            networkUnit.AttachToWallServerRpc(pos, normal);
+
+            return;
+        }
+
         attachPos = pos;
         attachNormal = normal;
         landingPos = GridUtils.GetTopFromSide(pos, normal);
@@ -72,15 +77,37 @@ public class LadderUnit : Unit
     }
 
     private void FinishAttach () {
-        Group.TeleportTo(_destination);
-        Group.SetAgentEnabled(false);
+        // Group.TeleportTo(_destination);
+        // Group.SetAgentEnabled(false);
+
+        Game.SetPosition(gameObject, _destination);
+        SetAgentEnabled(false);
+
         transform.forward = -attachNormal;
-        ladder.transform.localPosition = new Vector3(0, 0.5f, 0.5f);
-        ladder.transform.forward = -attachNormal;
+        // ladder.transform.localPosition = new Vector3(0, 0.5f, 0.5f);
+        // ladder.transform.forward = -attachNormal;
+
+        SetLadderPos(new Vector3(0, 0.5f, 0.5f), -attachNormal, true);
+
         bottomPos = transform.position + (attachNormal * -0.3f);
 
         attaching = false;
         _attached = true;
+    }
+
+    public void SetLadderPos (Vector3 newPos, Vector3 newRot, bool forward) {
+        if (Game.online && Game.isHost) {
+            networkUnit.SetLadderPosClientRpc(newPos, newRot, forward);
+        }
+
+        ladder.transform.localPosition = newPos;
+        
+        if (forward) {
+            ladder.transform.forward = newRot;
+        }
+        else {
+            ladder.transform.localEulerAngles = newRot;
+        }
     }
 }
 

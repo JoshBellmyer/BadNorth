@@ -39,6 +39,18 @@ public class NetworkUnit : NetworkBehaviour {
     }
 
     [ServerRpc(RequireOwnership = false)]
+    public void AttachToWallServerRpc (Vector3 pos, Vector3 normal) {
+        ((LadderUnit)unit).AttachToWall(pos, normal);
+    }
+
+    [ClientRpc]
+    public void SetLadderPosClientRpc (Vector3 newPos, Vector3 newRot, bool forward) {
+        if (!Game.isHost) {
+            ((LadderUnit)unit).SetLadderPos(newPos, newRot, forward);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
     public void IssueDestinationServerRpc (Vector3 destination) {
         unit.IssueDestination(destination);
     }
