@@ -6,10 +6,13 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Unity.Netcode;
+using Netcode.Transports.PhotonRealtime;
 
 public class TitleScreen : UIScreen
 {
     [SerializeField] private NetworkManager networkManager;
+    [SerializeField] private PhotonRealtimeTransport photonTransport;
+    [SerializeField] private InputField roomName;
 
     [SerializeField] Text missingPlayerText;
 
@@ -70,10 +73,10 @@ public class TitleScreen : UIScreen
                 }
 
                 if (Game.isHost) {
-                    infoText.text = $"Waiting for player 2{waitEndings[waitIndex]}";
+                    infoText.text = $"Room Name: {photonTransport.RoomName}\nWaiting for player 2{waitEndings[waitIndex]}";
                 }
                 else {
-                    infoText.text = $"Searching for room{waitEndings[waitIndex]}";
+                    infoText.text = $"Room Name: {photonTransport.RoomName}\nSearching for room{waitEndings[waitIndex]}";
                 }
                 
                 textTime = 0.35f;
@@ -197,14 +200,15 @@ public class TitleScreen : UIScreen
     }
 
     // Start hosting a game
-    public void OnHostGame () {
+    public void OnHostGame () 
+    {
+        photonTransport.RoomName = roomName.text;
         if (networkManager.StartHost()) {
             Game.online = true;
             Game.isHost = true;
             
             waitIndex = 0;
             textTime = 0.35f;
-            infoText.text = "Waiting for player 2";
 
             hostGameButton.interactable = false;
             joinGameButton.interactable = false;
@@ -216,7 +220,9 @@ public class TitleScreen : UIScreen
     }
 
     // Attempt to join a game
-    public void OnJoinGame () {
+    public void OnJoinGame ()
+    {
+        photonTransport.RoomName = roomName.text;
         if (networkManager.StartClient()) {
             // Listen for startGame message
             networkManager.CustomMessagingManager.RegisterNamedMessageHandler("startGame", (senderClientId, reader) => {
@@ -229,7 +235,6 @@ public class TitleScreen : UIScreen
 
             waitIndex = 0;
             textTime = 0.35f;
-            infoText.text = "Searching for room";
             
             hostGameButton.interactable = false;
             joinGameButton.interactable = false;
