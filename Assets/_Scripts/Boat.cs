@@ -95,13 +95,14 @@ public class Boat : MonoBehaviour {
 
 
 	private void UpdateLaser () {
+		if (laser == null || selector == null) {
+			return;
+		}
+
 		RaycastHit hit;
 		bool hitTerrain = Physics.Raycast(transform.position + new Vector3(0, 0.7f, 0) + transform.forward * 1f, transform.forward, out hit, LayerMask.GetMask("Terrain"));
 
 		if (hitTerrain) {
-			laser.transform.localScale = new Vector3(1, 1, hit.distance);
-			selector.transform.position = GridUtils.GetTopFromSide(hit.point, hit.normal);
-
 			// Collider[] cols = Physics.OverlapSphere(selector.transform.position + new Vector3(0, 0.75f, 0), 0.35f, LayerMask.GetMask("Terrain"));
 			bool terrainAbove = GridUtils.CheckForTerrainAbove(selector.transform.position);
 
@@ -156,8 +157,8 @@ public class Boat : MonoBehaviour {
 
 	public void CancelDeploy()
 	{
-		laser.SetActive(false);
-		selector.SetActive(false);
+		Destroy(laser);
+		Destroy(selector);
 
 		if (player != null) {
 			player.Boat = null;
