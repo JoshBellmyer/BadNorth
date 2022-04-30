@@ -27,8 +27,6 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
 
     public void SetUpMap()
     {
-        LoadTileSet();
-
         if (Game.isHost && Game.online)
         {
             seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
@@ -36,6 +34,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
         }
         else if (!Game.online || !Application.isPlaying)
         {
+            LoadTileSet();
             random = new System.Random(seed);
             seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
             StartCoroutine(GenerateMap(seed, tileSetName));
@@ -61,6 +60,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
     [ClientRpc]
     private void SendGenerationInfoClientRpc(int seed, string tileSetName)
     {
+        LoadTileSet();
         random = new System.Random(seed);
         StartCoroutine(GenerateMap(seed, tileSetName));
     }
