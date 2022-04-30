@@ -38,9 +38,9 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
             random = new System.Random(seed);
             seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
             StartCoroutine(GenerateMap(seed, tileSetName));
+            StartCoroutine(FindSandCoroutine());
         }
 
-        StartCoroutine(FindSandCoroutine());
     }
 
     /// <summary>
@@ -63,6 +63,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
         LoadTileSet();
         random = new System.Random(seed);
         StartCoroutine(GenerateMap(seed, tileSetName));
+        StartCoroutine(FindSandCoroutine());
     }
 
     private void LoadTileSet () {
