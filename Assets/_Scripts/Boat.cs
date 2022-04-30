@@ -103,6 +103,9 @@ public class Boat : MonoBehaviour {
 		bool hitTerrain = Physics.Raycast(transform.position + new Vector3(0, 0.7f, 0) + transform.forward * 1f, transform.forward, out hit, LayerMask.GetMask("Terrain"));
 
 		if (hitTerrain) {
+			laser.transform.localScale = new Vector3(1, 1, hit.distance);
+			selector.transform.position = GridUtils.GetTopFromSide(hit.point, hit.normal);
+			
 			// Collider[] cols = Physics.OverlapSphere(selector.transform.position + new Vector3(0, 0.75f, 0), 0.35f, LayerMask.GetMask("Terrain"));
 			bool terrainAbove = GridUtils.CheckForTerrainAbove(selector.transform.position);
 
