@@ -50,6 +50,7 @@ public class Clock : NetworkBehaviour
         if(!Game.online || Game.isHost)
         {
             time.Value = startTime;
+            localTime = startTime;
         }
     }
 
@@ -71,6 +72,6 @@ public class Clock : NetworkBehaviour
                 }
             }
         }
-        text.text = (int)time.Value + "";
+        text.text = (int)CurrentTime + "";
     }
 }
