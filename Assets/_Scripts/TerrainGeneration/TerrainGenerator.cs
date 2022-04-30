@@ -60,8 +60,8 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
     [ClientRpc]
     private void SendGenerationInfoClientRpc(int seed, string tileSetName)
     {
-        LoadTileSet();
         random = new System.Random(seed);
+        LoadTileSet();
         StartCoroutine(GenerateMap(seed, tileSetName));
         StartCoroutine(FindSandCoroutine());
     }
