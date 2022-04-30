@@ -217,6 +217,7 @@ public class Boat : MonoBehaviour {
 
 	private void DestroyMountedUnits () {
 		foreach (Unit u in mountedUnits) {
+			TeamManager.instance.Remove(u.Team, u);
 			Game.DestroyObject(u.gameObject);
 		}
 	}
