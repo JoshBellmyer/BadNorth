@@ -7,7 +7,6 @@ public class TilePlacer : MonoBehaviour {
 	private static TileData tileData;
 	private static TileSet tileSet;
 	private static List<CombineInstance> mInstances;
-	private static List<CombineInstance> cInstances;
 	private static Mesh mesh;
 	private static Mesh cMesh;
 	private static GameObject organizationalParent;
@@ -25,7 +24,6 @@ public class TilePlacer : MonoBehaviour {
 		cMesh = new Mesh();
 
 		mInstances = new List<CombineInstance>();
-		cInstances = new List<CombineInstance>();
 		CombineInstance combine = new CombineInstance();
 		combine.mesh = colMesh.sharedMesh;
 		combine.transform = Matrix4x4.TRS(colMesh.transform.position, colMesh.transform.rotation, colMesh.transform.localScale);
@@ -40,7 +38,6 @@ public class TilePlacer : MonoBehaviour {
 		mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
 		cMesh.CombineMeshes(mInstances.ToArray());
-		mesh.CombineMeshes(cInstances.ToArray());
 		colMesh.mesh = cMesh;
 		colMesh.GetComponent<MeshCollider>().sharedMesh = cMesh;
 
@@ -55,24 +52,10 @@ public class TilePlacer : MonoBehaviour {
 
 		Vector3 position = new Vector3(x, y - 0.5f, z) - new Vector3(offset, 0, offset);
 		Vector3 eulerAngles = new Vector3(0, rotation, 0);
-		Quaternion rotationTransform = Quaternion.Euler(0, rotation, 0) * tileObject.transform.GetChild(0).rotation;
-		Vector3 scale = tileObject.transform.GetChild(0).localScale;
 
-		if (tileData.tileTypes[x,y,z] == TileType.Miscellaneous)
-		{
-			GameObject go = Instantiate(tileObject, organizationalParent.transform);
-			go.transform.position = position;
-			go.transform.rotation = Quaternion.Euler(eulerAngles);
-		}
-		else
-		{
-			GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
-
-			CombineInstance combine = new CombineInstance();
-			combine.mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
-			combine.transform = Matrix4x4.TRS(position + new Vector3(tileData.sizeX - 1, 0, tileData.sizeZ - 1) / 2, rotationTransform, scale);
-			cInstances.Add(combine);
-		}
+		GameObject go = Instantiate(tileObject, organizationalParent.transform);
+		go.transform.position = position;
+		go.transform.rotation = Quaternion.Euler(eulerAngles);
 	}
 
 	// Places a mesh tile and adds it to the collision mesh
