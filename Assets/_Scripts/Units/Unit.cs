@@ -214,7 +214,7 @@ public abstract class Unit : MonoBehaviour {
 
     private void OnDestroy()
     {
-        MusicManager.Instance.RemoveTheme(Type);
+        if (MusicManager.Instance) MusicManager.Instance.RemoveTheme(Type);
     }
 
     protected virtual void UnitStart () {}

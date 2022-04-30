@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicManager : Singleton<MusicManager>
+public class MusicManager : MonoBehaviour
 {
     [Range(1, 2)]
     [SerializeField] float volumeScale = 1.5f;
@@ -15,6 +15,8 @@ public class MusicManager : Singleton<MusicManager>
     bool specialThemePlaying;
     Dictionary<UnitType, AudioSource> players;
     Dictionary<UnitType, int> unitCounts;
+
+    public static MusicManager Instance;
 
     private void Start()
     {
@@ -41,6 +43,7 @@ public class MusicManager : Singleton<MusicManager>
 
         SoundPlayer.PlaySound(Sound.GameStart, 1, false);
         Play();
+        Instance = this;
     }
 
     private void Update()
