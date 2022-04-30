@@ -28,9 +28,13 @@ public class TeamManager : MonoBehaviour
     }
 
     public void Remove (string team, Unit unit) {
-        dictionary[team].Remove(unit);
+        if (!dictionary.ContainsKey(team)) {
+            return;
+        }
 
-        Debug.Log("called remove");
+        if (dictionary[team].Contains(unit)) {
+            dictionary[team].Remove(unit);
+        }
 
         if (dictionary[team].Count < 1) {
             Game.instance.OnGameOver(team);
