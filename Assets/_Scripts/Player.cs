@@ -126,10 +126,11 @@ public class Player : MonoBehaviour {
         // Group unitGroup = new Group($"{player.playerId}", unitType);
     }
 
-    public void CancelBoat () {
-        if (Boat != null) {
-            Destroy(Boat.gameObject);
-            Boat.CancelDeploy(); 
+    public void CancelBoat() {
+        if (Boat != null)
+        {
+            Game.DestroyObject(Boat.gameObject);
+            Boat.CancelDeploy();
         }
     }
 
