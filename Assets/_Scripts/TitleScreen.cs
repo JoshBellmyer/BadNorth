@@ -161,8 +161,8 @@ public class TitleScreen : UIScreen
     public void OnPlayOnline () {
         DeviceManager.Instance.SetPlayerDevice(0, player1DeviceSelection.value);
 
+        SoundPlayer.StopTitleMusic();
         if (Game.isHost) {
-            SoundPlayer.StopTitleMusic();
             networkManager.SceneManager.LoadScene("Island", LoadSceneMode.Single);
         }
     }
