@@ -70,7 +70,7 @@ public class TilePlacer : MonoBehaviour {
 
 			CombineInstance combine = new CombineInstance();
 			combine.mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
-			combine.transform = Matrix4x4.TRS(position + new Vector3(tileData.sizeX - 1, 0, tileData.sizeZ - 1) / 2, rotationTransform, scale);
+			combine.transform = Matrix4x4.TRS(position + tileObject.transform.GetChild(0).localPosition + new Vector3(tileData.sizeX - 1, 0, tileData.sizeZ - 1) / 2f, rotationTransform, scale);
 			cInstances.Add(combine);
 		}
 	}
@@ -81,7 +81,7 @@ public class TilePlacer : MonoBehaviour {
 		GameObject tileObject = tileSet.PickTile(tileData, new Vector3Int(x, y, z), ref rotation, true);
 		if (tileObject == null) return;
 
-		Vector3 position = new Vector3(x, y - 0.5f, z) + tileObject.transform.GetChild(0).localPosition - new Vector3(tileData.sizeX - 1, 0, tileData.sizeZ - 1) / 2;
+		Vector3 position = new Vector3(x, y - 0.5f, z) + tileObject.transform.GetChild(0).localPosition - new Vector3(tileData.sizeX - 1, 0, tileData.sizeZ - 1) / 2f;
 		Quaternion rotationTransform = Quaternion.Euler(0, rotation, 0) * tileObject.transform.GetChild(0).rotation;
 		Vector3 scale = tileObject.transform.GetChild(0).localScale;
 
