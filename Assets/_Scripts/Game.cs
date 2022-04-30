@@ -61,6 +61,10 @@ public class Game : MonoBehaviour {
 
 	public void OnGameOver(string losingTeam)
     {
+    	if (Clock.instance.CurrentTime > 30) {
+    		return;
+    	}
+
     	int losingTeamInt = int.Parse(losingTeam);
 
     	if (online) {
