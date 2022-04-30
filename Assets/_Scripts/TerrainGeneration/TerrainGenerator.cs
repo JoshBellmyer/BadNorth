@@ -75,7 +75,7 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
 
     public IEnumerator GenerateMap(int seed, string tileSetName)
     {
-        while (SceneManager.GetActiveScene().name != "Island") yield return null;
+        while (!Application.isEditor && SceneManager.GetActiveScene().name != "Island") yield return null;
 
         // random = new System.Random(seed);
 
