@@ -41,6 +41,18 @@ public class TeamManager : MonoBehaviour
         }
     }
 
+    public void CheckForWin () {
+        foreach (KeyValuePair<string, HashSet<Unit>> pair in dictionary) {
+            if (pair.Value != null) {
+                if (pair.Value.Count < 1) {
+                    Game.instance.OnGameOver(pair.Key);
+
+                    break;
+                }
+            }
+        }
+    }
+
     public HashSet<Unit> GetOnTeam(string team) {
         HashSet<Unit> set = new HashSet<Unit>();
 

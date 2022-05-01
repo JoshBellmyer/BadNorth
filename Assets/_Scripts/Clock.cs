@@ -65,8 +65,8 @@ public class Clock : NetworkBehaviour
             if (!finished)
             {
                 CurrentTime -= Time.deltaTime;
-                if (time.Value <= 0)
-                {
+                if (CurrentTime <= 0)
+                {   
                     finished = true;
                     clockFinished();
                 }

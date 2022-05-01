@@ -39,6 +39,11 @@ public class OnlinePlayer : NetworkBehaviour {
         Game.instance.EndGame(losingTeam);
     }
 
+    [ServerRpc]
+    public void PlaySoundServerRpc (Sound sound, float volume, bool varyPitch) {
+        PlaySoundClientRpc(sound, volume, varyPitch);
+    }
+
     [ClientRpc]
     public void PlaySoundClientRpc (Sound sound, float volume, bool varyPitch) {
         SoundPlayer.PlaySoundLocal(sound, volume, varyPitch);

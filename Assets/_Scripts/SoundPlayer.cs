@@ -56,7 +56,12 @@ public class SoundPlayer : MonoBehaviour {
 	// Play a sound clip directly if in local mode, otherwise if online send a ClientRpc to play the sound for both players
 	public static void PlaySound (Sound sound, float volume, bool varyPitch) {
 		if (Game.online) {
-			Game.GetLocalPlayer().PlaySoundClientRpc(sound, volume, varyPitch);
+			if (Game.isHost) {
+				Game.GetLocalPlayer().PlaySoundClientRpc(sound, volume, varyPitch);
+			}
+			else {
+				Game.GetLocalPlayer().PlaySoundServerRpc(sound, volume, varyPitch);
+			}
 		}
 		else {
 			PlaySoundLocal(sound, volume, varyPitch);

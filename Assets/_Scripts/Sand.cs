@@ -48,7 +48,7 @@ public class Sand : NetworkBehaviour
 
     public IEnumerator RaiseSand()
     {
-        if (Game.isHost)
+        if (!Game.online || Game.isHost)
         {
             while (true)
             {

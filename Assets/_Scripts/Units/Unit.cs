@@ -50,6 +50,7 @@ public abstract class Unit : MonoBehaviour {
     protected Vector3 _destination;
     protected float _currentCooldown;
     private float startDelay = 1;
+    private float fallDelay;
 
     private bool setColor;
     private List<Tuple<NavMeshAgent, NavMeshAgent>> agentTuples = new List<Tuple<NavMeshAgent, NavMeshAgent>>();
@@ -230,6 +231,14 @@ public abstract class Unit : MonoBehaviour {
             }
         }
 
+        if (fallDelay > 0) {
+            fallDelay -= Time.deltaTime;
+
+            if (fallDelay <= 0) {
+                fallDelay = 0;
+            }
+        }
+
         if (Game.online && !Game.isHost) {
             return;
         }
@@ -248,7 +257,7 @@ public abstract class Unit : MonoBehaviour {
             UnPause();
         }
 
-        if (!climbing) {
+        if (!climbing && fallDelay <= 0) {
             CheckForGround();
         }
 
@@ -476,6 +485,7 @@ public abstract class Unit : MonoBehaviour {
             if (transform.position == targetLadder.GetEdgePos()) {
                 transform.position = targetLadder.GetEdgePos();
                 climbing = false;
+                fallDelay = 1f;
                 _navMeshAgent.enabled = true;
                 targetLadder.Occupied = false;
                 targetLadder = null;
@@ -600,7 +610,7 @@ public abstract class Unit : MonoBehaviour {
         }
 
         RaycastHit hit;
-        bool didHit = Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.5f, LayerMask.GetMask("Terrain"));
+        bool didHit = Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.6f, LayerMask.GetMask("Terrain"));
 
         if (falling && didHit) {
             falling = false;

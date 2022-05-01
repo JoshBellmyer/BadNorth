@@ -6,6 +6,7 @@ public class TilePlacer : MonoBehaviour {
 
 	private static TileData tileData;
 	private static TileSet tileSet;
+	private static List<CombineInstance> cInstances;
 	private static List<CombineInstance> mInstances;
 	private static Mesh mesh;
 	private static Mesh cMesh;
@@ -22,7 +23,7 @@ public class TilePlacer : MonoBehaviour {
 		organizationalParent = new GameObject("Tiles");
 		mesh = new Mesh();
 		cMesh = new Mesh();
-
+		cInstances = new List<CombineInstance>();
 		mInstances = new List<CombineInstance>();
 		CombineInstance combine = new CombineInstance();
 		combine.mesh = colMesh.sharedMesh;
@@ -37,6 +38,7 @@ public class TilePlacer : MonoBehaviour {
 
 		mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
+		mesh.CombineMeshes(cInstances.ToArray());
 		cMesh.CombineMeshes(mInstances.ToArray());
 		colMesh.mesh = cMesh;
 		colMesh.GetComponent<MeshCollider>().sharedMesh = cMesh;
@@ -49,13 +51,27 @@ public class TilePlacer : MonoBehaviour {
 		int rotation = 0;
 		GameObject tileObject = tileSet.PickTile(tileData, new Vector3Int(x, y, z), ref rotation);
 		if (tileObject == null) return;
+		TileType type = tileData.tileTypes[x, y, z];
 
-		Vector3 position = new Vector3(x, y - 0.5f, z) - new Vector3(offset, 0, offset);
-		Vector3 eulerAngles = new Vector3(0, rotation, 0);
+		if (type == TileType.Miscellaneous) {
+			Vector3 position = new Vector3(x, y - 0.5f, z) - new Vector3(offset, 0, offset);
+			Vector3 eulerAngles = new Vector3(0, rotation, 0);
 
-		GameObject go = Instantiate(tileObject, organizationalParent.transform);
-		go.transform.position = position;
-		go.transform.rotation = Quaternion.Euler(eulerAngles);
+			GameObject go = Instantiate(tileObject, organizationalParent.transform);
+			go.transform.position = position;
+			go.transform.rotation = Quaternion.Euler(eulerAngles);
+		}
+		else {
+			Vector3 position = new Vector3(x, y - 0.5f, z) + tileObject.transform.GetChild(0).localPosition;
+			Vector3 eulerAngles = new Vector3(0, rotation, 0) + tileObject.transform.GetChild(0).localEulerAngles;
+			Vector3 scale = tileObject.transform.GetChild(0).localScale;
+			GameObject meshObject = tileObject.transform.GetChild(0).gameObject;
+
+			CombineInstance combine = new CombineInstance();
+			combine.mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
+			combine.transform = Matrix4x4.TRS(position, Quaternion.Euler(eulerAngles), scale);
+			cInstances.Add(combine);
+		}
 	}
 
 	// Places a mesh tile and adds it to the collision mesh

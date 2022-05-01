@@ -14,6 +14,9 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
     private TileSet tileSet;
 
     public static System.Random random;
+    private int generateMap;
+    private int onlineSeed;
+    private string onlineTileSetName;
 
     public NavMeshSurface surface;
 
@@ -37,11 +40,24 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
         }
         else if (!Game.online || !Application.isPlaying)
         {
+            Debug.Log("single...");
             seed = randomizeSeed ? Random.Range(int.MinValue, int.MaxValue) : seed;
             StartCoroutine(GenerateMap(seed, tileSetName));
         }
 
         StartCoroutine(FindSandCoroutine());
+    }
+
+    private void Update () {
+        if (generateMap > 0) {
+            generateMap--;
+
+            if (generateMap <= 0) {
+                generateMap = 0;
+                random = new System.Random(this.onlineSeed);
+                StartCoroutine(GenerateMap(this.onlineSeed, this.onlineTileSetName));
+            }
+        }
     }
 
     /// <summary>
@@ -59,9 +75,14 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
     }
 
     [ClientRpc]
-    private void SendGenerationInfoClientRpc(int seed, string tileSetName)
+    private void SendGenerationInfoClientRpc(int seedNew, string tileSetNameNew)
     {
-        StartCoroutine(GenerateMap(seed, tileSetName));
+        this.seed = seedNew;
+        this.tileSetName = tileSetNameNew;
+        this.onlineSeed = seedNew;
+        this.onlineTileSetName = tileSetNameNew;
+        // StartCoroutine(GenerateMap(seed, tileSetName));
+        generateMap = 3;
     }
 
     private void LoadTileSet () {
@@ -73,13 +94,13 @@ public class TerrainGenerator : NetworkBehaviour, ISavable
         }
     }
 
-    public IEnumerator GenerateMap(int seed, string tileSetName)
+    public IEnumerator GenerateMap(int seedU, string tileSetNameU)
     {
         while (SceneManager.GetActiveScene().name != "Island") yield return null;
 
         // random = new System.Random(seed);
 
-        float[,] heightMap = GenerateHeightMap(seed);
+        float[,] heightMap = GenerateHeightMap(seedU);
 
         MeshData data = MeshGenerator.GenerateTerrainMeshFlatTiles(heightMap, settings.meshScale);
 

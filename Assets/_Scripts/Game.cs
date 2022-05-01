@@ -18,6 +18,7 @@ public class Game : MonoBehaviour {
 	public static NetworkHelper networkHelper;
 
 	public bool isPaused;
+	private bool gameEnded;
 	public List<PlayerController> players;
 
 	public const int everythingMask = 0x7FFFFFFF;
@@ -61,6 +62,9 @@ public class Game : MonoBehaviour {
 
 	public void OnGameOver(string losingTeam)
     {
+    	if (gameEnded) {
+    		return;
+    	}
     	if (Clock.instance.CurrentTime > 30) {
     		return;
     	}
@@ -77,6 +81,7 @@ public class Game : MonoBehaviour {
 	}
 
 	public void EndGame (int losingTeam) {
+		gameEnded = true;
 		string winningColor = losingTeam == 1 ? "yellow" : "blue";
 
 		UIManager.instance.DisplayWinner(winningColor);
